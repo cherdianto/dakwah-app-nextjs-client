@@ -1,36 +1,22 @@
-import { Button, Card, CardMedia, CardHeader, CardActions, Typography, Grid, CardContent } from "@mui/material";
+import { Button, Card, CardMedia, CardHeader, CardActions, Typography, Grid, CardContent, Box } from "@mui/material";
 import Link from 'next/link'
 import PropTypes from 'prop-types'
-import { makeStyles } from "@mui/styles";
-
-const useStyles = makeStyles({
-    card: {
-        maxWidth: 368
-    },
-    image: {
-        height: 88
-    },
-    relative: {
-        position: 'relative'
-    }
-})
 
 const MateriCard = ({ name, img, status, rating, student, description, materiID }) => {
-    const classes = useStyles()
 
     return (
         <>
             <Link href={"/materi/[id]"} as={`materi/${materiID}`} >
                 <Card>
-                    <div className={classes.card}>
-                        <div className={classes.relative}>
-                            <CardHeader 
+                    <Box sx={{ maxWidth: 368 }}>
+                        <Box sx={{ position: 'relative' }}>
+                            <CardHeader
                                 title={name}
                             />
                             <CardMedia
-                                className={classes.image}
                                 image={img}
                                 title={name}
+                                sx={{ height: 88 }}
                             />
                             <CardContent>
                                 <Grid container direction='column'>
@@ -46,8 +32,8 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID 
                                 <Button size="small">Share</Button>
                                 <Button size="small">Learn More</Button>
                             </CardActions>
-                        </div>
-                    </div>
+                        </Box>
+                    </Box>
                 </Card>
             </Link>
         </>

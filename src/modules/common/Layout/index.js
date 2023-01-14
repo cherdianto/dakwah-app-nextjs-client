@@ -1,24 +1,19 @@
 import BottomNav from "../../mobile/BottomNav";
-import { makeStyles } from "@mui/styles";
 import { PropTypes } from 'prop-types'
-// import MobileHeader from '../../mobile/Header'
+import styled from "@emotion/styled";
 
-const useStyles = makeStyles({
-    content: {
-        marginTop: 20,
-        marginBottom: 60
-    }
+
+const RootStyles = styled("div")({
+    marginTop: 20,
+    marginBottom: 60 
 })
 
 const Layout = ({ children }) => {
-    const classes = useStyles()
-
     return (
         <>
-            {/* <MobileHeader /> */}
-            <div className={classes.content}>
+            <RootStyles>
                 { children }
-            </div>
+            </RootStyles>
             <BottomNav />
         </>
     )

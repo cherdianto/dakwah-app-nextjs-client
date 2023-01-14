@@ -1,31 +1,12 @@
 import Layout from "@common/Layout";
 import { ArrowLeft, ExpandMore } from "@mui/icons-material";
 import { Container, Accordion, AccordionSummary, AccordionDetails, Grid, Card, CardHeader, CardContent, Typography, AppBar, Toolbar, IconButton } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import Link from 'next/link'
 
-const useStyles = makeStyles({
-    card: {
-        maxWidth: 358
-    },
-    image: {
-        height: 88
-    },
-    relative: {
-        position: 'relative'
-    },
-    paragraphStyle: {
-        whiteSpace: 'pre-line'
-    }
-})
 const MateriDetail = ({ materi }) => {
-    const classes = useStyles()
-
-    // console.log(materi)
     const { materiID, img, name, status, rating, student, description, content } = materi
 
     return (
-
         <>
             <AppBar position="static">
                 <Toolbar variant="dense">
@@ -39,20 +20,6 @@ const MateriDetail = ({ materi }) => {
             </AppBar>
             <Container sx={{ marginTop: 1 }}>
                 <Grid direction='column'>
-                    {/* <Card>
-                        <div className={classes.card} >
-                            <div className={classes.relative}>
-                                <CardHeader>
-                                    title={name}
-                                </CardHeader>
-                                <CardContent>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {description}
-                                    </Typography>
-                                </CardContent>
-                            </div>
-                        </div>
-                    </Card> */}
                     {content.map((ctn, id) => {
                         return (
                             <Accordion key={id}>
@@ -63,7 +30,7 @@ const MateriDetail = ({ materi }) => {
                                     <Typography>{ctn.subTitle}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    <Typography variant="body2" paragraph="true" className={classes.paragraphStyle}>
+                                    <Typography variant="body2" paragraph="true" sx={{ whiteSpace: 'pre-line' }}>
                                         {ctn.matan}
                                     </Typography>
                                 </AccordionDetails>
