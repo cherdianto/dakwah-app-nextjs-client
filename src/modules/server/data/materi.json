@@ -1,0 +1,32 @@
+{
+    "creator": "candraherdianto",
+    "list": [
+        {
+            "id": 1,
+            "name": "Belajar Tauhid",
+            "img": "https://i.ibb.co/4m50NPZ/asparagus.jpg",
+            "status": true,
+            "rating": 4.5,
+            "student": 100,
+            "description": "Belajar tauhid dasar"
+        },
+        {
+            "id": 2,
+            "name": "Mengenal Allah SWT",
+            "img": "https://i.ibb.co/4m50NPZ/asparagus.jpg",
+            "status": true,
+            "rating": 4.5,
+            "student": 150,
+            "description": "Belajar mengenal Allah SWT"
+        },
+        {
+            "id": 3,
+            "name": "Mengenal Rasulullah SAW",
+            "img": "https://i.ibb.co/4m50NPZ/asparagus.jpg",
+            "status": true,
+            "rating": 4.5,
+            "student": 200,
+            "description": "Belajar mengenal Rasulullah SAW"
+        }
+    ]
+}
