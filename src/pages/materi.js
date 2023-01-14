@@ -32,7 +32,7 @@ export default function MateriPage({ allMateri }) {
     )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
     const res = await fetch("http://localhost:3000/api/materi")
 
     const allMateri = await res.json();
