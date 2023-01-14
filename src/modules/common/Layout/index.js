@@ -5,7 +5,8 @@ import { PropTypes } from 'prop-types'
 
 const useStyles = makeStyles({
     content: {
-        marginTop: 74
+        marginTop: 20,
+        marginBottom: 60
     }
 })
 
