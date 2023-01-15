@@ -2,7 +2,6 @@ import React from 'react'
 import Layout from '../modules/common/Layout'
 import { Grid, Container } from '@mui/material'
 import MateriCard from '@common/MateriCard'
-import Materi from './api/materi/[id]'
 
 export default function MateriPage({ allMateri }) {
     const { list } = allMateri
@@ -15,7 +14,7 @@ export default function MateriPage({ allMateri }) {
                         return (
                             <Grid key={id} item xs={12} sm={12}>
                                 <MateriCard 
-                                    materiID = {lst.id}
+                                    materiID = {lst._id}
                                     img={lst.img}
                                     name={lst.name}
                                     status={lst.status}
@@ -32,9 +31,8 @@ export default function MateriPage({ allMateri }) {
     )
 }
 
-export async function getServerSideProps() {
-    const res = await fetch("http://localhost:3000/api/materi")
-
+export async function getStaticProps() {
+    const res = await fetch("http://localhost:3001/api/materi")
     const allMateri = await res.json();
 
     return {

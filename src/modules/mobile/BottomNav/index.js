@@ -14,9 +14,7 @@ const BottomNav = (props) => {
                 showLabels
                 value={value}
                 onChange={(event, newValue) => {
-                    console.log(newValue)
                     setValue(newValue)
-                    // console.log(value)
                 }}
             >
                 <BottomNavigationAction 

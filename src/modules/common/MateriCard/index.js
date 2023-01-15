@@ -44,7 +44,7 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID 
 MateriCard.propTypes = {
     img: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    status: PropTypes.bool.isRequired,
+    status: PropTypes.string.isRequired,
     rating: PropTypes.number,
     student: PropTypes.number,
     description: PropTypes.string.isRequired,

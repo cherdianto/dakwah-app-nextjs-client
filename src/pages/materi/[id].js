@@ -4,7 +4,7 @@ import { Container, Accordion, AccordionSummary, AccordionDetails, Grid, Card, C
 import Link from 'next/link'
 
 const MateriDetail = ({ materi }) => {
-    const { materiID, img, name, status, rating, student, description, content } = materi
+    const { name, content } = materi
 
     return (
         <>
@@ -18,8 +18,8 @@ const MateriDetail = ({ materi }) => {
                     <Typography variant="h6" color="inherit" component="div">{name}</Typography>
                 </Toolbar>
             </AppBar>
-            <Container sx={{ marginTop: 1 }}>
-                <Grid direction='column'>
+            {/* <Container sx={{ marginTop: 1 }}> */}
+                <Grid direction='column' sx={{ p: 1 }}>
                     {content.map((ctn, id) => {
                         return (
                             <Accordion key={id}>
@@ -38,27 +38,27 @@ const MateriDetail = ({ materi }) => {
                         )
                     })}
                 </Grid>
-            </Container>
+            {/* </Container> */}
         </>
 
     )
 }
 
-export async function getServerSidePaths() {
-    const res = await fetch("http://localhost:3000/api/materi")
+export async function getStaticPaths() {
+    const res = await fetch("http://localhost:3001/api/materi")
     const allMateri = await res.json()
 
-    const paths = allMateri.list.map(materi => `/materi/${materi.id}`)
+    const paths = allMateri.list.map(materi => `/materi/${materi._id}`)
     return { paths, fallback: false }
 }
 
-export async function getServerSideProps({ params }) {
-    const res = await fetch(`http://localhost:3000/api/materi/${params.id}`)
-    const materi = await res.json()
+export async function getStaticProps({ params }) {
+    const res = await fetch(`http://localhost:3001/api/materi/${params.id}`)
+    const detailMateri = await res.json()
 
     return {
         props: {
-            materi
+            materi : detailMateri.materi
         }
     }
 }
