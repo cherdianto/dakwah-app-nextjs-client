@@ -41,6 +41,10 @@ const MateriDetail = ({ materi }) => {
                             <AccordionSummary
                                 expandIcon={<ExpandMore />}
                                 id={id}
+                                sx={{
+                                    background: '#f2f4f7',
+                                    borderBottom: '1px solid darkgray'
+                                }}
                             >
                                 <Typography>{ctn.subTitle}</Typography>
                             </AccordionSummary>

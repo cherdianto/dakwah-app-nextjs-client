@@ -15,6 +15,10 @@ const MateriLabelStyled = styled(MateriLabel)`
     margin-bottom: 0px;
 `;
 
+const StyledLink = styled(Link)`
+    text-decoration: none;
+`;
+
 const MateriCard = ({ name, img, status, rating, student, description, materiID, label }) => {
     return (
         <Card>
@@ -39,9 +43,9 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID,
 
                     </Grid>
                     <Grid container direction='row' gap={2}>
-                        <Link href={"/materi/[id]"} as={`materi/${materiID}`} >
+                        <StyledLink href={"/materi/[id]"} as={`materi/${materiID}`} >
                             <Button size="small" variant="contained" endIcon={<PlayArrow />}>Mulai Baca</Button>
-                        </Link>
+                        </StyledLink>
                         <Button size="small" variant="outlined" endIcon={<Share />}>Bagikan</Button>
                     </Grid>
                 </CardContent>

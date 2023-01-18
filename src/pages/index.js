@@ -12,6 +12,11 @@ import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import Link from 'next/link'
+import styled from '@emotion/styled'
+
+const StyledLink = styled(Link)`
+    text-decoration: none;
+`;
 
 function PromoSlide(props) {
     return (
@@ -91,9 +96,9 @@ export default function Homepage(props) {
                         <Typography gutterBottom variant='body1' align='left'>2. Register dan login untuk membaca materi dakwah dengan penyimpanan progres belajar</Typography>
                         <Typography gutterBottom variant='body1' align='left'>3. Anda dapat membaca materi dakwah tanpa perlu login</Typography>
                     </Box>
-                    <Link href={'/register'}>
+                    <StyledLink href={'/register'}>
                         <Button variant='outlined' sx={{ m: 3}}>Register</Button>
-                    </Link>
+                    </StyledLink>
                     <Typography variant='body1' align='center'>Selamat belajar.</Typography>
                 </Grid>
             </Container>
