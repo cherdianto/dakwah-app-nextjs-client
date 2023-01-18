@@ -1,5 +1,9 @@
-import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
-import { AccountBox, Book, CleaningServices, Home, Menu } from "@mui/icons-material";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import Paper from "@mui/material/Paper";
+import AccountBox from "@mui/icons-material/AccountBox";
+import Book from "@mui/icons-material/Book";
+import Home from "@mui/icons-material/Home";
 import { useState } from "react";
 import { useRouter } from "next/router";
 

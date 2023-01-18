@@ -1,6 +1,21 @@
-import Layout from "@common/Layout";
-import { ArrowLeft, ExpandMore } from "@mui/icons-material";
-import { Container, Accordion, AccordionSummary, AccordionDetails, Grid, Card, CardHeader, CardContent, Typography, AppBar, Toolbar, IconButton } from "@mui/material";
+// import Layout from "@common/Layout";
+import ArrowLeft from "@mui/icons-material/ArrowLeft";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Grid from "@mui/material/Grid";
+// import Card from "@mui/material/Card";
+// import CardHeader from "@mui/material/CardHeader";
+// import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+// import Button from "@mui/material/Button";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 import Link from 'next/link'
 
 const MateriDetail = ({ materi }) => {
@@ -19,25 +34,32 @@ const MateriDetail = ({ materi }) => {
                 </Toolbar>
             </AppBar>
             {/* <Container sx={{ marginTop: 1 }}> */}
-                <Grid direction='column' sx={{ p: 1 }}>
-                    {content.map((ctn, id) => {
-                        return (
-                            <Accordion key={id}>
-                                <AccordionSummary
-                                    expandIcon={<ExpandMore />}
-                                    id={id}
-                                >
-                                    <Typography>{ctn.subTitle}</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                    <Typography variant="body2" paragraph="true" sx={{ whiteSpace: 'pre-line' }}>
+            <Grid direction='column' sx={{ p: 1 }} gap={2}>
+                {content.map((ctn, id) => {
+                    return (
+                        <Accordion key={id}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMore />}
+                                id={id}
+                            >
+                                <Typography>{ctn.subTitle}</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Grid direction='column'>
+                                    <Typography variant="body2" sx={{ whiteSpace: 'pre-line' }}>
                                         {ctn.matan}
                                     </Typography>
-                                </AccordionDetails>
-                            </Accordion>
-                        )
-                    })}
-                </Grid>
+                                    <Grid container direction='row' justifyContent='flex-end'>
+                                        <FormGroup>
+                                            <FormControlLabel control={<Switch />} label="Selesai Baca" />
+                                        </FormGroup>
+                                    </Grid>
+                                </Grid>
+                            </AccordionDetails>
+                        </Accordion>
+                    )
+                })}
+            </Grid>
             {/* </Container> */}
         </>
 
@@ -58,7 +80,7 @@ export async function getStaticProps({ params }) {
 
     return {
         props: {
-            materi : detailMateri.materi
+            materi: detailMateri.materi
         }
     }
 }

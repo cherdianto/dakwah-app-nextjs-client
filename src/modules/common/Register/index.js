@@ -1,7 +1,14 @@
 import React from "react";
-import { Container, Typography, Link, Box, TextField, Stack, FormControlLabel, Checkbox, Button } from "@mui/material";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
 import styled from "@emotion/styled";
-import { ArrowRight } from "@mui/icons-material";
+import ArrowRight from "@mui/icons-material/ArrowRight";
 
 const RootStyle = styled("div")({
     // background:,
@@ -12,8 +19,8 @@ const RootStyle = styled("div")({
 });
 
 const ContentStyle = styled("div")({
-    maxWidth: 358,
-    padding: 25,
+    // maxWidth: 358,
+    padding: 10,
     margin: "auto",
     display: "flex",
     justifyContent: "center",

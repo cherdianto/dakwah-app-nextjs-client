@@ -1,6 +1,10 @@
 import Link from "next/link";
-import { AppBar, Toolbar, Typography, IconButton, Box } from "@mui/material";
-import { Menu } from "@mui/icons-material";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Box from "@mui/material/Box";
+import Menu from "@mui/icons-material/Menu";
 
 
 const Header = () => {

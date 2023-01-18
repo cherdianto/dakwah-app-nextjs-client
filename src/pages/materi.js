@@ -1,6 +1,7 @@
 import React from 'react'
 import Layout from '../modules/common/Layout'
-import { Grid, Container } from '@mui/material'
+import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
 import MateriCard from '@common/MateriCard'
 
 export default function MateriPage({ allMateri }) {
@@ -20,6 +21,7 @@ export default function MateriPage({ allMateri }) {
                                     status={lst.status}
                                     rating={lst.rating}
                                     student={lst.student}
+                                    label={lst.label}
                                     description={lst.description}
                                 />
                             </Grid>
