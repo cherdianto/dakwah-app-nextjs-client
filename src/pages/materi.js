@@ -3,13 +3,16 @@ import Layout from '../modules/common/Layout'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import MateriCard from '@common/MateriCard'
+import { useUser } from '@contexts/user.context'
 
 export default function MateriPage({ allMateri }) {
     const { list } = allMateri
+    const { user, setUser } = useUser()
 
     return (
         <Layout>
             <Container maxWidth='sm'>
+                <h2>{user}</h2>
                 <Grid container spacing={2}>
                     {list.map((lst, id) => {
                         return (
