@@ -17,52 +17,62 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Link from 'next/link'
+import MoreIcon from '@mui/icons-material/MoreVert';
+
 
 const MateriDetail = ({ materi }) => {
     const { name, content } = materi
 
     return (
         <>
-            <AppBar position="static">
-                <Toolbar variant="dense">
+            <AppBar position="static" color="inherit">
+                <Toolbar variant="dense" sx={{
+                    width: '100%',
+                    maxWidth: 600,
+                    mx: 'auto'
+                }}>
                     <Link href={"/materi"}>
                         <IconButton edge='start' color="inherit" sx={{ mr: 2 }}>
                             <ArrowLeft />
                         </IconButton>
                     </Link>
-                    <Typography variant="h6" color="inherit" component="div">{name}</Typography>
+                    <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>{name}</Typography>
+                    <IconButton color="inherit">
+                        <MoreIcon />
+                    </IconButton>
                 </Toolbar>
             </AppBar>
-            {/* <Container sx={{ marginTop: 1 }}> */}
-            <Grid direction='column' sx={{ p: 1 }} gap={2}>
-                {content.map((ctn, id) => {
-                    return (
-                        <Accordion key={id}>
-                            <AccordionSummary
-                                expandIcon={<ExpandMore />}
-                                id={id}
-                                sx={{
-                                    background: '#f2f4f7',
-                                    borderBottom: '1px solid darkgray'
-                                }}
-                            >
-                                <Typography>{ctn.subTitle}</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <Grid direction='column'>
-                                    <Typography variant="body2" sx={{ whiteSpace: 'pre-line' }}>
-                                        {ctn.matan}
-                                    </Typography>
-                                    <Grid container direction='row' justifyContent='flex-end'>
-                                        <FormGroup>
-                                            <FormControlLabel control={<Switch />} label="Selesai Baca" />
-                                        </FormGroup>
+            <Grid container justifyContent='center'>
+                <Grid container maxWidth={'sm'} direction='column' sx={{ p: 1 }} gap={1}>
+                    {content.map((ctn, id) => {
+                        return (
+                            <Accordion key={id}>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMore />}
+                                    id={id}
+                                    sx={{
+                                        background: '#f2f4f7',
+                                        borderBottom: '1px solid darkgray'
+                                    }}
+                                >
+                                    <Typography>{ctn.subTitle}</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Grid direction='column'>
+                                        <Typography variant="body2" sx={{ whiteSpace: 'pre-line' }}>
+                                            {ctn.matan}
+                                        </Typography>
+                                        <Grid container direction='row' justifyContent='flex-end'>
+                                            <FormGroup>
+                                                <FormControlLabel control={<Switch />} label="Selesai Baca" />
+                                            </FormGroup>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </AccordionDetails>
-                        </Accordion>
-                    )
-                })}
+                                </AccordionDetails>
+                            </Accordion>
+                        )
+                    })}
+                </Grid>
             </Grid>
             {/* </Container> */}
         </>

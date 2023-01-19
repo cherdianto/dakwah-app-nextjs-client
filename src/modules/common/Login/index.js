@@ -20,21 +20,13 @@ import Router from "next/router";
 axios.defaults.withCredentials = true;
 
 const RootStyle = styled("div")({
-    // background:,
-    // height: '100vh',
-    height: '80vh',
+    height: 'calc(100vh - 110px)',
     display: 'grid',
     placeItems: 'center'
 });
 
 const ContentStyle = styled("div")({
-    maxWidth: 358,
-    padding: 25,
-    margin: "auto",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    background: "#fff"
+    padding: 5,
 });
 
 const HeadingStyle = styled(Box)({
@@ -74,7 +66,7 @@ const Login = () => {
     })
     return (
         <RootStyle>
-            <Container maxWidth="sm">
+            <Container >
                 <ContentStyle>
                     <HeadingStyle>
                         <Typography sx={{ color: "text.secondary", mb: 1 }} >
@@ -83,9 +75,7 @@ const Login = () => {
                         {error && error.status === true ? <Alert severity='error'>{error.message}</Alert> : ''}
                     </HeadingStyle>
 
-                    <Grid
-                        sx={{ display: "flex", flexDirection: "column", gap: 3 }}
-                    >
+                    <Grid direction='column' gap={2}>
                         <form
                             id="loginForm"
                             onSubmit={(e) => {
@@ -102,6 +92,9 @@ const Login = () => {
                                 label="Email Address"
                                 value={validation.values.email}
                                 onChange={validation.handleChange}
+                                sx={{
+                                    pb: 3
+                                }}
                             />
                             <TextField
                                 fullWidth

@@ -2,8 +2,14 @@ import React from 'react'
 import Layout from '../modules/common/Layout'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
+import AppBar from '@mui/material/AppBar'
+import Typography from '@mui/material/Typography'
+import Toolbar from '@mui/material/Toolbar'
+import Box from '@mui/material/Box'
 import MateriCard from '@common/MateriCard'
 import { useUser } from '@contexts/user.context'
+import { flexbox } from '@mui/system'
+
 
 export default function MateriPage({ allMateri }) {
     const { list } = allMateri
@@ -11,14 +17,22 @@ export default function MateriPage({ allMateri }) {
 
     return (
         <Layout>
-            <Container maxWidth='sm'>
-                <h2>{user}</h2>
-                <Grid container spacing={2}>
+            <AppBar position='fixed' color="inherit" elevation={2}>
+                <Toolbar variant="dense" sx={{
+                    width: '100%',
+                    maxWidth: 600,
+                    mx: 'auto'
+                }}>
+                    <Typography variant="h5" color="inherit" component="div">Materi Aktif</Typography>
+                </Toolbar>
+            </AppBar>
+            <Grid container>
+                <Grid container sx={{ p: 1 }} gap={2}>
                     {list.map((lst, id) => {
                         return (
                             <Grid key={id} item xs={12} sm={12}>
-                                <MateriCard 
-                                    materiID = {lst._id}
+                                <MateriCard
+                                    materiID={lst._id}
                                     img={lst.img}
                                     name={lst.name}
                                     status={lst.status}
@@ -31,7 +45,7 @@ export default function MateriPage({ allMateri }) {
                         )
                     })}
                 </Grid>
-            </Container>
+            </Grid>
         </Layout>
     )
 }

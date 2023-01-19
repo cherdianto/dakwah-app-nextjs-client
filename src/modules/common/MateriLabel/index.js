@@ -11,7 +11,7 @@ const MateriLabel = ({ className, label }) => {
                         <Chip
                             color='secondary'
                             size='small'
-                            label={item.toLowerCase()}
+                            label={item.toUpperCase()}
                             sx={{
                                 fontSize: 10,
                                 fontWeight: 900,
