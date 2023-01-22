@@ -1,102 +1,155 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import { useFormik } from 'formik'
+import { useUser } from '@contexts/user.context'
+
 import styled from "@emotion/styled";
 import ArrowRight from "@mui/icons-material/ArrowRight";
+import axios from "axios";
+import Link from "next/link";
+
+axios.defaults.withCredentials = true;
 
 const RootStyle = styled("div")({
-    // background:,
-    // height: '100vh',
-    height: '80vh',
+    height: 'calc(100vh - 110px)',
     display: 'grid',
     placeItems: 'center'
 });
 
 const ContentStyle = styled("div")({
-    // maxWidth: 358,
-    padding: 10,
-    margin: "auto",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    background: "#fff"
+    padding: 5,
 });
 
 const HeadingStyle = styled(Box)({
-    textAlign: "center"
+    textAlign: "center",
+    marginBottom: 35
 })
 
 const Register = () => {
+    const { user, setUser } = useUser()
+    const [error, setError] = useState(null)
+
+    const validation = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            email: 'user2@email.com',
+            password: 'password'
+        },
+        onSubmit: async (values) => {
+            const cred = {
+                email: values.email,
+                password: values.password
+            }
+            console.log('submit nih ' + cred)
+            try {
+                const res = await axios.post('http://localhost:3001/auth/login', cred)
+                setUser(res.data.fullname)
+                setError(null)
+            } catch (error) {
+                setError({
+                    status: true,
+                    // message: error.response.data.message
+                })
+                // alert(error.response.data.message)
+            }
+
+        }
+    })
     return (
         <RootStyle>
-            <Container maxWidth="sm">
+            <Container >
                 <ContentStyle>
                     <HeadingStyle>
-                        <Typography sx={{ color: "text.secondary", mb: 5 }} >
+                        <Typography sx={{ color: "text.secondary", mb: 1 }} >
                             Create new account
                         </Typography>
+                        {error && error.status === true ? <Alert severity='error'>{error.message}</Alert> : ''}
                     </HeadingStyle>
 
-                    <Box
-                        sx={{ display: "flex", flexDirection: "column", gap: 3 }}
-                    >
-                        <TextField
-                            fullWidth
-                            autoComplete="name"
-                            type="text"
-                            label="Full Name"
-                            required
-                        />
-                        <TextField
-                            fullWidth
-                            autoComplete="email"
-                            type="email"
-                            label="Email Address"
-                            required
-                        />
-                        <TextField
-                            fullWidth
-                            autoComplete="whatsapp"
-                            type="number"
-                            label="Whatsapp Number"
-                            required
-                        />
-                        <TextField
-                            fullWidth
-                            autoComplete="username"
-                            type="password"
-                            label="Password"
-                            required
-                        />
-                        <Box>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                justifyContent="space-between"
-                                sx={{ my: 2 }}
-                            >
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox />
-                                    }
-                                    label="Remember me"
-                                />
-                            </Stack>
-                            <Button
-                                variant="contained"
-                                endIcon={<ArrowRight />}
+                    <Grid direction='column' gap={2}>
+                        <form
+                            id="loginForm"
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                validation.handleSubmit();
+                                return false
+                            }}
+                        >
+                            <TextField
                                 fullWidth
-                            >
-                                Register
-                            </Button>
-                        </Box>
-                    </Box>
+                                id="fullname"
+                                type="string"
+                                label="Fullname"
+                                value={validation.values.fullname}
+                                onChange={validation.handleChange}
+                                sx={{
+                                    pb: 2
+                                }}
+                            />
+                            <TextField
+                                fullWidth
+                                id="email"
+                                type="email"
+                                label="Email Address"
+                                value={validation.values.email}
+                                onChange={validation.handleChange}
+                                sx={{
+                                    pb: 2
+                                }}
+                            />
+                            <TextField
+                                fullWidth
+                                id="whatsapp"
+                                type="whatsapp"
+                                label="Whatsapp"
+                                value={validation.values.whatsapp}
+                                onChange={validation.handleChange}
+                                sx={{
+                                    pb: 2
+                                }}
+                            />
+
+                            <TextField
+                                fullWidth
+                                id="password"
+                                type="password"
+                                label="Password"
+                                value={validation.values.password}
+                                onChange={validation.handleChange}
+                                sx={{
+                                    pb: 2
+                                }}
+
+                            />
+                            <Box>
+                                <Button
+                                    variant="contained"
+                                    endIcon={<ArrowRight />}
+                                    fullWidth
+                                    type="submit"
+                                    sx={{
+                                        mb: 2
+                                    }}
+                                >
+                                    Register
+                                </Button>
+                                <Typography variant="body2" align="center">Already have an account?
+                                    <Link href={'/login'}>
+                                        Login
+                                    </Link>
+                                </Typography>
+                            </Box>
+                        </form>
+                    </Grid>
                 </ContentStyle>
             </Container>
         </RootStyle>

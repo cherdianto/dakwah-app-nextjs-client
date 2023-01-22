@@ -8,7 +8,9 @@ import Toolbar from '@mui/material/Toolbar'
 import Box from '@mui/material/Box'
 import MateriCard from '@common/MateriCard'
 import { useUser } from '@contexts/user.context'
-import { flexbox } from '@mui/system'
+import IconButton from '@mui/material/IconButton';
+import MoreIcon from '@mui/icons-material/MoreVert';
+
 
 
 export default function MateriPage({ allMateri }) {
@@ -24,6 +26,11 @@ export default function MateriPage({ allMateri }) {
                     mx: 'auto'
                 }}>
                     <Typography variant="h5" color="inherit" component="div">Materi Aktif</Typography>
+                    <Box sx={{ flexGrow: 1 }} />
+                {/* <LanguagePopover /> */}
+                <IconButton color="inherit">
+                    <MoreIcon />
+                </IconButton>
                 </Toolbar>
             </AppBar>
             <Grid container>

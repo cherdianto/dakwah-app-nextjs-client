@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Layout from '../modules/common/Layout'
 import Carousel from 'react-material-ui-carousel'
 import Paper from '@mui/material/Paper'
@@ -17,7 +17,7 @@ import Toolbar from '@mui/material/Toolbar'
 import AppBar from '@mui/material/AppBar'
 import MoreIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
-
+import axiosJWT from '@utils/axiosJWT'
 
 
 import { useUser } from '@contexts/user.context'
@@ -69,6 +69,23 @@ export default function Homepage(props) {
         }
     ]
 
+    const getUser = async () => {
+        try {
+            const res = await axiosJWT('http://localhost:3001/auth/user', {
+                withCredentials: true
+            })
+            setUser(res.data.user.fullname)
+        } catch (error) {
+            if(error.isAxiosError){
+                setUser()
+            }
+        }
+    }
+
+    useEffect(() => {
+        if(!user) getUser()
+    }, [user])
+
     return (
         <Layout>
             <AppBar position="fixed" color="inherit" elevation={2}>
@@ -77,7 +94,7 @@ export default function Homepage(props) {
                     maxWidth: 600,
                     mx: 'auto'
                 }}>
-                    <Typography variant='h6'>Welcome</Typography>
+                    <Typography variant='h6'>Welcome, {user ? `${user}` : 'Guest'}</Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     <LanguagePopover />
                 </Toolbar>

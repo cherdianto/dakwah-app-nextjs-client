@@ -7,16 +7,17 @@ import { AppNavbar } from '@common/NavbarProfil'
 import axiosJWT from '@utils/axiosJWT'
 import Router from 'next/router'
 import { useEffect } from 'react'
-import { axiosGetter } from '@utils/axiosGetter'
+// import { axiosGetter } from '@utils/axiosGetter'
 
 
-const AccountPage = (props) => {
+const RegisterPage = (props) => {
+    console.log(props)
     
     const {user, setUser} = useUser()
 
     const getUser = async () => {
+        console.log('getting user info')
         try {
-            
             const res = await axiosJWT('http://localhost:3001/auth/user', {
                 withCredentials: true
             })
@@ -25,21 +26,21 @@ const AccountPage = (props) => {
         } catch (error) {
             if(error.isAxiosError){
                 setUser()
+                // console.log(error.response.data.message)
             }
-            Router.push('/login')
         }
     }
-
+    
     useEffect(() => {
-        if(!user) getUser()
+        getUser()
+        if(user) Router.push('/account')
     }, [user])
 
     return (
         <Layout>
-            <AppNavbar />
-            { user ? <h2>dashboard {user}</h2> : <h2>loading...</h2> }
+            <Register />
         </Layout>
     )
 }
 
-export default AccountPage
+export default RegisterPage

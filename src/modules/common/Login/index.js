@@ -15,7 +15,7 @@ import { useUser } from '@contexts/user.context'
 import styled from "@emotion/styled";
 import ArrowRight from "@mui/icons-material/ArrowRight";
 import axios from "axios";
-import Router from "next/router";
+import Link from "next/link";
 
 axios.defaults.withCredentials = true;
 
@@ -70,7 +70,7 @@ const Login = () => {
                 <ContentStyle>
                     <HeadingStyle>
                         <Typography sx={{ color: "text.secondary", mb: 1 }} >
-                            Login to your account {user}
+                            Login to your account
                         </Typography>
                         {error && error.status === true ? <Alert severity='error'>{error.message}</Alert> : ''}
                     </HeadingStyle>
@@ -124,9 +124,17 @@ const Login = () => {
                                     endIcon={<ArrowRight />}
                                     fullWidth
                                     type="submit"
+                                    sx={{
+                                        mb: 2
+                                    }}
                                 >
                                     Login
                                 </Button>
+                                <Typography variant="body2" align="center">New user?  
+                                        <Link href={'/register'}>
+                                             Register
+                                        </Link>
+                                </Typography>
                             </Box>
                         </form>
                     </Grid>

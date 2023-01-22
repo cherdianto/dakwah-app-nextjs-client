@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import AccountPopover from "@common/AccountPopover.js";
 // import MenuIcon from '@mui/icons-material/Menu';
 
 export const AppNavbar = (props) => {
@@ -16,10 +17,7 @@ export const AppNavbar = (props) => {
             }}>
                 <Typography variant='h6'>Profil</Typography>
                 <Box sx={{ flexGrow: 1 }} />
-                {/* <LanguagePopover /> */}
-                <IconButton color="inherit">
-                    <MoreIcon />
-                </IconButton>
+                <AccountPopover />
             </Toolbar>
         </AppBar>
     )
