@@ -100,7 +100,7 @@ const MateriDetail = ({ materi }) => {
 // }
 
 export async function getStaticPaths() {
-    const res = await fetch("https://dakwah-bot.vercel.app/api/allMateri")
+    const res = await fetch("https://dakwah-bot.vercel.app/api/materi")
     const allMateri = await res.json()
 
     const paths = allMateri.list.map(materi => `https://dakwah-bot.vercel.app/materi/${materi.id}`)

@@ -70,7 +70,7 @@ export default function MateriPage({ allMateri }) {
 // }
 
 export async function getStaticProps() {
-    const res = await fetch("https://dakwah-bot.vercel.app/api/allMateri")
+    const res = await fetch("https://dakwah-bot.vercel.app/api/materi")
     const allMateri = await res.json();
 
     return {
