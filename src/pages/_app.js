@@ -5,6 +5,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from '../theme'
 import { UserProvider } from 'src/contexts/user.context'
+import { PersonalizeProvider } from '@contexts/personalize.context'
 
 export default function MyApp(props) {
     const { Component, pageProps } = props
@@ -25,8 +26,10 @@ export default function MyApp(props) {
             </Head>
             <UserProvider initialUser={pageProps?.user}>
                 <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <Component {...pageProps} />
+                    <PersonalizeProvider initialPersonalize={pageProps?.personalize || ''}>
+                        <CssBaseline />
+                        <Component {...pageProps} />
+                    </PersonalizeProvider>
                 </ThemeProvider>
             </UserProvider>
         </>

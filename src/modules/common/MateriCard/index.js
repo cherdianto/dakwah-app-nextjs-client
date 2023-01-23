@@ -21,8 +21,11 @@ const StyledLink = styled(Link)`
 
 const MateriCard = ({ name, img, status, rating, student, description, materiID, label }) => {
     return (
-        <Card>
-            <Box sx={{ position: 'relative', maxWidth: 368, padding: 1 }}>
+        <Card elevation={2} sx={{
+            p: 0,
+            border: '1px solid lightgray'
+        }}>
+            <Box sx={{ position: 'relative', maxWidth: 368, px: 1 }}>
                 <CardContent >
                     <Grid container direction='column' sx={{ paddingBottom: 1, paddingTop: 0 }}>
                         <Grid container direction='row' justifyContent='stretch'>

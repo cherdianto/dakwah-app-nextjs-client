@@ -18,10 +18,20 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Link from 'next/link'
 import MoreIcon from '@mui/icons-material/MoreVert';
+import BottomSetting from "@mobile/BottomSetting";
+import { usePersonalize } from "@contexts/personalize.context";
+import { useEffect, useState } from "react";
 
 
 const MateriDetail = ({ materi }) => {
+    const { personalize, setPersonalize} = usePersonalize()
+    const [fontSize, setFontSize] = useState(personalize.fontSize)
     const { name, content } = materi
+
+    useEffect(() => {
+        setFontSize(personalize.fontSize)
+    }, [personalize])
+
 
     return (
         <>
@@ -55,11 +65,11 @@ const MateriDetail = ({ materi }) => {
                                         borderBottom: '1px solid darkgray'
                                     }}
                                 >
-                                    <Typography>{ctn.subTitle}</Typography>
+                                    <Typography sx={{ fontSize }}>{ctn.subTitle}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Grid container direction='column'>
-                                        <Typography variant="body2" sx={{ whiteSpace: 'pre-line' }}>
+                                        <Typography align="justify" sx={{ whiteSpace: 'pre-line', fontSize }}>
                                             {ctn.matan}
                                         </Typography>
                                         <Grid container direction='row' justifyContent='flex-end'>
@@ -74,6 +84,7 @@ const MateriDetail = ({ materi }) => {
                     })}
                 </Grid>
             </Grid>
+            <BottomSetting />
             {/* </Container> */}
         </>
 
@@ -99,19 +110,25 @@ const MateriDetail = ({ materi }) => {
 //     }
 // }
 
+const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+const baseUrl = process.env.ENV === 'vercel' ? process.env.BASE_URL_VERCEL : process.env.BASE_URL_LOCAL
+
 export async function getServerSidePaths() {
-    const res = await fetch("https://dakwah-bot.vercel.app/api/allMateri")
+    const res = await fetch(`${apiUrl}/api/materi`)
     const allMateri = await res.json()
 
-    const paths = allMateri.list.map(materi => `https://dakwah-bot.vercel.app/materi/${materi.id}`)
+    const paths = allMateri.list.map(materi => `${baseUrl}/materi/${materi.id}`)
     return { paths, fallback: false }
 }
 
 export async function getServerSideProps({ params }) {
-    console.log(params)
-    const res = await fetch(`https://dakwah-bot.vercel.app/api/materi/${params.id}`)
-    console.log(res)
-    const detailMateri = await res.json()
+    // console.log(params)
+    const res = await fetch(`${apiUrl}/api/materi/${params.id}`)
+    // console.log(res)
+    let detailMateri = await res.json()
+    if(process.env.ENV === 'development'){
+        detailMateri = detailMateri.materi
+    }
 
     return {
         props: {

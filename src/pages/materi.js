@@ -39,7 +39,7 @@ export default function MateriPage({ allMateri }) {
                         return (
                             <Grid key={id} item xs={12} sm={12}>
                                 <MateriCard
-                                    materiID={lst.id} //ini untuk sementara
+                                    materiID={ process.env.ENV === 'development' ? `${lst.id}` : `${lst._id}`} //ini untuk sementara
                                     // materiID={lst._id} // ini untuk production
                                     img={lst.img}
                                     name={lst.name}
@@ -70,7 +70,8 @@ export default function MateriPage({ allMateri }) {
 // }
 
 export async function getServerSideProps() {
-    const res = await fetch("https://dakwah-bot.vercel.app/api/allMateri")
+    const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+    const res = await fetch(`${apiUrl}/api/materi`)
     const allMateri = await res.json();
 
     return {

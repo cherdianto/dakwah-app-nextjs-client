@@ -11,6 +11,7 @@ const RootStyles = styled("div")({
     maxWidth: 600,
     alignItems: 'center',
     margin: '0 auto',
+    // background: '#E7EBF0'
     // border: '1px dotted gray',
     // height: 'calc(100% - 65px)'
 })
