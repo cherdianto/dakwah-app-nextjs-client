@@ -54,6 +54,8 @@ function PromoSlide(props) {
 export default function Homepage(props) {
     const { user, setUser } = useUser()
 
+    console.log('homepage')
+
     let items = [
         {
             nama: "slide 1",
@@ -71,10 +73,12 @@ export default function Homepage(props) {
 
     const getUser = async () => {
         try {
+            console.log('firing axiosjwt from homepage')
+
             const res = await axiosJWT('http://localhost:3001/auth/user', {
                 withCredentials: true
             })
-            setUser(res.data.user.fullname)
+            setUser(res.data.user)
         } catch (error) {
             if(error.isAxiosError){
                 setUser()
@@ -94,7 +98,7 @@ export default function Homepage(props) {
                     maxWidth: 600,
                     mx: 'auto'
                 }}>
-                    <Typography variant='h6'>Welcome, {user ? `${user}` : 'Guest'}</Typography>
+                    <Typography variant='h6'>Welcome, {user ? `${user.fullname}` : 'Guest'}</Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     <LanguagePopover />
                 </Toolbar>

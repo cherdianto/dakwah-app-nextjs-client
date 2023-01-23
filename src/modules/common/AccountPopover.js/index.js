@@ -2,12 +2,15 @@ import { useState } from 'react';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { alpha } from '@mui/material/styles';
 import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material';
+import Router from 'next/router'
+import axiosJWT from '@utils/axiosJWT';
+import { useUser } from '@contexts/user.context';
 
 // ----------------------------------------------------------------------
 
 const ACCOUNTMENU = [
     {
-        value: 'edit',
+        value: 'edit profile',
         label: 'Edit Profile',
         icon: '/assets/icons/ic_flag_de.svg',
     },
@@ -22,13 +25,47 @@ const ACCOUNTMENU = [
 
 export default function AccountPopover() {
     const [open, setOpen] = useState(null);
+    const { user, setUser } = useUser()
 
     const handleOpen = (event) => {
         setOpen(event.currentTarget);
     };
 
-    const handleClose = () => {
+    const handleLogout = async () => {
+        try {
+            const res = await axiosJWT.get('http://localhost:3001/auth/logout', {withCredentials: true})
+            return true
+        } catch (error) {
+            console.log(error)
+            return false
+        }
+    }
+
+    const handleClose = async (e) => {
+        const target = e.target.id
+        // console.log(e.target.id)
         setOpen(null);
+        
+        
+
+        if(target === 'edit profile') {
+            Router.push('/update-profile')
+            console.log('edit profile')
+        } else if ( target === 'logout'){
+            try {
+                const res = await axiosJWT.get('http://localhost:3001/auth/logout', {withCredentials: true})
+                console.log(res)
+                
+                if(res.data.status === true){
+                    Router.push('/')
+                }
+                
+            } catch (error) {
+                console.log(error)
+            }
+
+            setUser()
+        }
     };
 
     return (
@@ -69,7 +106,7 @@ export default function AccountPopover() {
             >
                 <Stack spacing={0.75}>
                     {ACCOUNTMENU.map((option) => (
-                        <MenuItem key={option.value} selected={option.value === ACCOUNTMENU[0].value} onClick={() => handleClose()}>
+                        <MenuItem key={option.value} id={option.value} onClick={(e) => handleClose(e)}>
                             {/* <Box component="img" alt={option.label} src={option.icon} sx={{ width: 28, mr: 2 }} /> */}
 
                             {option.label}

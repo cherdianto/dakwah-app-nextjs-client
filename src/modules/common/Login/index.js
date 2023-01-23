@@ -52,7 +52,7 @@ const Login = () => {
             console.log('submit nih ' + cred)
             try {
                 const res = await axios.post('http://localhost:3001/auth/login', cred)
-                setUser(res.data.fullname)
+                setUser(res.data)
                 setError(null)
             } catch (error) {
                 setError({
@@ -75,7 +75,7 @@ const Login = () => {
                         {error && error.status === true ? <Alert severity='error'>{error.message}</Alert> : ''}
                     </HeadingStyle>
 
-                    <Grid direction='column' gap={2}>
+                    <Grid container direction='column' gap={2}>
                         <form
                             id="loginForm"
                             onSubmit={(e) => {

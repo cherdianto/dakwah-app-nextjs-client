@@ -1,5 +1,5 @@
 import Login from '@common/Login'
-import Register from '@common/Register'
+import Register from '@common/RegisterForm'
 import React from 'react'
 import Layout from '../modules/common/Layout'
 import { useUser } from '@contexts/user.context'
@@ -12,24 +12,8 @@ import { useEffect } from 'react'
 const LoginPage = (props) => {
     
     const {user, setUser} = useUser()
-
-    const getUser = async () => {
-        console.log('getting user info')
-        try {
-            const res = await axiosJWT('http://localhost:3001/auth/user', {
-                withCredentials: true
-            })
-            
-            setUser(res.data.user.fullname)
-        } catch (error) {
-            if(error.isAxiosError){
-                setUser()
-            }
-        }
-    }
     
     useEffect(() => {
-        getUser()
         if(user) Router.push('/account')
     }, [user])
 

@@ -9,6 +9,9 @@
             "rating": 4.5,
             "student": 100,
             "description": "Belajar tauhid dasar",
+            "label" : [
+                "advance"
+            ],
             "content": [
                 {
                     "matan": "Mempelajari tauhid merupakan kewajiban setiap muslim, baik laki-laki maupun wanita, karena Allah ﷻ menciptakan manusia dan jin adalah hanya untuk bertauhid yaitu meng-Esakan ibadah kepada Allah ﷻ Allah ﷻ berfirman\n\nﻭَﻣَﺎ ﺧَﻠَﻘْﺖُ ﺍﻟْﺠِﻦَّ ﻭَﺍْﻹِﻧْﺲَ ﺇِﻻَّ ﻟِﻴَﻌْﺒُﺪُﻭﻥ\n’’Dan tidaklah Aku ciptakan jin dan manusia kecuali untuk beribadah kepadaKu’’.(Surat Adz-Dzariyaat : 56)\n\nOleh karena itulah Allah ﷻ telah mengutus para Rasul kepada setiap ummat tujuannya adalah untuk mengajak mereka kepada tauhid. Allah ﷻ berfirman\n\nﻭَﻟَﻘَﺪْ ﺑَﻌَﺜْﻨَﺎ ﻓِﻲ ﻛُﻞِّ ﺃُﻣَّﺔٍ ﺭَﺳُﻮﻟًﺎ ﺃَﻥِ ﺍﻋْﺒُﺪُﻭﺍ ﺍﻟﻠَّﻪَ ﻭَﺍﺟْﺘَﻨِﺒُﻮﺍ ﺍﻟﻄَّﺎﻏُﻮﺕَ ۖ …\n’’Dan sungguh-sungguh Kami telah mengutus kepada setiap ummat seorang Rasul yang mereka berkata kepada kaumnya, ’’Sembahlah Allah dan jauhilah thaghut’’. (Surat AnNahl : 36)\n\nMakna thaghut adalah segala sesembahan selain Allah ﷻ\n\nOleh karena itu seorang muslim yang tidak memahami tauhid, yang merupakan inti dari ajaran Islam, maka sebenarnya dia tidak memahami agamanya meskipun dia telah mengaku mempelajari ilmu-ilmu yang banyak",
@@ -40,6 +43,9 @@
             "rating": 4.5,
             "student": 150,
             "description": "Belajar mengenal Allah SWT",
+            "label" : [
+                "advance"
+            ],
             "content": [
                 {
                     "matan": "matan 1",
@@ -71,6 +77,9 @@
             "rating": 4.5,
             "student": 200,
             "description": "Belajar mengenal Rasulullah SAW",
+            "label" : [
+                "advance"
+            ],
             "content": [
                 {
                     "matan": "matan 1",

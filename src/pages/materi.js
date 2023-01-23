@@ -39,7 +39,8 @@ export default function MateriPage({ allMateri }) {
                         return (
                             <Grid key={id} item xs={12} sm={12}>
                                 <MateriCard
-                                    materiID={lst._id}
+                                    materiID={lst.id} //ini untuk sementara
+                                    // materiID={lst._id} // ini untuk production
                                     img={lst.img}
                                     name={lst.name}
                                     status={lst.status}
@@ -57,8 +58,19 @@ export default function MateriPage({ allMateri }) {
     )
 }
 
+// export async function getStaticProps() {
+//     const res = await fetch("http://localhost:3001/api/materi")
+//     const allMateri = await res.json();
+
+//     return {
+//         props: {
+//             allMateri
+//         }
+//     }
+// }
+
 export async function getStaticProps() {
-    const res = await fetch("http://localhost:3001/api/materi")
+    const res = await fetch("http://localhost:3000/api/allMateri")
     const allMateri = await res.json();
 
     return {

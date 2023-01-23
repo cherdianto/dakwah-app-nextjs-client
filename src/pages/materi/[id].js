@@ -58,7 +58,7 @@ const MateriDetail = ({ materi }) => {
                                     <Typography>{ctn.subTitle}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    <Grid direction='column'>
+                                    <Grid container direction='column'>
                                         <Typography variant="body2" sx={{ whiteSpace: 'pre-line' }}>
                                             {ctn.matan}
                                         </Typography>
@@ -80,21 +80,42 @@ const MateriDetail = ({ materi }) => {
     )
 }
 
+// export async function getStaticPaths() {
+//     const res = await fetch("http://localhost:3001/api/materi")
+//     const allMateri = await res.json()
+
+//     const paths = allMateri.list.map(materi => `/materi/${materi._id}`)
+//     return { paths, fallback: false }
+// }
+
+// export async function getStaticProps({ params }) {
+//     const res = await fetch(`http://localhost:3001/api/materi/${params.id}`)
+//     const detailMateri = await res.json()
+
+//     return {
+//         props: {
+//             materi: detailMateri.materi
+//         }
+//     }
+// }
+
 export async function getStaticPaths() {
-    const res = await fetch("http://localhost:3001/api/materi")
+    const res = await fetch("http://localhost:3000/api/allMateri")
     const allMateri = await res.json()
 
-    const paths = allMateri.list.map(materi => `/materi/${materi._id}`)
+    const paths = allMateri.list.map(materi => `/materi/${materi.id}`)
     return { paths, fallback: false }
 }
 
 export async function getStaticProps({ params }) {
-    const res = await fetch(`http://localhost:3001/api/materi/${params.id}`)
+    console.log(params)
+    const res = await fetch(`http://localhost:3000/api/materi/${params.id}`)
+    console.log(res)
     const detailMateri = await res.json()
 
     return {
         props: {
-            materi: detailMateri.materi
+            materi: detailMateri
         }
     }
 }

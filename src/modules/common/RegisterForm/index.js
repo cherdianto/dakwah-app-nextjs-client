@@ -34,30 +34,41 @@ const HeadingStyle = styled(Box)({
     marginBottom: 35
 })
 
-const Register = () => {
+const RegisterForm = () => {
     const { user, setUser } = useUser()
     const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(null)
 
     const validation = useFormik({
         enableReinitialize: true,
         initialValues: {
-            email: 'user2@email.com',
-            password: 'password'
+            email: '',
+            password: '',
+            whatsapp: '',
+            fullname: ''
         },
         onSubmit: async (values) => {
-            const cred = {
+            const data = {
                 email: values.email,
+                fullname: values.fullname,
+                whatsapp: values.whatsapp,
                 password: values.password
             }
-            console.log('submit nih ' + cred)
+            console.log('submit register ' + data)
             try {
-                const res = await axios.post('http://localhost:3001/auth/login', cred)
-                setUser(res.data.fullname)
+                const res = await axios.post('http://localhost:3001/auth/register', data)
+                console.log(res)
+                setUser(res.data.user)
                 setError(null)
+                setSuccess({
+                    status: true,
+                    message: "REGISTER SUCCESS"
+                })
             } catch (error) {
+                console.log(error)
                 setError({
                     status: true,
-                    // message: error.response.data.message
+                    message: error.response.data.message
                 })
                 // alert(error.response.data.message)
             }
@@ -73,6 +84,7 @@ const Register = () => {
                             Create new account
                         </Typography>
                         {error && error.status === true ? <Alert severity='error'>{error.message}</Alert> : ''}
+                        {success && success.status === true ? <Alert severity='success'>{success.message}</Alert> : ''}
                     </HeadingStyle>
 
                     <Grid direction='column' gap={2}>
@@ -156,4 +168,4 @@ const Register = () => {
     )
 }
 
-export default Register
+export default RegisterForm
