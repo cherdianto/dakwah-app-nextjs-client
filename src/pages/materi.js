@@ -70,7 +70,7 @@ export default function MateriPage({ allMateri }) {
 // }
 
 export async function getStaticProps() {
-    const res = await fetch("http://localhost:3000/api/allMateri")
+    const res = await fetch("/api/allMateri")
     const allMateri = await res.json();
 
     return {

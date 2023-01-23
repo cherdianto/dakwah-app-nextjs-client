@@ -100,7 +100,7 @@ const MateriDetail = ({ materi }) => {
 // }
 
 export async function getStaticPaths() {
-    const res = await fetch("http://localhost:3000/api/allMateri")
+    const res = await fetch("/api/allMateri")
     const allMateri = await res.json()
 
     const paths = allMateri.list.map(materi => `/materi/${materi.id}`)
@@ -109,7 +109,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
     console.log(params)
-    const res = await fetch(`http://localhost:3000/api/materi/${params.id}`)
+    const res = await fetch(`/api/materi/${params.id}`)
     console.log(res)
     const detailMateri = await res.json()
 
