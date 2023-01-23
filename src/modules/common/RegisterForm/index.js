@@ -34,30 +34,41 @@ const HeadingStyle = styled(Box)({
     marginBottom: 35
 })
 
-const Login = () => {
+const RegisterForm = () => {
     const { user, setUser } = useUser()
     const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(null)
 
     const validation = useFormik({
         enableReinitialize: true,
         initialValues: {
-            email: 'user2@email.com',
-            password: 'password'
+            email: '',
+            password: '',
+            whatsapp: '',
+            fullname: ''
         },
         onSubmit: async (values) => {
-            const cred = {
-                email : values.email,
-                password : values.password
+            const data = {
+                email: values.email,
+                fullname: values.fullname,
+                whatsapp: values.whatsapp,
+                password: values.password
             }
-            console.log('submit nih ' + cred)
+            console.log('submit register ' + data)
             try {
-                const res = await axios.post('http://localhost:3001/auth/login', cred)
-                setUser(res.data)
+                const res = await axios.post('http://localhost:3001/auth/register', data)
+                console.log(res)
+                setUser(res.data.user)
                 setError(null)
+                setSuccess({
+                    status: true,
+                    message: "REGISTER SUCCESS"
+                })
             } catch (error) {
+                console.log(error)
                 setError({
                     status: true,
-                    message:error.response.data.message
+                    message: error.response.data.message
                 })
                 // alert(error.response.data.message)
             }
@@ -70,12 +81,13 @@ const Login = () => {
                 <ContentStyle>
                     <HeadingStyle>
                         <Typography sx={{ color: "text.secondary", mb: 1 }} >
-                            Login to your account
+                            Create new account
                         </Typography>
                         {error && error.status === true ? <Alert severity='error'>{error.message}</Alert> : ''}
+                        {success && success.status === true ? <Alert severity='success'>{success.message}</Alert> : ''}
                     </HeadingStyle>
 
-                    <Grid container direction='column' gap={2}>
+                    <Grid direction='column' gap={2}>
                         <form
                             id="loginForm"
                             onSubmit={(e) => {
@@ -86,39 +98,51 @@ const Login = () => {
                         >
                             <TextField
                                 fullWidth
-                                // autoComplete="email"
+                                id="fullname"
+                                type="string"
+                                label="Fullname"
+                                value={validation.values.fullname}
+                                onChange={validation.handleChange}
+                                sx={{
+                                    pb: 2
+                                }}
+                            />
+                            <TextField
+                                fullWidth
                                 id="email"
                                 type="email"
                                 label="Email Address"
                                 value={validation.values.email}
                                 onChange={validation.handleChange}
                                 sx={{
-                                    pb: 3
+                                    pb: 2
                                 }}
                             />
                             <TextField
                                 fullWidth
-                                // autoComplete="username"
+                                id="whatsapp"
+                                type="whatsapp"
+                                label="Whatsapp"
+                                value={validation.values.whatsapp}
+                                onChange={validation.handleChange}
+                                sx={{
+                                    pb: 2
+                                }}
+                            />
+
+                            <TextField
+                                fullWidth
                                 id="password"
                                 type="password"
                                 label="Password"
                                 value={validation.values.password}
                                 onChange={validation.handleChange}
+                                sx={{
+                                    pb: 2
+                                }}
+
                             />
                             <Box>
-                                <Stack
-                                    direction="row"
-                                    alignItems="center"
-                                    justifyContent="space-between"
-                                    sx={{ my: 2 }}
-                                >
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox />
-                                        }
-                                        label="Remember me"
-                                    />
-                                </Stack>
                                 <Button
                                     variant="contained"
                                     endIcon={<ArrowRight />}
@@ -128,12 +152,12 @@ const Login = () => {
                                         mb: 2
                                     }}
                                 >
-                                    Login
+                                    Register
                                 </Button>
-                                <Typography variant="body2" align="center">New user?  
-                                        <Link href={'/register'}>
-                                             Register
-                                        </Link>
+                                <Typography variant="body2" align="center">Already have an account?
+                                    <Link href={'/login'}>
+                                        Login
+                                    </Link>
                                 </Typography>
                             </Box>
                         </form>
@@ -144,4 +168,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default RegisterForm

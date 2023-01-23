@@ -15,6 +15,12 @@
       "@utils/*": [
         "src/utils/*"
       ],
+      "@contexts/*": [
+        "src/contexts/*"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
     }
   }
 }

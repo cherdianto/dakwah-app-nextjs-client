@@ -4,8 +4,15 @@ import styled from "@emotion/styled";
 
 
 const RootStyles = styled("div")({
-    marginTop: 20,
-    marginBottom: 60 
+    paddingTop: 50,
+    paddingBottom: 60,
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: 600,
+    alignItems: 'center',
+    margin: '0 auto',
+    // border: '1px dotted gray',
+    // height: 'calc(100% - 65px)'
 })
 
 const Layout = ({ children }) => {
