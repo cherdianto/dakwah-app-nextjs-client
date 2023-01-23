@@ -69,8 +69,8 @@ export default function MateriPage({ allMateri }) {
 //     }
 // }
 
-export async function getStaticProps() {
-    const res = await fetch("https://dakwah-bot.vercel.app/api/materi")
+export async function getServerSideProps() {
+    const res = await fetch("https://dakwah-bot.vercel.app/api/allMateri")
     const allMateri = await res.json();
 
     return {

@@ -99,15 +99,15 @@ const MateriDetail = ({ materi }) => {
 //     }
 // }
 
-export async function getStaticPaths() {
-    const res = await fetch("https://dakwah-bot.vercel.app/api/materi")
+export async function getServerSidePaths() {
+    const res = await fetch("https://dakwah-bot.vercel.app/api/allMateri")
     const allMateri = await res.json()
 
     const paths = allMateri.list.map(materi => `https://dakwah-bot.vercel.app/materi/${materi.id}`)
     return { paths, fallback: false }
 }
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
     console.log(params)
     const res = await fetch(`https://dakwah-bot.vercel.app/api/materi/${params.id}`)
     console.log(res)
