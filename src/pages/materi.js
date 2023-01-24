@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../modules/common/Layout'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
@@ -11,19 +11,44 @@ import { useUser } from '@contexts/user.context'
 import IconButton from '@mui/material/IconButton';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import MateriPopover from '@common/MateriPopover.js'
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { getMateries } from '../apiQuery'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 
-
-export default function MateriPage({ allMateri }) {
+export default function MateriPage() {
     // const { list } = allMateri
-    const [list, setList] = useState(allMateri.list)
+
+    const { status, data } = useQuery(['materi'], getMateries)
+
+    useEffect(() => {
+        console.log(status)
+        if (status === 'success') {
+            setList(data)
+        }
+    }, [status, data])
+
+    const cache = useQueryClient()
+
+    const addMateri = useMutation(getMateries, {
+        onSuccess: () => {
+            cache.invalidateQueries('materi')
+        }
+    })
+
+    // console.log(data)
+    const [list, setList] = useState([])
     const { user, setUser } = useUser()
 
     const handleGetNewMateriFromModal = (newMateri) => {
-        setList([
-            ...list,
-            { ... newMateri }
-        ])
+        // setList([
+        //     ...list,
+        //     { ... newMateri }
+        // ])
+        addMateri.mutate()
+        console.log('set new materi manualy')
+
     }
     return (
         <Layout>
@@ -35,7 +60,7 @@ export default function MateriPage({ allMateri }) {
                 }}>
                     <Typography variant="h5" color="inherit" component="div">Materi Aktif</Typography>
                     <Box sx={{ flexGrow: 1 }} />
-                    <MateriPopover onNewMateri={(newMateri) => handleGetNewMateriFromModal(newMateri)}/>
+                    <MateriPopover onNewMateri={(newMateri) => handleGetNewMateriFromModal(newMateri)} />
                 </Toolbar>
             </AppBar>
             <Grid container>
@@ -75,13 +100,22 @@ export default function MateriPage({ allMateri }) {
 // }
 
 export async function getServerSideProps() {
-    const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
-    const res = await fetch(`${apiUrl}/api/materi`)
-    const allMateri = await res.json();
+    // const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+    // const getMateri = async () => {
+    //     const res = await fetch(`${apiUrl}/api/materi`)
+    //     const allMateri = await res.json();
+
+    //     console.log(allMateri)
+    //     return allMateri
+    // }
+    const queryClient = new QueryClient()
+
+    await queryClient.fetchQuery(['materi'], getMateries)
 
     return {
         props: {
-            allMateri
+            // allMateri
+            dehydratedState: dehydrate(queryClient)
         }
     }
 }
