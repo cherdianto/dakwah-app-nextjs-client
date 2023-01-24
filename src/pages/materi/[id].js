@@ -5,14 +5,10 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Grid from "@mui/material/Grid";
-// import Card from "@mui/material/Card";
-// import CardHeader from "@mui/material/CardHeader";
-// import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-// import Button from "@mui/material/Button";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -21,18 +17,41 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import BottomSetting from "@mobile/BottomSetting";
 import { usePersonalize } from "@contexts/personalize.context";
 import { useEffect, useState } from "react";
+import TextEditor from "@common/TextEditor";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Edit from "@mui/icons-material/Edit";
+import Save from "@mui/icons-material/Save";
+import Cancel from "@mui/icons-material/Cancel";
 
 
-const MateriDetail = ({ materi }) => {
-    const { personalize, setPersonalize} = usePersonalize()
+const MateriDetail = ({ materi, materiId }) => {
+    console.log(materiId)
+    const { personalize, setPersonalize } = usePersonalize()
     const [fontSize, setFontSize] = useState(personalize.fontSize)
     const { name, content } = materi
-
+    const [isEdit, setIsEdit] = useState(false)
+    const [targetContent, setTargetContent] = useState()
+    const [masterContent, setMasterContent] = useState(materi)
+    
     useEffect(() => {
         setFontSize(personalize.fontSize)
     }, [personalize])
 
+    const handleEdit = (e) => {
+        setIsEdit(true)
+        setTargetContent(e.target.id)
+    }
 
+    const handleCancelEdit = (e) => {
+        setIsEdit(false)
+        setTargetContent()
+    }
+
+    const handleUpdateState = (content) => {
+        console.log(content)
+        setMasterContent(content)
+    }
     return (
         <>
             <AppBar position="static" color="inherit">
@@ -52,9 +71,11 @@ const MateriDetail = ({ materi }) => {
                     </IconButton>
                 </Toolbar>
             </AppBar>
-            <Grid container justifyContent='center'>
+            <Grid container justifyContent='center' sx={{
+                pb: 8
+            }}>
                 <Grid container maxWidth={'sm'} direction='column' sx={{ p: 1 }} gap={1}>
-                    {content.map((ctn, id) => {
+                    {masterContent.content.map((ctn, id) => {
                         return (
                             <Accordion key={id}>
                                 <AccordionSummary
@@ -65,19 +86,24 @@ const MateriDetail = ({ materi }) => {
                                         borderBottom: '1px solid darkgray'
                                     }}
                                 >
-                                    <Typography sx={{ fontSize }}>{ctn.subTitle}</Typography>
+                                    <Typography sx={{ fontSize, fontWeight: 500 }}>{ctn.subTitle}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    <Grid container direction='column'>
-                                        <Typography align="justify" sx={{ whiteSpace: 'pre-line', fontSize }}>
-                                            {ctn.matan}
-                                        </Typography>
-                                        <Grid container direction='row' justifyContent='flex-end'>
-                                            <FormGroup>
-                                                <FormControlLabel control={<Switch />} label="Selesai Baca" />
-                                            </FormGroup>
+                                    { (isEdit && targetContent === ctn.id) ? (
+                                        <TextEditor handleUpdateState={handleUpdateState} materiId={materiId} matan={ctn.matan} subTitle={ctn.subTitle} contentid={ctn.id} handleCancelEdit={handleCancelEdit} />
+                                    ) : (
+                                        <Grid container direction='column'>
+                                            <Box align="justify" dangerouslySetInnerHTML={{ __html: ctn.matan }} sx={{ fontSize }} />
+                                            <Grid container direction='row' justifyContent='space-between' sx={{
+                                                mt: 3
+                                            }}>
+                                                <Button startIcon={<Edit />} id={ctn.id} onClick={(e) => handleEdit(e)} >Edit</Button>
+                                                <FormGroup>
+                                                    <FormControlLabel control={<Switch />} label="Selesai Baca" />
+                                                </FormGroup>
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
+                                    )}
                                 </AccordionDetails>
                             </Accordion>
                         )
@@ -126,13 +152,14 @@ export async function getServerSideProps({ params }) {
     const res = await fetch(`${apiUrl}/api/materi/${params.id}`)
     // console.log(res)
     let detailMateri = await res.json()
-    if(process.env.ENV === 'development'){
+    if (process.env.ENV === 'development') {
         detailMateri = detailMateri.materi
     }
 
     return {
         props: {
-            materi: detailMateri
+            materi: detailMateri,
+            materiId: params.id
         }
     }
 }
