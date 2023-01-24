@@ -23,6 +23,7 @@ import Box from "@mui/material/Box";
 import Edit from "@mui/icons-material/Edit";
 import Save from "@mui/icons-material/Save";
 import Cancel from "@mui/icons-material/Cancel";
+import ContentPopover from "@common/ContentPopover";
 
 
 const MateriDetail = ({ materi, materiId }) => {
@@ -52,6 +53,14 @@ const MateriDetail = ({ materi, materiId }) => {
         console.log(content)
         setMasterContent(content)
     }
+
+    const handleNewContent = (newContent) => {
+        // console.log(content)
+        setMasterContent([
+            ...content,
+            newContent
+        ])
+    }
     return (
         <>
             <AppBar position="static" color="inherit">
@@ -66,9 +75,7 @@ const MateriDetail = ({ materi, materiId }) => {
                         </IconButton>
                     </Link>
                     <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>{name}</Typography>
-                    <IconButton color="inherit">
-                        <MoreIcon />
-                    </IconButton>
+                    <ContentPopover materiId={materiId} onNewContent={(data) => handleNewContent(data)} />
                 </Toolbar>
             </AppBar>
             <Grid container justifyContent='center' sx={{
@@ -90,7 +97,7 @@ const MateriDetail = ({ materi, materiId }) => {
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     { (isEdit && targetContent === ctn.id) ? (
-                                        <TextEditor handleUpdateState={handleUpdateState} materiId={materiId} matan={ctn.matan} subTitle={ctn.subTitle} contentid={ctn.id} handleCancelEdit={handleCancelEdit} />
+                                        <TextEditor isEdit={true} handleUpdateState={handleUpdateState} materiId={materiId} matan={ctn.matan} subTitle={ctn.subTitle} contentid={ctn.id} handleCancelEdit={handleCancelEdit} />
                                     ) : (
                                         <Grid container direction='column'>
                                             <Box align="justify" dangerouslySetInnerHTML={{ __html: ctn.matan }} sx={{ fontSize }} />

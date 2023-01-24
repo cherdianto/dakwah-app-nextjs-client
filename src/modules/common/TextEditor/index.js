@@ -11,29 +11,43 @@ const ReactQuill = dynamic(() => import("react-quill"), {
     ssr: false
 });
 
-const TextEditor = ({ matan, materiId, contentid, subTitle, handleCancelEdit, handleUpdateState }) => {
+const TextEditor = ({ matan, materiId, contentid, subTitle, handleCancelEdit, handleUpdateState, style, isEdit }) => {
     const [value, setValue] = useState(matan)
     const [newSubtitle, setNewSubtitle] = useState(subTitle)
 
     const handleSave = async () => {
         // const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
-
-        const res = await axiosJWT.put(`http://localhost:3001/api/materi/${materiId}/content/${contentid}`, {
-            matan: value,
-            subTitle: newSubtitle
-        }, { withCredentials: true })
-
-        if (!res) {
-            console.log('error')
+        if(isEdit){
+            const res = await axiosJWT.put(`http://localhost:3001/api/materi/${materiId}/content/${contentid}`, {
+                matan: value,
+                subTitle: newSubtitle
+            }, { withCredentials: true })
+    
+            if (!res) {
+                console.log('error')
+            }
+    
+            console.log('success')
+            console.log(res.data.content)
+            handleUpdateState(res.data.content)
+            handleCancelEdit()
+        } else {
+            const res = await axiosJWT.post(`http://localhost:3001/api/materi/${materiId}/content`, {
+                matan: value,
+                subTitle: newSubtitle
+            }, { withCredentials: true })
+    
+            if (!res) {
+                console.log('error')
+            }
+    
+            console.log('success')
+            console.log(res.data.content)
+            // handleCancelEdit()
         }
-
-        console.log('success')
-        console.log(res.data.content)
-        handleUpdateState(res.data.content)
-        handleCancelEdit()
     }
     return (
-        <Grid container direction='column' gap={2}>
+        <Grid container direction='column' gap={2} sx={style}>
             <TextField id="subtitle" label="Subtitle" variant="outlined" onChange={e => setNewSubtitle(e.target.value)} value={newSubtitle} sx={{ mt:3 }}/>
             <ReactQuill value={value} onChange={setValue} />
             <Button startIcon={<Cancel onClick={handleCancelEdit} />}  >Cancel</Button>

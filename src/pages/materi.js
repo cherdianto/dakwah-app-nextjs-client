@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Layout from '../modules/common/Layout'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
@@ -10,13 +10,21 @@ import MateriCard from '@common/MateriCard'
 import { useUser } from '@contexts/user.context'
 import IconButton from '@mui/material/IconButton';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import MateriPopover from '@common/MateriPopover.js'
 
 
 
 export default function MateriPage({ allMateri }) {
-    const { list } = allMateri
+    // const { list } = allMateri
+    const [list, setList] = useState(allMateri.list)
     const { user, setUser } = useUser()
 
+    const handleGetNewMateriFromModal = (newMateri) => {
+        setList([
+            ...list,
+            { ... newMateri }
+        ])
+    }
     return (
         <Layout>
             <AppBar position='fixed' color="inherit" elevation={2}>
@@ -27,19 +35,16 @@ export default function MateriPage({ allMateri }) {
                 }}>
                     <Typography variant="h5" color="inherit" component="div">Materi Aktif</Typography>
                     <Box sx={{ flexGrow: 1 }} />
-                {/* <LanguagePopover /> */}
-                <IconButton color="inherit">
-                    <MoreIcon />
-                </IconButton>
+                    <MateriPopover onNewMateri={(newMateri) => handleGetNewMateriFromModal(newMateri)}/>
                 </Toolbar>
             </AppBar>
             <Grid container>
                 <Grid container sx={{ p: 1 }} gap={2}>
-                    {list.map((lst, id) => {
+                    {list?.map((lst, id) => {
                         return (
                             <Grid key={id} item xs={12} sm={12}>
                                 <MateriCard
-                                    materiID={ process.env.ENV === 'development' ? `${lst.id}` : `${lst._id}`} //ini untuk sementara
+                                    materiID={process.env.ENV === 'development' ? `${lst.id}` : `${lst._id}`} //ini untuk sementara
                                     // materiID={lst._id} // ini untuk production
                                     img={lst.img}
                                     name={lst.name}

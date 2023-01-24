@@ -23,7 +23,8 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID,
     return (
         <Card elevation={2} sx={{
             p: 0,
-            border: '1px solid lightgray'
+            border: '1px solid lightgray',
+            borderRadius: 5
         }}>
             <Box sx={{ position: 'relative', maxWidth: 368, px: 1 }}>
                 <CardContent >
