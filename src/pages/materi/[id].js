@@ -24,16 +24,25 @@ import Edit from "@mui/icons-material/Edit";
 import Save from "@mui/icons-material/Save";
 import Cancel from "@mui/icons-material/Cancel";
 import ContentPopover from "@common/ContentPopover";
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { addMateri, getMateries, showMateri, updateContent } from '../../apiQuery'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 
-const MateriDetail = ({ materi, materiId }) => {
-    console.log(materiId)
+const MateriDetail = ({ materiId }) => {
     const { personalize, setPersonalize } = usePersonalize()
     const [fontSize, setFontSize] = useState(personalize.fontSize)
-    const { name, content } = materi
     const [isEdit, setIsEdit] = useState(false)
     const [targetContent, setTargetContent] = useState()
-    const [masterContent, setMasterContent] = useState(materi)
+    const [masterContent, setMasterContent] = useState()
+    const { status, data } = useQuery(['content'], () => showMateri(materiId))
+
+    useEffect(() => {
+        if (status === 'success') {
+            setMasterContent(data)
+        }
+    }, [status, data])
     
     useEffect(() => {
         setFontSize(personalize.fontSize)
@@ -48,19 +57,38 @@ const MateriDetail = ({ materi, materiId }) => {
         setIsEdit(false)
         setTargetContent()
     }
+    const cache = useQueryClient()
+    
+    const editContent = useMutation(updateContent, {
+        onSuccess: () => {
+            cache.invalidateQueries('materi')
+        }
+    })
 
-    const handleUpdateState = (content) => {
-        console.log(content)
-        setMasterContent(content)
+    const handleSave = async ({ contentId, matan, subTitle }) => {
+
+        try {
+            await editContent.mutate({
+                materiId, 
+                contentId, 
+                formData: { matan, subTitle}
+            })
+        } catch (error) {
+            throw new Error(error)
+            
+        }
+        setIsEdit(false)
+        setTargetContent()
+        // setMasterContent(content)
     }
 
-    const handleNewContent = (newContent) => {
-        // console.log(content)
-        setMasterContent([
-            ...content,
-            newContent
-        ])
-    }
+    // const handleNewContent = (newContent) => {
+    //     setMasterContent([
+    //         ...content,
+    //         newContent
+    //     ])
+    // }
+
     return (
         <>
             <AppBar position="static" color="inherit">
@@ -74,15 +102,15 @@ const MateriDetail = ({ materi, materiId }) => {
                             <ArrowLeft />
                         </IconButton>
                     </Link>
-                    <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>{name}</Typography>
-                    <ContentPopover materiId={materiId} onNewContent={(data) => handleNewContent(data)} />
+                    <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>{masterContent?.name}</Typography>
+                    {/* <ContentPopover materiId={materiId} onNewContent={(data) => handleNewContent(data)} /> */}
                 </Toolbar>
             </AppBar>
             <Grid container justifyContent='center' sx={{
                 pb: 8
             }}>
                 <Grid container maxWidth={'sm'} direction='column' sx={{ p: 1 }} gap={1}>
-                    {masterContent.content.map((ctn, id) => {
+                    {masterContent?.content?.map((ctn, id) => {
                         return (
                             <Accordion key={id}>
                                 <AccordionSummary
@@ -97,7 +125,13 @@ const MateriDetail = ({ materi, materiId }) => {
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     { (isEdit && targetContent === ctn.id) ? (
-                                        <TextEditor isEdit={true} handleUpdateState={handleUpdateState} materiId={materiId} matan={ctn.matan} subTitle={ctn.subTitle} contentid={ctn.id} handleCancelEdit={handleCancelEdit} />
+                                        <TextEditor
+                                            onSave={(formData) => handleSave(formData)} 
+                                            onCancel={handleCancelEdit} 
+                                            matan={ isEdit && ctn.matan}
+                                            subTitle={ isEdit && ctn.subTitle}
+                                            contentId={ctn.id}
+                                            />
                                     ) : (
                                         <Grid container direction='column'>
                                             <Box align="justify" dangerouslySetInnerHTML={{ __html: ctn.matan }} sx={{ fontSize }} />
@@ -147,26 +181,34 @@ const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : proce
 const baseUrl = process.env.ENV === 'vercel' ? process.env.BASE_URL_VERCEL : process.env.BASE_URL_LOCAL
 
 export async function getServerSidePaths() {
-    const res = await fetch(`${apiUrl}/api/materi`)
-    const allMateri = await res.json()
+    // const res = await fetch(`${apiUrl}/api/materi`)
+    // const allMateri = await res.json()
 
-    const paths = allMateri.list.map(materi => `${baseUrl}/materi/${materi.id}`)
+    const queryClient = new QueryClient()
+    const list = await queryClient.fetchQuery(['materi'], getMateries)
+    const paths = list.map(materi => `${baseUrl}/materi/${materi.id}`)
     return { paths, fallback: false }
 }
 
 export async function getServerSideProps({ params }) {
     // console.log(params)
-    const res = await fetch(`${apiUrl}/api/materi/${params.id}`)
-    // console.log(res)
-    let detailMateri = await res.json()
-    if (process.env.ENV === 'development') {
-        detailMateri = detailMateri.materi
-    }
+    // const res = await fetch(`${apiUrl}/api/materi/${params.id}`)
+    // // console.log(res)
+    // let detailMateri = await res.json()
+    // if (process.env.ENV === 'development') {
+    //     detailMateri = detailMateri.materi
+    // }
+
+    const queryClient = new QueryClient()
+
+    // console.log(params)
+    const res =await queryClient.fetchQuery(['content'], () => showMateri(params.id))
 
     return {
         props: {
-            materi: detailMateri,
-            materiId: params.id
+            // materi: detailMateri,
+            materiId: params.id,
+            dehydratedState: dehydrate(queryClient)
         }
     }
 }

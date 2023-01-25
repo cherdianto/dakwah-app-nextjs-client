@@ -24,10 +24,10 @@ const MATERIMENU_ADMIN = [
 
 // ----------------------------------------------------------------------
 
-export default function MateriPopover({ onNewMateri }) {
+export default function MateriPopover({ onSelect }) {
     const [open, setOpen] = useState(null);
     const { user, setUser } = useUser()
-    const [modalOpen, setModalOpen] = useState(false)
+    const [selected, setSelected] = useState()
 
     const handleOpen = (event) => {
         setOpen(event.currentTarget);
@@ -35,26 +35,15 @@ export default function MateriPopover({ onNewMateri }) {
 
     const handleClose = async (e) => {
         const target = e.target.id
-        // console.log(e.target.id)
+        
         setOpen(null);
-        
-        
-
         if(target === 'add materi') {
-            // Router.push('/update-profile')
-            console.log('add materi')
             setOpen(null)
-            setModalOpen(true)
+            onSelect('add materi')
         } else if ( target === 'sequence'){
-            console.log('sequence')
+            onSelect('sequence')
         }
     };
-
-    const handleAddMateriSuccess = (res) => {
-        console.log('handle add materi success')
-        console.log(res)
-        onNewMateri(res.data.newMateri)
-    }
 
     return (
         <>
@@ -102,7 +91,7 @@ export default function MateriPopover({ onNewMateri }) {
                     ))}
                 </Stack>
             </Popover>
-            <MateriModal open={modalOpen} onClose={() => setModalOpen(false)} onSuccess={(data) => handleAddMateriSuccess(data)} />
+            {/* <MateriModal open={modalOpen} onClose={() => setModalOpen(false)} onSuccess={(data) => handleAddMateriSuccess(data)} /> */}
         </>
     );
 }

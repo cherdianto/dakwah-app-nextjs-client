@@ -13,13 +13,15 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import MateriPopover from '@common/MateriPopover.js'
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
-import { getMateries } from '../apiQuery'
+import { addMateri, getMateries } from '../apiQuery'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import MateriModal from '@common/AddMateriModal'
 
 
 export default function MateriPage() {
-    // const { list } = allMateri
-
+    const [modalMateri, setModalMateri] = useState(false)
+    const [isModalEdit, setIsModalEdit] = useState(false)
+    const [list, setList] = useState([])
     const { status, data } = useQuery(['materi'], getMateries)
 
     useEffect(() => {
@@ -29,18 +31,30 @@ export default function MateriPage() {
         }
     }, [status, data])
 
+    const handleMateriPopoverSelect = (selected) => {
+        if (selected === 'add materi') {
+            setModalMateri(true)
+            setIsModalEdit(false)
+        }
+        else console.log(selected)
+    }
+
     const cache = useQueryClient()
 
-    const addMateri = useMutation(getMateries, {
+    const addNewMateri = useMutation(addMateri, {
         onSuccess: () => {
             cache.invalidateQueries('materi')
         }
     })
 
-    // console.log(data)
-    const [list, setList] = useState([])
-    const { user, setUser } = useUser()
-
+    const handleSaveData = async (formData) => {
+        try {
+            await addNewMateri.mutate(formData)
+            setModalMateri(false)
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
     const handleGetNewMateriFromModal = (newMateri) => {
         // setList([
         //     ...list,
@@ -60,7 +74,7 @@ export default function MateriPage() {
                 }}>
                     <Typography variant="h5" color="inherit" component="div">Materi Aktif</Typography>
                     <Box sx={{ flexGrow: 1 }} />
-                    <MateriPopover onNewMateri={(newMateri) => handleGetNewMateriFromModal(newMateri)} />
+                    <MateriPopover onSelect={(selected) => handleMateriPopoverSelect(selected)} />
                 </Toolbar>
             </AppBar>
             <Grid container>
@@ -84,6 +98,15 @@ export default function MateriPage() {
                     })}
                 </Grid>
             </Grid>
+            <MateriModal 
+                open={modalMateri}
+                onClose={() => setModalMateri(false)} 
+                onSave={(formData) => handleSaveData(formData)}
+                isEdit={isModalEdit}
+                title={ !isModalEdit && null }
+                description={ !isModalEdit && null }
+                label={ !isModalEdit && [] }
+            />
         </Layout>
     )
 }
