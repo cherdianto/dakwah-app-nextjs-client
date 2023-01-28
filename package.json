@@ -17,6 +17,7 @@
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.4",
     "@next/font": "13.1.2",
+    "@tanstack/react-query": "^4.23.0",
     "axios": "^1.2.3",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.2",
@@ -27,6 +28,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-material-ui-carousel": "^3.4.2",
+    "react-quill": "^2.0.0",
     "yup": "^0.32.11"
   }
 }

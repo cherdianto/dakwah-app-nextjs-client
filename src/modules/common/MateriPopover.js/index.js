@@ -5,66 +5,43 @@ import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material';
 import Router from 'next/router'
 import axiosJWT from '@utils/axiosJWT';
 import { useUser } from '@contexts/user.context';
+import MateriModal from '@common/AddMateriModal';
 
 // ----------------------------------------------------------------------
-const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
-const ACCOUNTMENU = [
+
+const MATERIMENU_ADMIN = [
     {
-        value: 'edit profile',
-        label: 'Edit Profile',
+        value: 'add materi',
+        label: 'Add Materi',
         icon: '/assets/icons/ic_flag_de.svg',
     },
     {
-        value: 'logout',
-        label: 'Logout',
+        value: 'sequence',
+        label: 'Edit Sequence',
         icon: '/assets/icons/ic_flag_en.svg',
     }
 ];
 
 // ----------------------------------------------------------------------
 
-export default function AccountPopover() {
+export default function MateriPopover({ onSelect }) {
     const [open, setOpen] = useState(null);
     const { user, setUser } = useUser()
+    const [selected, setSelected] = useState()
 
     const handleOpen = (event) => {
         setOpen(event.currentTarget);
     };
 
-    const handleLogout = async () => {
-        try {
-            const res = await axiosJWT.get(`${apiUrl}/auth/logout`, {withCredentials: true})
-            return true
-        } catch (error) {
-            console.log(error)
-            return false
-        }
-    }
-
     const handleClose = async (e) => {
         const target = e.target.id
-        // console.log(e.target.id)
+        
         setOpen(null);
-        
-        
-
-        if(target === 'edit profile') {
-            Router.push('/update-profile')
-            console.log('edit profile')
-        } else if ( target === 'logout'){
-            try {
-                const res = await axiosJWT.get(`${apiUrl}/auth/logout`, {withCredentials: true})
-                console.log(res)
-                
-                if(res.data.status === true){
-                    Router.push('/')
-                }
-                
-            } catch (error) {
-                console.log(error)
-            }
-
-            setUser()
+        if(target === 'add materi') {
+            setOpen(null)
+            onSelect('add materi')
+        } else if ( target === 'sequence'){
+            onSelect('sequence')
         }
     };
 
@@ -105,7 +82,7 @@ export default function AccountPopover() {
                 }}
             >
                 <Stack spacing={0.75}>
-                    {ACCOUNTMENU.map((option) => (
+                    {MATERIMENU_ADMIN.map((option) => (
                         <MenuItem key={option.value} id={option.value} onClick={(e) => handleClose(e)}>
                             {/* <Box component="img" alt={option.label} src={option.icon} sx={{ width: 28, mr: 2 }} /> */}
 
@@ -114,6 +91,7 @@ export default function AccountPopover() {
                     ))}
                 </Stack>
             </Popover>
+            {/* <MateriModal open={modalOpen} onClose={() => setModalOpen(false)} onSuccess={(data) => handleAddMateriSuccess(data)} /> */}
         </>
     );
 }

@@ -18,6 +18,7 @@ import axios from "axios";
 import Link from "next/link";
 
 axios.defaults.withCredentials = true;
+const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
 
 const RootStyle = styled("div")({
     height: 'calc(100vh - 110px)',
@@ -37,6 +38,7 @@ const HeadingStyle = styled(Box)({
 const Login = () => {
     const { user, setUser } = useUser()
     const [error, setError] = useState(null)
+    console.log(apiUrl)
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -51,7 +53,7 @@ const Login = () => {
             }
             console.log('submit nih ' + cred)
             try {
-                const res = await axios.post('http://localhost:3001/auth/login', cred)
+                const res = await axios.post(`${apiUrl}/auth/login`, cred)
                 setUser(res.data)
                 setError(null)
             } catch (error) {

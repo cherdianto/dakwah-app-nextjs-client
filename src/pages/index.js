@@ -23,6 +23,8 @@ import axiosJWT from '@utils/axiosJWT'
 import { useUser } from '@contexts/user.context'
 import LanguagePopover from '@common/LanguagePopover'
 
+const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+
 const StyledLink = styled(Link)`
     text-decoration: none;
 `;
@@ -75,7 +77,7 @@ export default function Homepage(props) {
         try {
             console.log('firing axiosjwt from homepage')
 
-            const res = await axiosJWT('http://localhost:3001/auth/user', {
+            const res = await axiosJWT(`${apiUrl}/auth/user`, {
                 withCredentials: true
             })
             setUser(res.data.user)

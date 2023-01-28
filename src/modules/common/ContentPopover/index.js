@@ -5,41 +5,34 @@ import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material';
 import Router from 'next/router'
 import axiosJWT from '@utils/axiosJWT';
 import { useUser } from '@contexts/user.context';
+import MateriModal from '@common/AddMateriModal';
+import ContentModal from '@common/AddContentModal';
 
 // ----------------------------------------------------------------------
-const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
-const ACCOUNTMENU = [
+
+const CONTENTMENU_ADMIN = [
     {
-        value: 'edit profile',
-        label: 'Edit Profile',
+        value: 'add content',
+        label: 'Add Content',
         icon: '/assets/icons/ic_flag_de.svg',
     },
     {
-        value: 'logout',
-        label: 'Logout',
+        value: 'sequence',
+        label: 'Edit Sequence',
         icon: '/assets/icons/ic_flag_en.svg',
     }
 ];
 
 // ----------------------------------------------------------------------
 
-export default function AccountPopover() {
+export default function ContentPopover({ materiId, onNewContent, onSave }) {
     const [open, setOpen] = useState(null);
     const { user, setUser } = useUser()
+    const [modalOpen, setModalOpen] = useState(false)
 
     const handleOpen = (event) => {
         setOpen(event.currentTarget);
     };
-
-    const handleLogout = async () => {
-        try {
-            const res = await axiosJWT.get(`${apiUrl}/auth/logout`, {withCredentials: true})
-            return true
-        } catch (error) {
-            console.log(error)
-            return false
-        }
-    }
 
     const handleClose = async (e) => {
         const target = e.target.id
@@ -48,25 +41,21 @@ export default function AccountPopover() {
         
         
 
-        if(target === 'edit profile') {
-            Router.push('/update-profile')
-            console.log('edit profile')
-        } else if ( target === 'logout'){
-            try {
-                const res = await axiosJWT.get(`${apiUrl}/auth/logout`, {withCredentials: true})
-                console.log(res)
-                
-                if(res.data.status === true){
-                    Router.push('/')
-                }
-                
-            } catch (error) {
-                console.log(error)
-            }
-
-            setUser()
+        if(target === 'add content') {
+            // Router.push('/update-profile')
+            console.log('add content')
+            setOpen(null)
+            setModalOpen(true)
+        } else if ( target === 'sequence'){
+            console.log('sequence')
         }
     };
+
+    // const handleAddContentSuccess = (res) => {
+    //     console.log('handle add materi success')
+    //     console.log(res)
+    //     onNewContent(res.data.newMateri)
+    // }
 
     return (
         <>
@@ -105,7 +94,7 @@ export default function AccountPopover() {
                 }}
             >
                 <Stack spacing={0.75}>
-                    {ACCOUNTMENU.map((option) => (
+                    {CONTENTMENU_ADMIN.map((option) => (
                         <MenuItem key={option.value} id={option.value} onClick={(e) => handleClose(e)}>
                             {/* <Box component="img" alt={option.label} src={option.icon} sx={{ width: 28, mr: 2 }} /> */}
 
@@ -114,6 +103,7 @@ export default function AccountPopover() {
                     ))}
                 </Stack>
             </Popover>
+            <ContentModal open={modalOpen} onClose={() => setModalOpen(false)} onSave={(formData) => onSave(formData)}/>
         </>
     );
 }

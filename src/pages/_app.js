@@ -1,13 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from '../theme'
 import { UserProvider } from 'src/contexts/user.context'
+import { PersonalizeProvider } from '@contexts/personalize.context'
+import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { config } from '@utils/react-query-config'
 
 export default function MyApp(props) {
     const { Component, pageProps } = props
+
+    const [queryClient] = useState(() => new QueryClient(config))
 
     React.useEffect(() => {
         // Remove the server-side injected CSS.
@@ -25,8 +30,14 @@ export default function MyApp(props) {
             </Head>
             <UserProvider initialUser={pageProps?.user}>
                 <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <Component {...pageProps} />
+                    <PersonalizeProvider initialPersonalize={pageProps?.personalize || ''}>
+                        <QueryClientProvider client={queryClient}>
+                            <Hydrate state={pageProps.dehydratedState}>
+                                <CssBaseline />
+                                <Component {...pageProps} />
+                            </Hydrate>
+                        </QueryClientProvider>
+                    </PersonalizeProvider>
                 </ThemeProvider>
             </UserProvider>
         </>
