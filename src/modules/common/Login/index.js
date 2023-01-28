@@ -38,13 +38,13 @@ const HeadingStyle = styled(Box)({
 const Login = () => {
     const { user, setUser } = useUser()
     const [error, setError] = useState(null)
-    console.log(apiUrl)
+    // console.log(apiUrl)
 
     const validation = useFormik({
         enableReinitialize: true,
         initialValues: {
-            email: 'user2@email.com',
-            password: 'password'
+            email: '',
+            password: ''
         },
         onSubmit: async (values) => {
             const cred = {

@@ -4,6 +4,7 @@ import { alpha } from '@mui/material/styles';
 import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material';
 import Router from 'next/router'
 import axiosJWT from '@utils/axiosJWT';
+import axios from 'axios';
 import { useUser } from '@contexts/user.context';
 
 // ----------------------------------------------------------------------
@@ -33,7 +34,7 @@ export default function AccountPopover() {
 
     const handleLogout = async () => {
         try {
-            const res = await axiosJWT.get(`${apiUrl}/auth/logout`, {withCredentials: true})
+            const res = await axios.get(`${apiUrl}/auth/logout`, {withCredentials: true})
             return true
         } catch (error) {
             console.log(error)
@@ -53,7 +54,7 @@ export default function AccountPopover() {
             console.log('edit profile')
         } else if ( target === 'logout'){
             try {
-                const res = await axiosJWT.get(`${apiUrl}/auth/logout`, {withCredentials: true})
+                const res = await axios.get(`${apiUrl}/auth/logout`, {withCredentials: true})
                 console.log(res)
                 
                 if(res.data.status === true){

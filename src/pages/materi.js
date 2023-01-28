@@ -122,7 +122,7 @@ export default function MateriPage() {
 //     }
 // }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     // const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
     // const getMateri = async () => {
     //     const res = await fetch(`${apiUrl}/api/materi`)
