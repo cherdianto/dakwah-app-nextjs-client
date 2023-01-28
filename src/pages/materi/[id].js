@@ -205,7 +205,7 @@ const MateriDetail = ({ materiId }) => {
 const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
 const baseUrl = process.env.ENV === 'vercel' ? process.env.BASE_URL_VERCEL : process.env.BASE_URL_LOCAL
 
-export async function getStaticPaths() {
+export async function getServerSidePaths() {
     // const res = await fetch(`${apiUrl}/api/materi`)
     // const allMateri = await res.json()
 
@@ -215,7 +215,7 @@ export async function getStaticPaths() {
     return { paths, fallback: false }
 }
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
     // console.log(params)
     // const res = await fetch(`${apiUrl}/api/materi/${params.id}`)
     // // console.log(res)
