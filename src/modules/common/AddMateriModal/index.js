@@ -29,7 +29,7 @@ const MateriModal = ({ open, onClose, onSave, title, description, label, isEdit 
     const [newDescription, setNewDescription] = useState(description)
     const [newLabel, setNewLabel] = useState(label)
 
-    const handleSave = async () => {
+    const handleSave = () => {
         const formData = {
             description: newDescription,
             name: newTitle,

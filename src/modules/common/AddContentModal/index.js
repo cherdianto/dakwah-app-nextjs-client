@@ -12,48 +12,34 @@ import TextEditor from "@common/TextEditor";
 
 const style = {
     position: 'absolute',
-    top: '50%',
+    top: '10%',
     left: '50%',
-    transform: 'translate(-50%, -50%)',
+    transform: 'translate(-50%, -5%)',
     width: '100%',
     maxWidth: 600,
-    height: '70%',
     bgcolor: 'background.paper',
-    //   border: '2px solid #000',
     borderRadius: 3,
     boxShadow: 24,
-    p: 4,
+    p: 2,
 };
 
-const ContentModal = ({ open, onClose, onSuccess, materiId, contentId, matan }) => {
-    const [title, setTitle] = useState()
-    const [description, setDescription] = useState()
-    const [label, setLabel] = useState()
-    
-    const handleSave = async () => {
-        // const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
-
-        const res = await axiosJWT.post(`http://localhost:3001/api/materi/add`, {
-            description: description,
-            name: title,
-            label: label
-        }, { withCredentials: true })
-
-        if (!res) {
-            console.log('error')
-        }
-
-        console.log('success')
-        console.log(res)
-        // handleUpdateState(res.data.content)
-        onSuccess(res)
+const ContentModal = ({ open, onClose, onSave }) => {
+    const handleSaveAndCloseModal = (formData) => {
+        onSave(formData)
         onClose()
     }
 
+    const handleCancel = () => {
+        onClose()
+    }
     return (
         <>
-            <Modal open={open} onClose={onClose}>
-                <TextEditor materiId={materiId} style={style} isEdit={false}/>
+            <Modal open={open} onClose={onClose} sx={{
+                overflow: 'scroll',
+                // maxHeight: '100%'
+                display: 'block'
+            }}>
+                <TextEditor style={style} isEdit={false} onCancel={() => handleCancel()} onSave={(formData) => handleSaveAndCloseModal(formData)} />
             </Modal>
         </>
     )

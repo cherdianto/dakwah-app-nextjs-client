@@ -1,7 +1,8 @@
 import axios from "axios"
+const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
 
 const refreshToken = async() => {
-    await axios.get('http://localhost/auth/refreshToken', {withCredentials: true})
+    await axios.get(`${apiUrl}/auth/refreshToken`, {withCredentials: true})
 }
 
 export const handleRequest = async (request) => {

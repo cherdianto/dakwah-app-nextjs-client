@@ -7,7 +7,7 @@ import axiosJWT from '@utils/axiosJWT';
 import { useUser } from '@contexts/user.context';
 
 // ----------------------------------------------------------------------
-
+const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
 const ACCOUNTMENU = [
     {
         value: 'edit profile',
@@ -33,7 +33,7 @@ export default function AccountPopover() {
 
     const handleLogout = async () => {
         try {
-            const res = await axiosJWT.get('http://localhost:3001/auth/logout', {withCredentials: true})
+            const res = await axiosJWT.get(`${apiUrl}/auth/logout`, {withCredentials: true})
             return true
         } catch (error) {
             console.log(error)
@@ -53,7 +53,7 @@ export default function AccountPopover() {
             console.log('edit profile')
         } else if ( target === 'logout'){
             try {
-                const res = await axiosJWT.get('http://localhost:3001/auth/logout', {withCredentials: true})
+                const res = await axiosJWT.get(`${apiUrl}/auth/logout`, {withCredentials: true})
                 console.log(res)
                 
                 if(res.data.status === true){

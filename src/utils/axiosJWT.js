@@ -1,8 +1,9 @@
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
-const apiUrl = 'http://localhost:3001';
-const appUrl = process.env.REACT_APP_ENV === 'development' ? process.env.REACT_APP_URL_BASE_DEV : process.env.REACT_APP_URL_BASE_PROD;
+const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+
+// const appUrl = process.env.REACT_APP_ENV === 'vercel' ? process.env.REACT_APP_URL_BASE_DEV : process.env.REACT_APP_URL_BASE_PROD;
 
 
 // $PENDINGWORK : setelah sukses dapet access token baru, seharusnya token baru disimpan di redux store auth/user/token utk dipake lagi di next request

@@ -25,7 +25,7 @@ const CONTENTMENU_ADMIN = [
 
 // ----------------------------------------------------------------------
 
-export default function ContentPopover({ materiId, onNewContent }) {
+export default function ContentPopover({ materiId, onNewContent, onSave }) {
     const [open, setOpen] = useState(null);
     const { user, setUser } = useUser()
     const [modalOpen, setModalOpen] = useState(false)
@@ -51,11 +51,11 @@ export default function ContentPopover({ materiId, onNewContent }) {
         }
     };
 
-    const handleAddContentSuccess = (res) => {
-        console.log('handle add materi success')
-        console.log(res)
-        onNewContent(res.data.newMateri)
-    }
+    // const handleAddContentSuccess = (res) => {
+    //     console.log('handle add materi success')
+    //     console.log(res)
+    //     onNewContent(res.data.newMateri)
+    // }
 
     return (
         <>
@@ -103,7 +103,7 @@ export default function ContentPopover({ materiId, onNewContent }) {
                     ))}
                 </Stack>
             </Popover>
-            <ContentModal materiId={materiId} open={modalOpen} onClose={() => setModalOpen(false)} onSuccess={(data) => handleAddContentSuccess(data)} />
+            <ContentModal open={modalOpen} onClose={() => setModalOpen(false)} onSave={(formData) => onSave(formData)}/>
         </>
     );
 }

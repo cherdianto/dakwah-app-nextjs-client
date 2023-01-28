@@ -26,8 +26,9 @@ import Cancel from "@mui/icons-material/Cancel";
 import ContentPopover from "@common/ContentPopover";
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
-import { addMateri, getMateries, showMateri, updateContent } from '../../apiQuery'
+import { addContent, getMateries, showMateri, updateContent } from '../../apiQuery'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import ModalReadingResponse from "@common/ReadingResponseModal";
 
 
 const MateriDetail = ({ materiId }) => {
@@ -36,6 +37,8 @@ const MateriDetail = ({ materiId }) => {
     const [isEdit, setIsEdit] = useState(false)
     const [targetContent, setTargetContent] = useState()
     const [masterContent, setMasterContent] = useState()
+    const [openModalReadingResponse, setOpenModalReadingResponse] = useState(false)
+    const [idReadingResponse, setIdReadingResponse] = useState()
     const { status, data } = useQuery(['content'], () => showMateri(materiId))
 
     useEffect(() => {
@@ -43,7 +46,7 @@ const MateriDetail = ({ materiId }) => {
             setMasterContent(data)
         }
     }, [status, data])
-    
+
     useEffect(() => {
         setFontSize(personalize.fontSize)
     }, [personalize])
@@ -58,36 +61,57 @@ const MateriDetail = ({ materiId }) => {
         setTargetContent()
     }
     const cache = useQueryClient()
-    
+
     const editContent = useMutation(updateContent, {
         onSuccess: () => {
             cache.invalidateQueries('materi')
         }
     })
 
-    const handleSave = async ({ contentId, matan, subTitle }) => {
-
-        try {
-            await editContent.mutate({
-                materiId, 
-                contentId, 
-                formData: { matan, subTitle}
-            })
-        } catch (error) {
-            throw new Error(error)
-            
+    const addNewContent = useMutation(addContent, {
+        onSuccess: () => {
+            cache.invalidateQueries('materi')
         }
-        setIsEdit(false)
-        setTargetContent()
-        // setMasterContent(content)
+    })
+
+    const handleSave = async ({ contentId, matan, subTitle }) => {
+        if (isEdit) {
+            try {
+                await editContent.mutate({
+                    materiId,
+                    contentId,
+                    formData: { matan, subTitle }
+                })
+            } catch (error) {
+                throw new Error(error)
+
+            }
+            setIsEdit(false)
+            setTargetContent()
+        } else {
+            try {
+                await addNewContent.mutate({
+                    materiId,
+                    formData: { matan, subTitle }
+                })
+            } catch (error) {
+                throw new Error(error)
+
+            }
+            setTargetContent()
+        }
     }
 
-    // const handleNewContent = (newContent) => {
-    //     setMasterContent([
-    //         ...content,
-    //         newContent
-    //     ])
-    // }
+    const handleOpenModalReadingResponse = (e) => {
+        if (e.target.checked) {
+            setIdReadingResponse(e.target.id)
+            setOpenModalReadingResponse(true)
+        }
+    }
+
+    const handleReadingResponse = (resp) => {
+        console.log(resp + ' ' + idReadingResponse)
+    }
 
     return (
         <>
@@ -103,7 +127,7 @@ const MateriDetail = ({ materiId }) => {
                         </IconButton>
                     </Link>
                     <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>{masterContent?.name}</Typography>
-                    {/* <ContentPopover materiId={materiId} onNewContent={(data) => handleNewContent(data)} /> */}
+                    <ContentPopover onSave={(formData) => handleSave(formData)} />
                 </Toolbar>
             </AppBar>
             <Grid container justifyContent='center' sx={{
@@ -124,14 +148,14 @@ const MateriDetail = ({ materiId }) => {
                                     <Typography sx={{ fontSize, fontWeight: 500 }}>{ctn.subTitle}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    { (isEdit && targetContent === ctn.id) ? (
+                                    {(isEdit && targetContent === ctn.id) ? (
                                         <TextEditor
-                                            onSave={(formData) => handleSave(formData)} 
-                                            onCancel={handleCancelEdit} 
-                                            matan={ isEdit && ctn.matan}
-                                            subTitle={ isEdit && ctn.subTitle}
+                                            onSave={(formData) => handleSave(formData)}
+                                            onCancel={handleCancelEdit}
+                                            matan={isEdit && ctn.matan}
+                                            subTitle={isEdit && ctn.subTitle}
                                             contentId={ctn.id}
-                                            />
+                                        />
                                     ) : (
                                         <Grid container direction='column'>
                                             <Box align="justify" dangerouslySetInnerHTML={{ __html: ctn.matan }} sx={{ fontSize }} />
@@ -140,7 +164,7 @@ const MateriDetail = ({ materiId }) => {
                                             }}>
                                                 <Button startIcon={<Edit />} id={ctn.id} onClick={(e) => handleEdit(e)} >Edit</Button>
                                                 <FormGroup>
-                                                    <FormControlLabel control={<Switch />} label="Selesai Baca" />
+                                                    <FormControlLabel control={<Switch id={ctn.id} onChange={(e) => handleOpenModalReadingResponse(e)} />} label="Selesai Baca" />
                                                 </FormGroup>
                                             </Grid>
                                         </Grid>
@@ -150,6 +174,7 @@ const MateriDetail = ({ materiId }) => {
                         )
                     })}
                 </Grid>
+                <ModalReadingResponse open={openModalReadingResponse} onClose={() => setOpenModalReadingResponse(false)} onReadingResponse={(resp) => handleReadingResponse(resp)} />
             </Grid>
             <BottomSetting />
             {/* </Container> */}
@@ -202,7 +227,7 @@ export async function getServerSideProps({ params }) {
     const queryClient = new QueryClient()
 
     // console.log(params)
-    const res =await queryClient.fetchQuery(['content'], () => showMateri(params.id))
+    const res = await queryClient.fetchQuery(['content'], () => showMateri(params.id))
 
     return {
         props: {

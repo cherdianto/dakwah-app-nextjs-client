@@ -19,6 +19,8 @@ import Link from "next/link";
 
 axios.defaults.withCredentials = true;
 
+const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+
 const RootStyle = styled("div")({
     height: 'calc(100vh - 110px)',
     display: 'grid',
@@ -56,7 +58,7 @@ const RegisterForm = () => {
             }
             console.log('submit register ' + data)
             try {
-                const res = await axios.post('http://localhost:3001/auth/register', data)
+                const res = await axios.post(`${apiUrl}/auth/register`, data)
                 console.log(res)
                 setUser(res.data.user)
                 setError(null)
