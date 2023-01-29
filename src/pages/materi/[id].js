@@ -13,7 +13,6 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Link from 'next/link'
-import MoreIcon from '@mui/icons-material/MoreVert';
 import BottomSetting from "@mobile/BottomSetting";
 import { usePersonalize } from "@contexts/personalize.context";
 import { useEffect, useState } from "react";
@@ -21,8 +20,6 @@ import TextEditor from "@common/TextEditor";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Edit from "@mui/icons-material/Edit";
-import Save from "@mui/icons-material/Save";
-import Cancel from "@mui/icons-material/Cancel";
 import ContentPopover from "@common/ContentPopover";
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
@@ -205,34 +202,19 @@ const MateriDetail = ({ materiId }) => {
 const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
 const baseUrl = process.env.ENV === 'vercel' ? process.env.BASE_URL_VERCEL : process.env.BASE_URL_LOCAL
 
-export async function getServerSidePaths() {
-    // const res = await fetch(`${apiUrl}/api/materi`)
-    // const allMateri = await res.json()
-
-    const queryClient = new QueryClient()
-    const list = await queryClient.fetchQuery(['materi'], getMateries)
-    const paths = list.map(materi => `${baseUrl}/materi/${materi.id}`)
-    return { paths, fallback: false }
+export async function getStaticPaths() {
+    return { paths: [], fallback: 'blocking' }
 }
 
-export async function getServerSideProps({ params }) {
-    // console.log(params)
-    // const res = await fetch(`${apiUrl}/api/materi/${params.id}`)
-    // // console.log(res)
-    // let detailMateri = await res.json()
-    // if (process.env.ENV === 'development') {
-    //     detailMateri = detailMateri.materi
-    // }
-
+export async function getStaticProps({ params }) {
+    const id = params.id
     const queryClient = new QueryClient()
-
-    // console.log(params)
-    const res = await queryClient.fetchQuery(['content'], () => showMateri(params.id))
+    
+    await queryClient.fetchQuery(['content', id], () => showMateri(id))
 
     return {
         props: {
-            // materi: detailMateri,
-            materiId: params.id,
+            materiId: id,
             dehydratedState: dehydrate(queryClient)
         }
     }
