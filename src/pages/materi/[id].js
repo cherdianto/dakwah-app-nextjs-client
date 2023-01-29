@@ -207,7 +207,9 @@ export async function getStaticPaths() {
     // const allMateri = await res.json()
 
     const paths = allMateri.map(materi => `/materi/${materi._id}`)
-    return { paths, fallback: false }
+    return { paths, fallback: true }
+    // fallback true = when we add new materi, then it will not return 404
+    // falback false = it will render 404 when there is no path found on the build time path
     // return { paths: [], fallback: 'blocking' }
 }
 
