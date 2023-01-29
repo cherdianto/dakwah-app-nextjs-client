@@ -8,7 +8,6 @@ const refreshToken = async() => {
 export const handleRequest = async (request) => {
     try {
         const res = await request()
-        console.log(res)
         return res
     } catch (error) {
         // if error 401, get new token, then ulangi request

@@ -35,7 +35,7 @@ const MateriModal = ({ open, onClose, onSave, title, description, label, isEdit 
             name: newTitle,
             label: newLabel
         }
-        console.log('success')
+        
         resetForm()
         onClose()
         onSave(formData)

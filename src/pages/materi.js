@@ -25,7 +25,6 @@ export default function MateriPage() {
     const { status, data } = useQuery(['materi'], getMateries)
 
     useEffect(() => {
-        console.log(status)
         if (status === 'success') {
             setList(data)
         }
@@ -36,7 +35,7 @@ export default function MateriPage() {
             setModalMateri(true)
             setIsModalEdit(false)
         }
-        else console.log(selected)
+        // else console.log(selected)
     }
 
     const cache = useQueryClient()
@@ -61,7 +60,6 @@ export default function MateriPage() {
         //     { ... newMateri }
         // ])
         addMateri.mutate()
-        console.log('set new materi manualy')
 
     }
     return (
@@ -123,14 +121,6 @@ export default function MateriPage() {
 // }
 
 export async function getServerSideProps() {
-    // const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
-    // const getMateri = async () => {
-    //     const res = await fetch(`${apiUrl}/api/materi`)
-    //     const allMateri = await res.json();
-
-    //     console.log(allMateri)
-    //     return allMateri
-    // }
     const queryClient = new QueryClient()
 
     await queryClient.fetchQuery(['materi'], getMateries)

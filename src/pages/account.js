@@ -13,17 +13,14 @@ import Grid from '@mui/material/Grid'
 import Dashboard from '@common/Dashboard'
 import Profile from '@common/Profile'
 
-const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
 const AccountPage = (props) => {
     
     const {user, setUser} = useUser()
 
-    console.log('account page')
-
     const getUser = async () => {
         try {
-            console.log('firing axiosjwt from accountpage')
             const res = await axiosJWT(`${apiUrl}/auth/user`, {
                 withCredentials: true
             })

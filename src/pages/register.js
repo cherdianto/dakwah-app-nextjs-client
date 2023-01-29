@@ -11,7 +11,6 @@ import { useEffect } from 'react'
 
 
 const RegisterPage = (props) => {
-    console.log(props)
     
     const {user, setUser} = useUser()
     

@@ -1,6 +1,6 @@
 import axiosJWT from "@utils/axiosJWT"
 import axios from "axios"
-const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
 const GET_MATERIES = apiUrl + "/api/materi"
 const ADD_MATERI = apiUrl + "/api/materi/add"
@@ -9,7 +9,6 @@ const BASE_API = apiUrl + "/api/materi"
 export const getMateries = async () => {
     try {
         const response = await axios.get(GET_MATERIES)
-        // console.log(response.data.list)
         return response.data.list
     } catch (error) {
         throw new Error(error)

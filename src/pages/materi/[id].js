@@ -199,8 +199,8 @@ const MateriDetail = ({ materiId }) => {
 //     }
 // }
 
-const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
-const baseUrl = process.env.ENV === 'vercel' ? process.env.BASE_URL_VERCEL : process.env.BASE_URL_LOCAL
+// const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
+// const baseUrl = process.env.ENV === 'dev' ? process.env.BASE_URL_DEV : process.env.BASE_URL_PROD
 
 export async function getStaticPaths() {
     const allMateri = await getMateries()

@@ -25,7 +25,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Alert from "@mui/material/Alert";
 
-const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
 const ContentStyle = styled("div")({
     padding: 20,
@@ -55,10 +55,8 @@ export default function UpdateProfile(props) {
                 // oldPassword: values.oldPassword,
                 // newPassword: values.newPassword
             }
-            console.log('submit update ' + data)
             try {
                 const res = await axiosJWT.put(`${apiUrl}/auth/update-profile`, data)
-                console.log(res)
                 setUser(res.data.user)
                 setError(null)
                 setSuccess({
@@ -66,7 +64,6 @@ export default function UpdateProfile(props) {
                     message: "UPDATE PROFILE SUCCESS"
                 })
             } catch (error) {
-                console.log(error)
                 setError({
                     status: true,
                     message: error.response.data.message
@@ -79,12 +76,9 @@ export default function UpdateProfile(props) {
 
     const getUser = async () => {
         try {
-            console.log('firing axiosjwt from update profile page')
             const res = await axiosJWT(`${apiUrl}/auth/user`, {
                 withCredentials: true
             })
-
-            console.log(res)
             
             setUser(res.data.user)
         } catch (error) {

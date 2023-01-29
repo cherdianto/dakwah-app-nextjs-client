@@ -23,7 +23,7 @@ import axiosJWT from '@utils/axiosJWT'
 import { useUser } from '@contexts/user.context'
 import LanguagePopover from '@common/LanguagePopover'
 
-const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
 const StyledLink = styled(Link)`
     text-decoration: none;
@@ -56,8 +56,6 @@ function PromoSlide(props) {
 export default function Homepage(props) {
     const { user, setUser } = useUser()
 
-    console.log('homepage')
-
     let items = [
         {
             nama: "slide 1",
@@ -75,8 +73,6 @@ export default function Homepage(props) {
 
     const getUser = async () => {
         try {
-            console.log('firing axiosjwt from homepage')
-
             const res = await axiosJWT(`${apiUrl}/auth/user`, {
                 withCredentials: true
             })

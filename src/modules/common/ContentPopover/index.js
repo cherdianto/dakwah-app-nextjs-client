@@ -43,11 +43,11 @@ export default function ContentPopover({ materiId, onNewContent, onSave }) {
 
         if(target === 'add content') {
             // Router.push('/update-profile')
-            console.log('add content')
+            // console.log('add content')
             setOpen(null)
             setModalOpen(true)
         } else if ( target === 'sequence'){
-            console.log('sequence')
+            // console.log('sequence')
         }
     };
 
