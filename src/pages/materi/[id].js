@@ -203,13 +203,18 @@ const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : proce
 const baseUrl = process.env.ENV === 'vercel' ? process.env.BASE_URL_VERCEL : process.env.BASE_URL_LOCAL
 
 export async function getStaticPaths() {
-    return { paths: [], fallback: 'blocking' }
+    const res = await getMateries()
+    const allMateri = await res.json()
+
+    const paths = allMateri.map(materi => `/materi/${materi._id}`)
+    return { paths, fallback: false }
+    // return { paths: [], fallback: 'blocking' }
 }
 
 export async function getStaticProps({ params }) {
     const id = params.id
     const queryClient = new QueryClient()
-    
+
     await queryClient.fetchQuery(['content', id], () => showMateri(id))
 
     return {
