@@ -36,7 +36,7 @@ const MateriDetail = ({ materiId }) => {
     const [masterContent, setMasterContent] = useState()
     const [openModalReadingResponse, setOpenModalReadingResponse] = useState(false)
     const [idReadingResponse, setIdReadingResponse] = useState()
-    const { status, data } = useQuery(['content'], () => showMateri(materiId))
+    const { status, data } = useQuery(['content', materiId], () => showMateri(materiId))
 
     useEffect(() => {
         if (status === 'success') {
