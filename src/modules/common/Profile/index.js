@@ -1,12 +1,12 @@
 import * as React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
+// import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
+// import Avatar from '@mui/material/Avatar';
+// import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 import { useUser } from '@contexts/user.context';
 
 export default function Profile(props) {
@@ -17,7 +17,7 @@ export default function Profile(props) {
             sx={{
                 width: '100%'
             }}
-        >
+        >   
             <ListItem>
                 <ListItemText primary="Nama" secondary={user.fullname} />
             </ListItem>
@@ -28,6 +28,10 @@ export default function Profile(props) {
             <Divider component="li" />
             <ListItem>
                 <ListItemText primary="Whatsapp" secondary={user.whatsapp} />
+            </ListItem>
+            <Divider component="li" />
+            <ListItem>
+                <ListItemText primary="Role" secondary={user.role} />
             </ListItem>
             <Divider component="li" />
             <ListItem>

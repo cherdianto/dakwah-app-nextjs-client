@@ -32,6 +32,7 @@ const MateriDetail = ({ materiId }) => {
     const { personalize, setPersonalize } = usePersonalize()
     const [fontSize, setFontSize] = useState(personalize.fontSize)
     const [isEdit, setIsEdit] = useState(false)
+    const [expanded, setExpanded] = useState(false)
     const [targetContent, setTargetContent] = useState()
     const [masterContent, setMasterContent] = useState()
     const [openModalReadingResponse, setOpenModalReadingResponse] = useState(false)
@@ -110,6 +111,10 @@ const MateriDetail = ({ materiId }) => {
         console.log(resp + ' ' + idReadingResponse)
     }
 
+    const handleChangeAccordion = (id) => (e, isExpanded) => {
+        setExpanded( isExpanded ? id : false)
+    }
+
     return (
         <>
             <AppBar position="static" color="inherit">
@@ -133,7 +138,7 @@ const MateriDetail = ({ materiId }) => {
                 <Grid container maxWidth={'sm'} direction='column' sx={{ p: 1 }} gap={1}>
                     {masterContent?.content?.map((ctn, id) => {
                         return (
-                            <Accordion key={id}>
+                            <Accordion key={id} expanded={expanded === `${id}`} onChange={handleChangeAccordion(`${id}`)}>
                                 <AccordionSummary
                                     expandIcon={<ExpandMore />}
                                     id={id}

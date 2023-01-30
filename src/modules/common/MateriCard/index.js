@@ -53,11 +53,11 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID,
                     </Grid>
                     <Grid container direction='row' gap={1}>
                         <StyledLink href={"/materi/[id]"} as={`materi/${materiID}`} >
-                            <Button size="small" variant="contained" endIcon={<PlayArrow />}>Mulai Baca</Button>
+                            <Button size="small" variant="contained" endIcon={<PlayArrow />}>Baca</Button>
                         </StyledLink>
-                        <Button size="small" variant="outlined" endIcon={<Share />}>Bagikan</Button>
-                        <Button size="small" variant="outlined" endIcon={<Edit />} onClick={() => isEdit(true)}>Edit</Button>
-                        <Button size="small" variant="outlined" endIcon={<Delete />} onClick={isDelete}>Del</Button>
+                        <Button size="small" variant="outlined" endIcon={<Share />}>Bagi</Button>
+                        <Button size="small" variant="outlined" endIcon={<Edit />} onClick={() => isEdit(true)}>Sunting</Button>
+                        <Button size="small" variant="outlined" endIcon={<Delete />} onClick={isDelete}>Hapus</Button>
                     </Grid>
                 </CardContent>
             </Box>

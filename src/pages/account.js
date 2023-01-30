@@ -8,9 +8,9 @@ import axiosJWT from '@utils/axiosJWT'
 import Router from 'next/router'
 import { useEffect } from 'react'
 import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid'
-import Dashboard from '@common/Dashboard'
+// import Typography from '@mui/material/Typography'
+// import Grid from '@mui/material/Grid'
+// import Dashboard from '@common/Dashboard'
 import Profile from '@common/Profile'
 
 const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
