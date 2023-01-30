@@ -144,7 +144,7 @@ export default function MateriPage() {
     )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
     const queryClient = new QueryClient()
 
     await queryClient.fetchQuery(['materi'], () => getMateries())
