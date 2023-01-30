@@ -147,7 +147,7 @@ export default function MateriPage() {
 export async function getStaticProps() {
     const queryClient = new QueryClient()
 
-    await queryClient.fetchQuery(['materi'], getMateries)
+    await queryClient.fetchQuery(['materi'], () => getMateries())
 
     return {
         props: {
