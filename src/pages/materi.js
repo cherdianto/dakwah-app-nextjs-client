@@ -13,7 +13,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import MateriPopover from '@common/MateriPopover.js'
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
-import { addMateri, getMateries } from '../apiQuery'
+import { addMateri, getMateries, updateMateri, deleteMateri } from '../apiQuery'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import MateriModal from '@common/AddMateriModal'
 
@@ -21,6 +21,7 @@ import MateriModal from '@common/AddMateriModal'
 export default function MateriPage() {
     const [modalMateri, setModalMateri] = useState(false)
     const [isModalEdit, setIsModalEdit] = useState(false)
+    const [dataToEdit, setDataToEdit] = useState()
     const [list, setList] = useState([])
     const { status, data } = useQuery(['materi'], getMateries)
 
@@ -46,22 +47,57 @@ export default function MateriPage() {
         }
     })
 
+    const editMateri = useMutation(updateMateri, {
+        onSuccess: () => {
+            cache.invalidateQueries('materi')
+        }
+    })
+
+    const removeMateri = useMutation(deleteMateri, {
+        onSuccess: () => {
+            cache.invalidateQueries('materi')
+        }
+    })
+
     const handleSaveData = async (formData) => {
+        if(isModalEdit){
+            try {
+                await editMateri.mutate({materiId: dataToEdit._id, formData})
+                setModalMateri(false)
+            } catch (error) {
+                throw new Error(error)
+            }
+        } else {
+            try {
+                await addNewMateri.mutate(formData)
+                setModalMateri(false)
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
+    }
+
+    const handleOpenModalEdit = (lst) => {
+        setDataToEdit(lst)
+        setIsModalEdit(true)
+        setModalMateri(true)
+    }
+
+    const handleCloseModal = () => {
+        setModalMateri(false)
+        setIsModalEdit(false)
+        setDataToEdit()
+    }
+
+    const handleDeleteMateri = async ({materiId}) => {
         try {
-            await addNewMateri.mutate(formData)
+            await removeMateri.mutate(materiId)
             setModalMateri(false)
         } catch (error) {
             throw new Error(error)
         }
     }
-    const handleGetNewMateriFromModal = (newMateri) => {
-        // setList([
-        //     ...list,
-        //     { ... newMateri }
-        // ])
-        addMateri.mutate()
 
-    }
     return (
         <Layout>
             <AppBar position='fixed' color="inherit" elevation={2}>
@@ -81,8 +117,7 @@ export default function MateriPage() {
                         return (
                             <Grid key={id} item xs={12} sm={12}>
                                 <MateriCard
-                                    materiID={process.env.ENV === 'development' ? `${lst.id}` : `${lst._id}`} //ini untuk sementara
-                                    // materiID={lst._id} // ini untuk production
+                                    materiID={lst._id}
                                     img={lst.img}
                                     name={lst.name}
                                     status={lst.status}
@@ -90,6 +125,8 @@ export default function MateriPage() {
                                     student={lst.student}
                                     label={lst.label}
                                     description={lst.description}
+                                    isEdit={() => handleOpenModalEdit(lst) }
+                                    isDelete={() => handleDeleteMateri({materiId: lst._id})}
                                 />
                             </Grid>
                         )
@@ -98,29 +135,16 @@ export default function MateriPage() {
             </Grid>
             <MateriModal 
                 open={modalMateri}
-                onClose={() => setModalMateri(false)} 
+                onClose={() => handleCloseModal()} 
                 onSave={(formData) => handleSaveData(formData)}
                 isEdit={isModalEdit}
-                title={ !isModalEdit && null }
-                description={ !isModalEdit && null }
-                label={ !isModalEdit && [] }
+                dataToEdit={dataToEdit}
             />
         </Layout>
     )
 }
 
-// export async function getStaticProps() {
-//     const res = await fetch("http://localhost:3001/api/materi")
-//     const allMateri = await res.json();
-
-//     return {
-//         props: {
-//             allMateri
-//         }
-//     }
-// }
-
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const queryClient = new QueryClient()
 
     await queryClient.fetchQuery(['materi'], getMateries)

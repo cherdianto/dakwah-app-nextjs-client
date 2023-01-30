@@ -36,6 +36,28 @@ export const showMateri = async (materiId) => {
     }
 }
 
+export const updateMateri = async ({materiId, formData}) => {
+    // console.log(materiId)
+    try {
+        const response = await axiosJWT.put(`${BASE_API}/update/${materiId}`, formData, { withCredentials : true})
+        // console.log(response.data.materi)
+        return response.data.updatedMateri
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+export const deleteMateri = async (materiId) => {
+    // console.log(materiId)
+    try {
+        const response = await axiosJWT.delete(`${BASE_API}/delete/${materiId}`, { withCredentials : true})
+        // console.log(response.data.materi)
+        return response.data.deletedMateri
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 export const addContent = async ({materiId,formData}) => {
     try {
         await axiosJWT.post(`${BASE_API}/${materiId}/content`, formData, { withCredentials : true})
