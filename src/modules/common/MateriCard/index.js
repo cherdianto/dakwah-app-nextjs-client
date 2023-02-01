@@ -13,6 +13,7 @@ import Share from "@mui/icons-material/Share";
 import Edit from "@mui/icons-material/Edit";
 import { useState } from "react";
 import Delete from "@mui/icons-material/Delete";
+import { useUser } from "@contexts/user.context";
 
 const MateriLabelStyled = styled(MateriLabel)`
     margin-bottom: 0px;
@@ -22,16 +23,17 @@ const StyledLink = styled(Link)`
     text-decoration: none;
 `;
 
-const MateriCard = ({ name, img, status, rating, student, description, materiID, label, isEdit, isDelete}) => {
+const MateriCard = ({ name, img, status, rating, student, description, materiID, label, isEdit, isDelete }) => {
     // const [modalEdit, setModalEdit] = useState(false)
-
+    const { user, setUser } = useUser()
+    
     return (
         <Card elevation={2} sx={{
             p: 0,
             border: '1px solid lightgray',
             borderRadius: 3
         }}>
-            <Box sx={{ position: 'relative',  px: 1 }}>
+            <Box sx={{ position: 'relative', px: 1 }}>
                 <CardContent >
                     <Grid container direction='column' sx={{ paddingBottom: 1, paddingTop: 0 }}>
                         <Grid container direction='row' justifyContent='stretch'>
@@ -56,8 +58,12 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID,
                             <Button size="small" variant="contained" endIcon={<PlayArrow />}>Baca</Button>
                         </StyledLink>
                         <Button size="small" variant="outlined" endIcon={<Share />}>Bagi</Button>
-                        <Button size="small" variant="outlined" endIcon={<Edit />} onClick={() => isEdit(true)}>Sunting</Button>
-                        <Button size="small" variant="outlined" endIcon={<Delete />} onClick={isDelete}>Hapus</Button>
+                        {(user?.role !== 'user' && user) && (
+                            <>
+                                <Button size="small" variant="outlined" endIcon={<Edit />} onClick={() => isEdit(true)}>Sunting</Button>
+                                <Button size="small" variant="outlined" endIcon={<Delete />} onClick={isDelete}>Hapus</Button>
+                            </>
+                        )}
                     </Grid>
                 </CardContent>
             </Box>

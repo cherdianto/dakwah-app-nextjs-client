@@ -6,6 +6,7 @@ import AppBar from '@mui/material/AppBar'
 import Typography from '@mui/material/Typography'
 import Toolbar from '@mui/material/Toolbar'
 import Box from '@mui/material/Box'
+import Alert from '@mui/material/Alert'
 import MateriCard from '@common/MateriCard'
 import { useUser } from '@contexts/user.context'
 import IconButton from '@mui/material/IconButton';
@@ -24,8 +25,10 @@ export default function MateriPage() {
     const [dataToEdit, setDataToEdit] = useState()
     const [list, setList] = useState([])
     const { status, data } = useQuery(['materi'], getMateries)
+    const { user, setUser } = useUser()
 
     useEffect(() => {
+        console.log('call useEffect')
         if (status === 'success') {
             setList(data)
         }
@@ -36,7 +39,6 @@ export default function MateriPage() {
             setModalMateri(true)
             setIsModalEdit(false)
         }
-        // else console.log(selected)
     }
 
     const cache = useQueryClient()
@@ -62,17 +64,17 @@ export default function MateriPage() {
     const handleSaveData = async (formData) => {
         if(isModalEdit){
             try {
-                await editMateri.mutate({materiId: dataToEdit._id, formData})
+                await editMateri.mutate({materiId: dataToEdit._id, accessToken: user.accessToken, formData})
                 setModalMateri(false)
             } catch (error) {
                 throw new Error(error)
             }
         } else {
             try {
-                await addNewMateri.mutate(formData)
+                await addNewMateri.mutate({accessToken: user.accessToken, formData})
                 setModalMateri(false)
             } catch (error) {
-                throw new Error(error)
+                console.log('unauthorized, please login')
             }
         }
     }
@@ -91,7 +93,7 @@ export default function MateriPage() {
 
     const handleDeleteMateri = async ({materiId}) => {
         try {
-            await removeMateri.mutate(materiId)
+            await removeMateri.mutate({accessToken: user.accessToken, materiId})
             setModalMateri(false)
         } catch (error) {
             throw new Error(error)
@@ -144,7 +146,7 @@ export default function MateriPage() {
     )
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const queryClient = new QueryClient()
 
     await queryClient.fetchQuery(['materi'], () => getMateries())
@@ -153,6 +155,7 @@ export async function getServerSideProps() {
         props: {
             // allMateri
             dehydratedState: dehydrate(queryClient)
-        }
+        },
+        revalidate: 10
     }
 }

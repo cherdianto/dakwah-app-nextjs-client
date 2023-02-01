@@ -58,7 +58,7 @@ export default function AccountPopover() {
                 // console.log(res)
                 
                 if(res.data.status === true){
-                    Router.push('/')
+                    Router.push('/login')
                 }
                 
             } catch (error) {

@@ -50,6 +50,7 @@ const Login = () => {
                 email : values.email,
                 password : values.password
             }
+
             try {
                 const res = await axios.post(`${apiUrl}/auth/login`, cred)
                 setUser(res.data)
@@ -59,7 +60,6 @@ const Login = () => {
                     status: true,
                     message:error.response.data.message
                 })
-                // alert(error.response.data.message)
             }
 
         }

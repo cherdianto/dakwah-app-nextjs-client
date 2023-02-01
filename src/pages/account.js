@@ -12,33 +12,37 @@ import Container from '@mui/material/Container'
 // import Grid from '@mui/material/Grid'
 // import Dashboard from '@common/Dashboard'
 import Profile from '@common/Profile'
+// import useAxiosJwt from '@hooks/useAxiosJwt'
 
 const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
 const AccountPage = (props) => {
-    
-    const {user, setUser} = useUser()
+
+    const { user, setUser } = useUser()
+    // const axiosJWT = useAxiosJwt()
 
     const getUser = async () => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user?.accessToken}`
+            },
+        }
+
         try {
-            const res = await axiosJWT(`${apiUrl}/auth/user`, {
-                withCredentials: true
-            })
-            
+            const res = await axiosJWT(`${apiUrl}/auth/user`, config)
+
             setUser(res.data.user)
         } catch (error) {
-            if(error.isAxiosError){
-                setUser()
-            }
+            setUser()
             Router.push('/login')
         }
     }
 
     useEffect(() => {
-        if(!user) getUser()
+        if (!user) getUser()
     }, [])
 
-    if(!user){
+    if (!user) {
         return (
             <Layout>
                 <h2>loading...</h2>

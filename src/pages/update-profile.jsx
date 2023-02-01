@@ -55,8 +55,14 @@ export default function UpdateProfile(props) {
                 // oldPassword: values.oldPassword,
                 // newPassword: values.newPassword
             }
+
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${user?.accessToken}`
+                },
+            }
             try {
-                const res = await axiosJWT.put(`${apiUrl}/auth/update-profile`, data)
+                const res = await axiosJWT.put(`${apiUrl}/auth/update-profile`, data, config)
                 setUser(res.data.user)
                 setError(null)
                 setSuccess({
@@ -79,10 +85,10 @@ export default function UpdateProfile(props) {
             const res = await axiosJWT(`${apiUrl}/auth/user`, {
                 withCredentials: true
             })
-            
+
             setUser(res.data.user)
         } catch (error) {
-            if(error.isAxiosError){
+            if (error.isAxiosError) {
                 setUser()
             }
             Router.push('/login')
@@ -90,17 +96,17 @@ export default function UpdateProfile(props) {
     }
 
     useEffect(() => {
-        if(!user) getUser()
+        if (!user) getUser()
     }, [])
 
-    if(!user){
+    if (!user) {
         return (
             <Layout>
                 <h2>loading...</h2>
             </Layout>
         )
     }
-    
+
     return (
         <Layout>
             <AppBar position='fixed' color="inherit" elevation={2}>
@@ -119,7 +125,7 @@ export default function UpdateProfile(props) {
             </AppBar>
             <ContentStyle>
                 <Grid container direction='column'>
-                    
+
                     <form
                         id="updateForm"
                         onSubmit={(e) => {
@@ -161,6 +167,27 @@ export default function UpdateProfile(props) {
                                 pb: 2
                             }}
                         />
+                        {/* <FormControl fullWidth>
+                            <InputLabel id="role">Role</InputLabel>
+                            <Select
+                                fullWidth
+                                id="role"
+                                type='select'
+                                name='role'
+                                value={validation.values.role}
+                                label='Role'
+                                labelId='role'
+                                onChange={validation.handleChange}
+                                sx={{
+                                    mb: 2
+                                }}
+                            >
+                                <MenuItem value={'user'}>user</MenuItem>
+                                <MenuItem value={'editor'}>editor</MenuItem>
+                                <MenuItem value={'translator'}>translator</MenuItem>
+                                <MenuItem value={'administrator'}>administrator</MenuItem>
+                            </Select>
+                        </FormControl> */}
                         <FormControl fullWidth>
                             <InputLabel id="language">Language</InputLabel>
                             <Select
@@ -219,7 +246,7 @@ export default function UpdateProfile(props) {
                     </form>
                 </Grid>
                 {error && error.status === true ? <Alert severity='error'>{error.message}</Alert> : ''}
-                    {success && success.status === true ? <Alert severity='success'>{success.message}</Alert> : ''}
+                {success && success.status === true ? <Alert severity='success'>{success.message}</Alert> : ''}
             </ContentStyle>
         </Layout>
     )
