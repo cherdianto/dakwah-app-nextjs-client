@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../modules/common/Layout'
-import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import AppBar from '@mui/material/AppBar'
 import Typography from '@mui/material/Typography'
 import Toolbar from '@mui/material/Toolbar'
 import Box from '@mui/material/Box'
-import Alert from '@mui/material/Alert'
 import MateriCard from '@common/MateriCard'
 import { useUser } from '@contexts/user.context'
-import IconButton from '@mui/material/IconButton';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import MateriPopover from '@common/MateriPopover.js'
+import MateriPopover from '@common/PopOver/MateriPopover.js/index.js'
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 import { addMateri, getMateries, updateMateri, deleteMateri } from '../apiQuery'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import MateriModal from '@common/AddMateriModal'
+import MateriModal from '@common/Modals/AddMateriModal'
+import axiosJWT from '@utils/axiosJWT'
 
+const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
 export default function MateriPage() {
     const [modalMateri, setModalMateri] = useState(false)
@@ -27,8 +25,30 @@ export default function MateriPage() {
     const { status, data } = useQuery(['materi'], getMateries)
     const { user, setUser } = useUser()
 
+    const getUser = async () => {
+        try {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${user?.accessToken}`
+                },
+                withCredentials: true
+            }
+            const res = await axiosJWT(`${apiUrl}/auth/user`, config)
+            // console.log(res)
+            setUser(res.data.user)
+        } catch (error) {
+            // console.log(error)
+            // if (error.isAxiosError) {
+            // }
+            setUser()
+        }
+    }
+
     useEffect(() => {
-        console.log('call useEffect')
+        if (!user) getUser()
+    }, [user])
+
+    useEffect(() => {
         if (status === 'success') {
             setList(data)
         }
@@ -102,15 +122,15 @@ export default function MateriPage() {
 
     return (
         <Layout>
-            <AppBar position='fixed' color="inherit" elevation={2}>
-                <Toolbar variant="dense" sx={{
+            <AppBar position='fixed' color="inherit" elevation={1}>
+                <Toolbar sx={{
                     width: '100%',
-                    maxWidth: 600,
+                    maxWidth: 768,
                     mx: 'auto'
                 }}>
                     <Typography variant="h5" color="inherit" component="div">Materi Aktif</Typography>
                     <Box sx={{ flexGrow: 1 }} />
-                    <MateriPopover onSelect={(selected) => handleMateriPopoverSelect(selected)} />
+                    { (user?.role === 'administrator' || user?.role === 'editor') && <MateriPopover onSelect={(selected) => handleMateriPopoverSelect(selected)} />}
                 </Toolbar>
             </AppBar>
             <Grid container>

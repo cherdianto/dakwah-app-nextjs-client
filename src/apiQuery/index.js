@@ -1,5 +1,6 @@
 import axiosJWT from "@utils/axiosJWT"
 import axios from "axios"
+axios.defaults.withCredentials = true;
 
 const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
@@ -22,14 +23,15 @@ export const addMateri = async ({accessToken, formData}) => {
         headers: {
             Authorization: `Bearer ${accessToken}`
         },
+        withCredentials: true
     }
     
     try {
         await axiosJWT.post(ADD_MATERI, formData, config)
         // console.log(response.data.materi)
     } catch (error) {
-        // console.log(error.response.data)
-        throw new Error(error.response.data)
+        // console.log(error)
+        throw new Error(error.response.data || error)
     }
 }
 
@@ -78,6 +80,7 @@ export const deleteMateri = async ({accessToken, materiId}) => {
 }
 
 export const addContent = async ({materiId, accessToken, formData}) => {
+    console.log(accessToken)
     const config = {
         headers: {
             Authorization: `Bearer ${accessToken}`
@@ -101,6 +104,22 @@ export const updateContent = async ({materiId, accessToken, contentId, formData}
 
     try {
         await axiosJWT.put(`${BASE_API}/${materiId}/content/${contentId}`, formData, config)
+        // console.log(response.data.materi)
+        // return response.data.materi
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+export const deleteContent = async ({materiId, accessToken, contentId}) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        },
+    }
+
+    try {
+        await axiosJWT.delete(`${BASE_API}/${materiId}/content/${contentId}`, config)
         // console.log(response.data.materi)
         // return response.data.materi
     } catch (error) {

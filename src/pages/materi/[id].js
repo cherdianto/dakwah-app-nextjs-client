@@ -20,24 +20,28 @@ import TextEditor from "@common/TextEditor";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Edit from "@mui/icons-material/Edit";
-import ContentPopover from "@common/ContentPopover";
+import ContentPopover from "@common/PopOver/ContentPopover";
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
-import { addContent, getMateries, showMateri, updateContent } from '../../apiQuery'
+import { addContent, getMateries, showMateri, updateContent, deleteContent } from '../../apiQuery'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import ModalReadingResponse from "@common/ReadingResponseModal";
-
+import ModalReadingResponse from "@common/Modals/ReadingResponseModal";
+import { useUser } from "@contexts/user.context";
+import Delete from "@mui/icons-material/Delete";
+import DeleteDialog from "@common/Dialogs/DeleteDialog";
 
 const MateriDetail = ({ materiId }) => {
     const { personalize, setPersonalize } = usePersonalize()
     const [fontSize, setFontSize] = useState(personalize.fontSize)
     const [isEdit, setIsEdit] = useState(false)
+    const [isDelete, setIsDelete] = useState(false)
     const [expanded, setExpanded] = useState(false)
     const [targetContent, setTargetContent] = useState()
     const [masterContent, setMasterContent] = useState()
     const [openModalReadingResponse, setOpenModalReadingResponse] = useState(false)
     const [idReadingResponse, setIdReadingResponse] = useState()
     const { status, data } = useQuery(['content', materiId], () => showMateri(materiId))
+    const { user, setUser } = useUser()
 
     useEffect(() => {
         if (status === 'success') {
@@ -49,9 +53,29 @@ const MateriDetail = ({ materiId }) => {
         setFontSize(personalize.fontSize)
     }, [personalize])
 
-    const handleEdit = (e) => {
+    const handleClickEdit = (e) => {
         setIsEdit(true)
         setTargetContent(e.target.id)
+    }
+
+    const handleClickDelete = (e) => {
+        setIsDelete(true)
+        setTargetContent(e.target.id)
+    }
+
+    const handleDelete = async (contentId) => {
+        try {
+            await removeContent.mutate({
+                accessToken: user?.accessToken,
+                materiId,
+                contentId
+            })
+        } catch (error) {
+            throw new Error(error)
+
+        }
+        setIsDelete(false)
+        setTargetContent()
     }
 
     const handleCancelEdit = (e) => {
@@ -72,10 +96,17 @@ const MateriDetail = ({ materiId }) => {
         }
     })
 
+    const removeContent = useMutation(deleteContent, {
+        onSuccess: () => {
+            cache.invalidateQueries('materi')
+        }
+    })
+
     const handleSave = async ({ contentId, matan, subTitle }) => {
         if (isEdit) {
             try {
                 await editContent.mutate({
+                    accessToken: user?.accessToken,
                     materiId,
                     contentId,
                     formData: { matan, subTitle }
@@ -89,6 +120,7 @@ const MateriDetail = ({ materiId }) => {
         } else {
             try {
                 await addNewContent.mutate({
+                    accessToken: user?.accessToken,
                     materiId,
                     formData: { matan, subTitle }
                 })
@@ -112,15 +144,15 @@ const MateriDetail = ({ materiId }) => {
     }
 
     const handleChangeAccordion = (id) => (e, isExpanded) => {
-        setExpanded( isExpanded ? id : false)
+        setExpanded(isExpanded ? id : false)
     }
 
     return (
         <>
-            <AppBar position="static" color="inherit">
-                <Toolbar variant="dense" sx={{
+            <AppBar position="static" color="inherit" elevation={1}>
+                <Toolbar sx={{
                     width: '100%',
-                    maxWidth: 600,
+                    maxWidth: 768,
                     mx: 'auto'
                 }}>
                     <Link href={"/materi"}>
@@ -133,9 +165,11 @@ const MateriDetail = ({ materiId }) => {
                 </Toolbar>
             </AppBar>
             <Grid container justifyContent='center' sx={{
-                pb: 8
+                pb: 8,
+                maxWidth: 768,
+                mx: 'auto'
             }}>
-                <Grid container maxWidth={'sm'} direction='column' sx={{ p: 1 }} gap={1}>
+                <Grid container direction='column' sx={{ p: 1 }} gap={1}>
                     {masterContent?.content?.map((ctn, id) => {
                         return (
                             <Accordion key={id} expanded={expanded === `${id}`} onChange={handleChangeAccordion(`${id}`)}>
@@ -164,7 +198,8 @@ const MateriDetail = ({ materiId }) => {
                                             <Grid container direction='row' justifyContent='space-between' sx={{
                                                 mt: 3
                                             }}>
-                                                <Button startIcon={<Edit />} id={ctn.id} onClick={(e) => handleEdit(e)} >Edit</Button>
+                                                { (user?.role === 'administrator' || user?.role === 'editor') && <Button startIcon={<Edit />} id={ctn.id} onClick={(e) => handleClickEdit(e)} >Edit</Button>}
+                                                { user?.role === 'administrator' && <Button startIcon={<Delete />} id={ctn.id} onClick={(e) => handleClickDelete(e)} >Delete</Button>}
                                                 <FormGroup>
                                                     <FormControlLabel control={<Switch id={ctn.id} onChange={(e) => handleOpenModalReadingResponse(e)} />} label="Selesai Baca" />
                                                 </FormGroup>
@@ -172,6 +207,12 @@ const MateriDetail = ({ materiId }) => {
                                         </Grid>
                                     )}
                                 </AccordionDetails>
+                                <DeleteDialog
+                                    open={isDelete}
+                                    onClose={() => setIsDelete(false)}
+                                    onDelete={() => handleDelete(ctn.id)}
+                                    title={ctn.subTitle}
+                                />
                             </Accordion>
                         )
                     })}
@@ -179,6 +220,7 @@ const MateriDetail = ({ materiId }) => {
                 <ModalReadingResponse open={openModalReadingResponse} onClose={() => setOpenModalReadingResponse(false)} onReadingResponse={(resp) => handleReadingResponse(resp)} />
             </Grid>
             <BottomSetting />
+
             {/* </Container> */}
         </>
 

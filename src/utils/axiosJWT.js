@@ -4,19 +4,19 @@ import jwt_decode from 'jwt-decode'
 const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 // const { user } = useUser()
 // $PENDINGWORK : setelah sukses dapet access token baru, seharusnya token baru disimpan di redux store auth/user/token utk dipake lagi di next request
-// axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true;
 
 const axiosJWT = axios.create()
 
 axiosJWT.interceptors.request.use(async (config) => {
-    // console.log(user)
-    // if (!user) {
-    //     console.log('calling axiosJWT without user')
-    //     const response = await axios.get(apiUrl + '/auth/refreshToken', {
-    //         withCredentials: true
-    //     });
-    //     config.headers.Authorization = `Bearer ${response.data.accessToken}`;
-    // } else {
+    const userRefreshToken = config.headers.Authorization.split(' ')[1]
+    if (!userRefreshToken || userRefreshToken === 'undefined') {
+        // console.log('calling axiosJWT without user')
+        const response = await axios.get(apiUrl + '/auth/refreshToken', {
+            withCredentials: true
+        });
+        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+    } else {
         // config.headers.Authorization = `Bearer ${user.data.accessToken}`;
         // console.log('calling axiosJWT with config')
         // console.log(config.headers)
@@ -28,12 +28,12 @@ axiosJWT.interceptors.request.use(async (config) => {
             });
             config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         }
-    // }
+    }
     return config
 }, (error) => {
-    console.log('error from axiosjwt')
-    console.log(error)
-    return Promise.reject('UNAUTHORIZED, PLEASE RELOGIN')
+    // console.log('error from axiosjwt')
+    // console.log(error)
+    return Promise.reject('UNAUTHORIZED - INTERCEPTOR REQUEST')
 }, [])
 
 
@@ -53,8 +53,9 @@ axiosJWT.interceptors.response.use((response) => {
     // } else {
     //     console.log('mbuh')
     // }
+    // console.log(error)
 
-    return Promise.reject('UNAUTHORIZED')
+    return Promise.reject('UNAUTHORIZED - INTERCEPTOR RESPONSE')
 
     // if(error.response.status === 401 && !originalRequest._retry){
     // if(error.response.status === 401 || error.response.status === 403){

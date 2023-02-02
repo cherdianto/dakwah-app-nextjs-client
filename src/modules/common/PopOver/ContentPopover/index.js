@@ -5,14 +5,15 @@ import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material';
 import Router from 'next/router'
 import axiosJWT from '@utils/axiosJWT';
 import { useUser } from '@contexts/user.context';
-import MateriModal from '@common/AddMateriModal';
+import MateriModal from '@common/Modals/AddMateriModal';
+import ContentModal from '@common/Modals/AddContentModal';
 
 // ----------------------------------------------------------------------
 
-const MATERIMENU_ADMIN = [
+const CONTENTMENU_ADMIN = [
     {
-        value: 'add materi',
-        label: 'Add Materi',
+        value: 'add content',
+        label: 'Add Content',
         icon: '/assets/icons/ic_flag_de.svg',
     },
     {
@@ -24,10 +25,10 @@ const MATERIMENU_ADMIN = [
 
 // ----------------------------------------------------------------------
 
-export default function MateriPopover({ onSelect }) {
+export default function ContentPopover({ materiId, onNewContent, onSave }) {
     const [open, setOpen] = useState(null);
     const { user, setUser } = useUser()
-    const [selected, setSelected] = useState()
+    const [modalOpen, setModalOpen] = useState(false)
 
     const handleOpen = (event) => {
         setOpen(event.currentTarget);
@@ -35,15 +36,26 @@ export default function MateriPopover({ onSelect }) {
 
     const handleClose = async (e) => {
         const target = e.target.id
-        
+        // console.log(e.target.id)
         setOpen(null);
-        if(target === 'add materi') {
+        
+        
+
+        if(target === 'add content') {
+            // Router.push('/update-profile')
+            // console.log('add content')
             setOpen(null)
-            onSelect('add materi')
+            setModalOpen(true)
         } else if ( target === 'sequence'){
-            onSelect('sequence')
+            // console.log('sequence')
         }
     };
+
+    // const handleAddContentSuccess = (res) => {
+    //     console.log('handle add materi success')
+    //     console.log(res)
+    //     onNewContent(res.data.newMateri)
+    // }
 
     return (
         <>
@@ -82,7 +94,7 @@ export default function MateriPopover({ onSelect }) {
                 }}
             >
                 <Stack spacing={0.75}>
-                    {MATERIMENU_ADMIN.map((option) => (
+                    {CONTENTMENU_ADMIN.map((option) => (
                         <MenuItem key={option.value} id={option.value} onClick={(e) => handleClose(e)}>
                             {/* <Box component="img" alt={option.label} src={option.icon} sx={{ width: 28, mr: 2 }} /> */}
 
@@ -91,7 +103,7 @@ export default function MateriPopover({ onSelect }) {
                     ))}
                 </Stack>
             </Popover>
-            {/* <MateriModal open={modalOpen} onClose={() => setModalOpen(false)} onSuccess={(data) => handleAddMateriSuccess(data)} /> */}
+            <ContentModal open={modalOpen} onClose={() => setModalOpen(false)} onSave={(formData) => onSave(formData)}/>
         </>
     );
 }

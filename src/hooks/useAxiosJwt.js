@@ -11,14 +11,14 @@ const useAxiosJwt = () => {
     const axiosJWT = axios.create()
     
     axiosJWT.interceptors.request.use(async(config) => {
-        console.log(user)
+        // console.log(user)
         if(!user){
-            console.log('calling axiosJWT without user')
+            // console.log('calling axiosJWT without user')
             const response = await axios.get(apiUrl +'/auth/refreshToken',{ withCredentials: true });
             config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         } else {
             config.headers.Authorization = `Bearer ${user.data.accessToken}`;
-            console.log('calling axiosJWT with user')
+            // console.log('calling axiosJWT with user')
             const currentDate = new Date();
             const decoded = jwt_decode(config.headers.Authorization.split(' ')[1])
             if(decoded.exp * 1000 < currentDate.getTime()){

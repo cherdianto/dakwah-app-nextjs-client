@@ -26,9 +26,9 @@ const style = {
     maxWidth: 500,
     bgcolor: 'background.paper',
     //   border: '2px solid #000',
-    borderRadius: 3,
+    borderRadius: 2,
     boxShadow: 24,
-    p: 4,
+    p: 2
 };
 
 const MateriModal = ({ open, onClose, onSave, dataToEdit, isEdit }) => {
@@ -49,7 +49,7 @@ const MateriModal = ({ open, onClose, onSave, dataToEdit, isEdit }) => {
                 status: values.status
             }
 
-            console.log(formData)
+            // console.log(formData)
 
             resetForm({values: ''})
             onClose()

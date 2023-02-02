@@ -4,11 +4,11 @@ import styled from "@emotion/styled";
 
 
 const RootStyles = styled("div")({
-    paddingTop: 50,
+    paddingTop: 60,
     paddingBottom: 60,
     display: 'flex',
     flexDirection: 'column',
-    maxWidth: 600,
+    maxWidth: 768,
     alignItems: 'center',
     margin: '0 auto',
     // background: '#E7EBF0'

@@ -21,7 +21,8 @@ import axiosJWT from '@utils/axiosJWT'
 
 
 import { useUser } from '@contexts/user.context'
-import LanguagePopover from '@common/LanguagePopover'
+import LanguagePopover from '@common/PopOver/LanguagePopover'
+import Divider from '@mui/material/Divider'
 
 const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
@@ -35,7 +36,7 @@ function PromoSlide(props) {
             elevation={1}
             square={false}
             sx={{
-                background: 'red',
+                background: 'lightgray',
                 height: 200,
             }}
         >
@@ -73,27 +74,32 @@ export default function Homepage(props) {
 
     const getUser = async () => {
         try {
-            const res = await axiosJWT(`${apiUrl}/auth/user`, {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${user?.accessToken}`
+                },
                 withCredentials: true
-            })
+            }
+            const res = await axiosJWT(`${apiUrl}/auth/user`, config)
+            // console.log(res)
             setUser(res.data.user)
         } catch (error) {
-            if(error.isAxiosError){
+            if (error.isAxiosError) {
                 setUser()
             }
         }
     }
 
     useEffect(() => {
-        if(!user) getUser()
+        if (!user) getUser()
     }, [user])
 
     return (
         <Layout>
-            <AppBar position="fixed" color="inherit" elevation={2}>
-                <Toolbar variant="dense" sx={{
+            <AppBar position="fixed" color="inherit" elevation={1}>
+                <Toolbar sx={{
                     width: '100%',
-                    maxWidth: 600,
+                    maxWidth: 768,
                     mx: 'auto'
                 }}>
                     <Typography variant='h6'>Welcome, {user ? `${user.fullname}` : 'Guest'}</Typography>
@@ -104,7 +110,7 @@ export default function Homepage(props) {
             <Grid container >
                 <Grid container direction='column'>
                     <Carousel
-                        height={200} sx={{ mb: 2 }}
+                        height={200} sx={{ m:1 }}
                     >
                         {items.map((item, i) => <PromoSlide key={i} item={item} />)}
                     </Carousel>
@@ -112,17 +118,23 @@ export default function Homepage(props) {
                 <Grid container direction='column' alignItems='center' sx={{
                     p: 2
                 }}>
-                    <Typography variant='body1' align='center'>Selamat datang di website dakwah-bot.com. Disini kami berusaha untuk memberikan materi dakwah islam secara ringkas, mudah dipahami, dan berkelanjutan.</Typography>
-                    <Typography gutterBottom variant='body1' align='center'>Anda dapat mengikuti materi di website ini dengan 3 cara, yaitu:
-                    </Typography>
-                    <Box sx={{ ml: 2 }}>
-                        <Typography gutterBottom variant='body1' align='left'>1. Register dan mengaktifkan layanan whatsapp, dakwah-bot akan mengirimkan materi dakwah secara berkala (rekomendasi)</Typography>
-                        <Typography gutterBottom variant='body1' align='left'>2. Register dan login untuk membaca materi dakwah dengan penyimpanan progres belajar</Typography>
-                        <Typography gutterBottom variant='body1' align='left'>3. Anda dapat membaca materi dakwah tanpa perlu login</Typography>
-                    </Box>
-                    <StyledLink href={'/register'}>
-                        <Button variant='outlined' sx={{ m: 3 }}>Register</Button>
-                    </StyledLink>
+                    <Typography variant='body1' align='center'>Ahlan wa sahlan</Typography>
+                    <Typography variant='body1' align='center'>Disini kami berusaha untuk memberikan materi dakwah islam secara ringkas, mudah dipahami, dan berkelanjutan.</Typography>
+                    <Divider variant="middle" sx={{
+                        p: 1
+                    }}/>
+                    { (user === undefined || !user) && (
+                        <>
+                            <Typography gutterBottom variant='body1' align='center'>Untuk mendapatkan fasilitas belajar yang lebih maksimal, silakan login.</Typography>
+                            <Divider variant="middle" sx={{
+                                p: 1
+                            }}/>
+                            <Typography gutterBottom variant='body1' align='center'>Buat akun, klik tombol di bawah ini</Typography>
+                            <StyledLink href={'/register'}>
+                                <Button variant='outlined' sx={{ m: 2 }}>Register</Button>
+                            </StyledLink>
+                        </>
+                    )}
                     <Typography variant='body1' align='center'>Selamat belajar.</Typography>
                 </Grid>
             </Grid>

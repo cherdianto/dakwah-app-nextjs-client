@@ -109,8 +109,8 @@ export default function UpdateProfile(props) {
 
     return (
         <Layout>
-            <AppBar position='fixed' color="inherit" elevation={2}>
-                <Toolbar variant="dense" sx={{
+            <AppBar position='fixed' color="inherit" elevation={1}>
+                <Toolbar sx={{
                     width: '100%',
                     maxWidth: 600,
                     mx: 'auto'

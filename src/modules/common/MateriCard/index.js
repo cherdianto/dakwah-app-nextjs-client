@@ -14,6 +14,7 @@ import Edit from "@mui/icons-material/Edit";
 import { useState } from "react";
 import Delete from "@mui/icons-material/Delete";
 import { useUser } from "@contexts/user.context";
+import DeleteDialog from "@common/Dialogs/DeleteDialog";
 
 const MateriLabelStyled = styled(MateriLabel)`
     margin-bottom: 0px;
@@ -25,11 +26,14 @@ const StyledLink = styled(Link)`
 
 const MateriCard = ({ name, img, status, rating, student, description, materiID, label, isEdit, isDelete }) => {
     // const [modalEdit, setModalEdit] = useState(false)
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false)
     const { user, setUser } = useUser()
-    
+
     return (
-        <Card elevation={2} sx={{
-            p: 0,
+        <>
+
+        <Card elevation={0} sx={{
+            // p: 0,
             border: '1px solid lightgray',
             borderRadius: 3
         }}>
@@ -61,13 +65,21 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID,
                         {(user?.role !== 'user' && user) && (
                             <>
                                 <Button size="small" variant="outlined" endIcon={<Edit />} onClick={() => isEdit(true)}>Sunting</Button>
-                                <Button size="small" variant="outlined" endIcon={<Delete />} onClick={isDelete}>Hapus</Button>
+                                <Button size="small" variant="outlined" endIcon={<Delete />} onClick={() => setShowDeleteDialog(true)}>Hapus</Button>
                             </>
                         )}
                     </Grid>
                 </CardContent>
             </Box>
         </Card>
+            <DeleteDialog 
+                open={showDeleteDialog}
+                onDelete={isDelete}
+                onClose={() => setShowDeleteDialog(false)}
+                title={name}
+            />
+        </>
+
     )
 
 }

@@ -4,15 +4,15 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import AccountPopover from "@common/AccountPopover.js";
+import AccountPopover from "@common/PopOver/AccountPopover.js/index.js";
 // import MenuIcon from '@mui/icons-material/Menu';
 
 export const AppNavbar = (props) => {
     return (
-        <AppBar position="fixed" color='inherit' elevation={3}>
-            <Toolbar variant="dense" sx={{
+        <AppBar position="fixed" color='inherit' elevation={1}>
+            <Toolbar sx={{
                 width: '100%',
-                maxWidth: 600,
+                maxWidth: 768,
                 mx: 'auto'
             }}>
                 <Typography variant='h6'>Profil</Typography>
