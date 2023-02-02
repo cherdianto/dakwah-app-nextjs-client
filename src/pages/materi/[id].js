@@ -161,7 +161,7 @@ const MateriDetail = ({ materiId }) => {
                         </IconButton>
                     </Link>
                     <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>{masterContent?.name}</Typography>
-                    <ContentPopover onSave={(formData) => handleSave(formData)} />
+                    { (user?.role === 'administrator' || user?.role === 'editor') && <ContentPopover onSave={(formData) => handleSave(formData)} />}
                 </Toolbar>
             </AppBar>
             <Grid container justifyContent='center' sx={{
