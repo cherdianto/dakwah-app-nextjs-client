@@ -34,12 +34,8 @@ export default function MateriPage() {
                 withCredentials: true
             }
             const res = await axiosJWT(`${apiUrl}/auth/user`, config)
-            // console.log(res)
             setUser(res.data.user)
         } catch (error) {
-            // console.log(error)
-            // if (error.isAxiosError) {
-            // }
             setUser()
         }
     }
@@ -50,9 +46,14 @@ export default function MateriPage() {
 
     useEffect(() => {
         if (status === 'success') {
-            setList(data)
+            if(!user || user?.role === 'user'){
+                const filteredData = data.filter(element => element.status === 'active')
+                setList(filteredData)
+            } else {
+                setList(data)
+            }
         }
-    }, [status, data])
+    }, [status, data, user])
 
     const handleMateriPopoverSelect = (selected) => {
         if (selected === 'add materi') {

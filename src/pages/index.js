@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../modules/common/Layout'
 import Carousel from 'react-material-ui-carousel'
 import Paper from '@mui/material/Paper'
@@ -6,20 +6,12 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import Select from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
 import Link from 'next/link'
 import styled from '@emotion/styled'
 import Toolbar from '@mui/material/Toolbar'
 import AppBar from '@mui/material/AppBar'
-import MoreIcon from '@mui/icons-material/MoreVert';
-import IconButton from '@mui/material/IconButton';
-import axiosJWT from '@utils/axiosJWT'
-
-
+import { fetchUser } from '../apiQuery'
+import Router from 'next/router'
 import { useUser } from '@contexts/user.context'
 import LanguagePopover from '@common/PopOver/LanguagePopover'
 import Divider from '@mui/material/Divider'
@@ -74,25 +66,18 @@ export default function Homepage(props) {
 
     const getUser = async () => {
         try {
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${user?.accessToken}`
-                },
-                withCredentials: true
-            }
-            const res = await axiosJWT(`${apiUrl}/auth/user`, config)
-            // console.log(res)
-            setUser(res.data.user)
+            const res = await fetchUser(user?.accessToken)
+            setUser(res)
         } catch (error) {
-            if (error.isAxiosError) {
-                setUser()
-            }
+            // if (error.isAxiosError) {
+            // }
+            setUser()
         }
     }
 
     useEffect(() => {
         if (!user) getUser()
-    }, [user])
+    }, [])
 
     return (
         <Layout>
@@ -102,7 +87,7 @@ export default function Homepage(props) {
                     maxWidth: 768,
                     mx: 'auto'
                 }}>
-                    <Typography variant='h6'>Welcome, {user ? `${user.fullname}` : 'Guest'}</Typography>
+                    <Typography variant='h5'>Hi, {user ? `${user.fullname}` : 'Guest'}</Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     <LanguagePopover />
                 </Toolbar>
@@ -118,7 +103,7 @@ export default function Homepage(props) {
                 <Grid container direction='column' alignItems='center' sx={{
                     p: 2
                 }}>
-                    <Typography variant='body1' align='center'>Ahlan wa sahlan</Typography>
+                    <Typography variant='body1' align='center' sx={{ w: '100%', display: 'block'}}>Ahlan wa sahlan</Typography>
                     <Typography variant='body1' align='center'>Disini kami berusaha untuk memberikan materi dakwah islam secara ringkas, mudah dipahami, dan berkelanjutan.</Typography>
                     <Divider variant="middle" sx={{
                         p: 1
@@ -135,7 +120,7 @@ export default function Homepage(props) {
                             </StyledLink>
                         </>
                     )}
-                    <Typography variant='body1' align='center'>Selamat belajar.</Typography>
+                    <Typography variant='body1' align='center' sx={{ w: '100%', display: 'block'}}>Selamat belajar.</Typography>
                 </Grid>
             </Grid>
         </Layout>

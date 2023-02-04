@@ -15,7 +15,7 @@ export const AppNavbar = (props) => {
                 maxWidth: 768,
                 mx: 'auto'
             }}>
-                <Typography variant='h6'>Profil</Typography>
+                <Typography variant='h5'>Profil</Typography>
                 <Box sx={{ flexGrow: 1 }} />
                 <AccountPopover />
             </Toolbar>

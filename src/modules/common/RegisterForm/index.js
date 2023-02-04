@@ -56,10 +56,9 @@ const RegisterForm = () => {
                 whatsapp: values.whatsapp,
                 password: values.password
             }
-            // console.log('submit register ' + data)
+
             try {
                 const res = await axios.post(`${apiUrl}/auth/register`, data)
-                // console.log(res)
                 setUser(res.data.user)
                 setError(null)
                 setSuccess({
@@ -67,12 +66,10 @@ const RegisterForm = () => {
                     message: "REGISTER SUCCESS"
                 })
             } catch (error) {
-                // console.log(error)
                 setError({
                     status: true,
                     message: error.response.data.message
                 })
-                // alert(error.response.data.message)
             }
 
         }

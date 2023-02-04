@@ -1,38 +1,23 @@
-import Login from '@common/Login'
-import Register from '@common/RegisterForm'
 import React from 'react'
 import Layout from '../modules/common/Layout'
 import { useUser } from '@contexts/user.context'
 import { AppNavbar } from '@common/NavbarProfil'
-import axiosJWT from '@utils/axiosJWT'
 import Router from 'next/router'
 import { useEffect } from 'react'
 import Container from '@mui/material/Container'
-// import Typography from '@mui/material/Typography'
-// import Grid from '@mui/material/Grid'
-// import Dashboard from '@common/Dashboard'
 import Profile from '@common/Profile'
-// import useAxiosJwt from '@hooks/useAxiosJwt'
-
-const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
+import { fetchUser } from '../apiQuery'
 
 const AccountPage = (props) => {
-
     const { user, setUser } = useUser()
-    // const axiosJWT = useAxiosJwt()
 
     const getUser = async () => {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${user?.accessToken}`
-            },
-        }
-
         try {
-            const res = await axiosJWT(`${apiUrl}/auth/user`, config)
-
-            setUser(res.data.user)
+            const res = await fetchUser(user?.accessToken)
+            setUser(res)
         } catch (error) {
+            // if (error.isAxiosError) {
+            // }
             setUser()
             Router.push('/login')
         }
@@ -53,7 +38,7 @@ const AccountPage = (props) => {
     return (
         <Layout>
             <AppNavbar />
-            <Container maxWidth="sm" sx={{
+            <Container sx={{
                 mt: 1
             }}>
                 {/* <Typography variant='h6' sx={{ mb: 1 }}>

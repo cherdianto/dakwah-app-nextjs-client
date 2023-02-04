@@ -61,7 +61,7 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID,
                         <StyledLink href={"/materi/[id]"} as={`materi/${materiID}`} >
                             <Button size="small" variant="contained" endIcon={<PlayArrow />}>Baca</Button>
                         </StyledLink>
-                        <Button size="small" variant="outlined" endIcon={<Share />}>Bagi</Button>
+                        {/* <Button size="small" variant="outlined" endIcon={<Share />}>Bagi</Button> */}
                         {(user?.role !== 'user' && user) && (
                             <>
                                 <Button size="small" variant="outlined" endIcon={<Edit />} onClick={() => isEdit(true)}>Sunting</Button>

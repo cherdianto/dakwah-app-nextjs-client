@@ -49,8 +49,6 @@ const MateriModal = ({ open, onClose, onSave, dataToEdit, isEdit }) => {
                 status: values.status
             }
 
-            // console.log(formData)
-
             resetForm({values: ''})
             onClose()
             onSave(formData)

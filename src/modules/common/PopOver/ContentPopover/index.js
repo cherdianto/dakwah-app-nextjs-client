@@ -36,26 +36,17 @@ export default function ContentPopover({ materiId, onNewContent, onSave }) {
 
     const handleClose = async (e) => {
         const target = e.target.id
-        // console.log(e.target.id)
         setOpen(null);
         
         
 
         if(target === 'add content') {
-            // Router.push('/update-profile')
-            // console.log('add content')
             setOpen(null)
             setModalOpen(true)
         } else if ( target === 'sequence'){
             // console.log('sequence')
         }
     };
-
-    // const handleAddContentSuccess = (res) => {
-    //     console.log('handle add materi success')
-    //     console.log(res)
-    //     onNewContent(res.data.newMateri)
-    // }
 
     return (
         <>

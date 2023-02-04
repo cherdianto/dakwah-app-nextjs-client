@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, cache } from 'react'
 import Layout from '../modules/common/Layout'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
@@ -24,8 +24,10 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Alert from "@mui/material/Alert";
-
-const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
+// import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { fetchUser, updateProfile } from '../apiQuery'
+// import { useQuery } from '@tanstack/react-query';
+import Router from 'next/router'
 
 const ContentStyle = styled("div")({
     padding: 20,
@@ -55,26 +57,21 @@ export default function UpdateProfile(props) {
                 // oldPassword: values.oldPassword,
                 // newPassword: values.newPassword
             }
-
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${user?.accessToken}`
-                },
-            }
+            
             try {
-                const res = await axiosJWT.put(`${apiUrl}/auth/update-profile`, data, config)
-                setUser(res.data.user)
+                const res = await updateProfile({data, accessToken: user?.accessToken})
+                setUser(res)
                 setError(null)
                 setSuccess({
                     status: true,
                     message: "UPDATE PROFILE SUCCESS"
                 })
             } catch (error) {
+                // console.log(error)
                 setError({
                     status: true,
                     message: error.response.data.message
                 })
-                // alert(error.response.data.message)
             }
 
         }
@@ -82,11 +79,8 @@ export default function UpdateProfile(props) {
 
     const getUser = async () => {
         try {
-            const res = await axiosJWT(`${apiUrl}/auth/user`, {
-                withCredentials: true
-            })
-
-            setUser(res.data.user)
+            const res = await fetchUser(user?.accessToken)
+            setUser(res)
         } catch (error) {
             if (error.isAxiosError) {
                 setUser()
@@ -97,7 +91,7 @@ export default function UpdateProfile(props) {
 
     useEffect(() => {
         if (!user) getUser()
-    }, [])
+    }, [user])
 
     if (!user) {
         return (
@@ -112,7 +106,7 @@ export default function UpdateProfile(props) {
             <AppBar position='fixed' color="inherit" elevation={1}>
                 <Toolbar sx={{
                     width: '100%',
-                    maxWidth: 600,
+                    maxWidth: 768,
                     mx: 'auto'
                 }}>
                     <Link href={"/account"}>
