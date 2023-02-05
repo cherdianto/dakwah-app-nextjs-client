@@ -1,3 +1,5 @@
+const { i18n } = require('./next-i18next.config');
+
 module.exports = {
     env: {
         ENV:"dev", //prod || dev
@@ -6,4 +8,5 @@ module.exports = {
         URL_BASE_PROD:"https://moslemguide.cherdianto.site",
         URL_BASE_DEV:"http://localhost:3000"
     },
+    i18n
   }

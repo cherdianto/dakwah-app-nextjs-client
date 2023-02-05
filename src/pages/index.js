@@ -15,6 +15,8 @@ import Router from 'next/router'
 import { useUser } from '@contexts/user.context'
 import LanguagePopover from '@common/PopOver/LanguagePopover'
 import Divider from '@mui/material/Divider'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
@@ -48,6 +50,9 @@ function PromoSlide(props) {
 
 export default function Homepage(props) {
     const { user, setUser } = useUser()
+    const { t } = useTranslation('common')
+
+    console.log(t(''))
 
     let items = [
         {
@@ -103,7 +108,7 @@ export default function Homepage(props) {
                 <Grid container direction='column' alignItems='center' sx={{
                     p: 2
                 }}>
-                    <Typography variant='body1' align='center' sx={{ w: '100%', display: 'block'}}>Ahlan wa sahlan</Typography>
+                    <Typography variant='body1' align='center' sx={{ w: '100%', display: 'block'}}>{t('sapaan')}</Typography>
                     <Typography variant='body1' align='center'>Disini kami berusaha untuk memberikan materi dakwah islam secara ringkas, mudah dipahami, dan berkelanjutan.</Typography>
                     <Divider variant="middle" sx={{
                         p: 1
@@ -128,4 +133,12 @@ export default function Homepage(props) {
 }
 
 
-
+export async function getStaticProps({ locale }){
+    return {
+        props: {
+            ...(await serverSideTranslations(locale, [
+                'common'
+            ]))
+        }
+    }
+}

@@ -8,8 +8,9 @@ import { UserProvider } from 'src/contexts/user.context'
 import { PersonalizeProvider } from '@contexts/personalize.context'
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { config } from '@utils/react-query-config'
+import { appWithTranslation } from 'next-i18next'
 
-export default function MyApp(props) {
+const MyApp = (props) => {
     const { Component, pageProps } = props
 
     const [queryClient] = useState(() => new QueryClient(config))
@@ -43,3 +44,5 @@ export default function MyApp(props) {
         </>
     )
 }
+
+export default appWithTranslation(MyApp)
