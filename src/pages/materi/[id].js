@@ -140,7 +140,7 @@ const MateriDetail = ({ materiId }) => {
     }
 
     const handleReadingResponse = (resp) => {
-        console.log(resp + ' ' + idReadingResponse)
+        // console.log(resp + ' ' + idReadingResponse)
     }
 
     const handleChangeAccordion = (id) => (e, isExpanded) => {

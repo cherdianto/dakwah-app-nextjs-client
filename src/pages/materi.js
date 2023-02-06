@@ -95,7 +95,7 @@ export default function MateriPage() {
                 await addNewMateri.mutate({accessToken: user.accessToken, formData})
                 setModalMateri(false)
             } catch (error) {
-                console.log('unauthorized, please login')
+                // console.log('unauthorized, please login')
             }
         }
     }

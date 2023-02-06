@@ -67,7 +67,6 @@ export default function UpdateProfile(props) {
                     message: "UPDATE PROFILE SUCCESS"
                 })
             } catch (error) {
-                // console.log(error)
                 setError({
                     status: true,
                     message: error.response.data.message

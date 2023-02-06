@@ -56,10 +56,19 @@ const Login = () => {
                 setUser(res.data)
                 setError(null)
             } catch (error) {
-                setError({
-                    status: true,
-                    message:error.response.data.message
-                })
+                if (error.response.status === 429) {
+                    // rate limiter error
+                    setError({
+                        status: true,
+                        message: error.response.data
+                    })
+                } else {
+                    // other errors
+                    setError({
+                        status: true,
+                        message: error.response.data.message
+                    })
+                }
             }
 
         }
@@ -106,7 +115,7 @@ const Login = () => {
                                 onChange={validation.handleChange}
                             />
                             <Box>
-                                <Stack
+                                {/* <Stack
                                     direction="row"
                                     alignItems="center"
                                     justifyContent="space-between"
@@ -118,14 +127,14 @@ const Login = () => {
                                         }
                                         label="Remember me"
                                     />
-                                </Stack>
+                                </Stack> */}
                                 <Button
                                     variant="contained"
                                     endIcon={<ArrowRight />}
                                     fullWidth
                                     type="submit"
                                     sx={{
-                                        mb: 2
+                                        my: 2
                                     }}
                                 >
                                     Login
@@ -133,6 +142,11 @@ const Login = () => {
                                 <Typography variant="body2" align="center">New user?  
                                         <Link href={'/register'}>
                                              Register
+                                        </Link>
+                                </Typography>
+                                <Typography variant="body2" align="center"> 
+                                        <Link href={'/forgot-password'}>
+                                             Forgot Password
                                         </Link>
                                 </Typography>
                             </Box>

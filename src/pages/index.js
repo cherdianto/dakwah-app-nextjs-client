@@ -52,8 +52,6 @@ export default function Homepage(props) {
     const { user, setUser } = useUser()
     const { t } = useTranslation('common')
 
-    console.log(t(''))
-
     let items = [
         {
             nama: "slide 1",

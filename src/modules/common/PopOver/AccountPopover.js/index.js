@@ -48,7 +48,7 @@ export default function AccountPopover() {
                 }
                 
             } catch (error) {
-                console.log(error)
+                // console.log(error)
             }
 
             setUser()

@@ -63,10 +63,10 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID,
                         </StyledLink>
                         {/* <Button size="small" variant="outlined" endIcon={<Share />}>Bagi</Button> */}
                         {(user?.role !== 'user' && user) && (
-                            <>
                                 <Button size="small" variant="outlined" endIcon={<Edit />} onClick={() => isEdit(true)}>Sunting</Button>
+                        )}
+                        {(user?.role === 'administrator' && user) && (
                                 <Button size="small" variant="outlined" endIcon={<Delete />} onClick={() => setShowDeleteDialog(true)}>Hapus</Button>
-                            </>
                         )}
                     </Grid>
                 </CardContent>

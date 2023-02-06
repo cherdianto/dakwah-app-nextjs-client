@@ -59,6 +59,7 @@ const RegisterForm = () => {
 
             try {
                 const res = await axios.post(`${apiUrl}/auth/register`, data)
+                console.log(res)
                 setUser(res.data.user)
                 setError(null)
                 setSuccess({
