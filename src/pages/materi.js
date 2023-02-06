@@ -14,6 +14,8 @@ import { addMateri, getMateries, updateMateri, deleteMateri } from '../apiQuery'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import MateriModal from '@common/Modals/AddMateriModal'
 import axiosJWT from '@utils/axiosJWT'
+import useAuth from '@hooks/useAuth'
+
 
 const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
@@ -24,25 +26,27 @@ export default function MateriPage() {
     const [list, setList] = useState([])
     const { status, data } = useQuery(['materi'], getMateries)
     const { user, setUser } = useUser()
+    const currentUser = useAuth({ redirect: null})
 
-    const getUser = async () => {
-        try {
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${user?.accessToken}`
-                },
-                withCredentials: true
-            }
-            const res = await axiosJWT(`${apiUrl}/auth/user`, config)
-            setUser(res.data.user)
-        } catch (error) {
-            setUser()
-        }
-    }
 
-    useEffect(() => {
-        if (!user) getUser()
-    }, [user])
+    // const getUser = async () => {
+    //     try {
+    //         const config = {
+    //             headers: {
+    //                 Authorization: `Bearer ${user?.accessToken}`
+    //             },
+    //             withCredentials: true
+    //         }
+    //         const res = await axiosJWT(`${apiUrl}/auth/user`, config)
+    //         setUser(res.data.user)
+    //     } catch (error) {
+    //         setUser()
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     if (!user) getUser()
+    // }, [user])
 
     useEffect(() => {
         if (status === 'success') {

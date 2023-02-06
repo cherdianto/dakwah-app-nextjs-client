@@ -27,7 +27,9 @@ import Alert from "@mui/material/Alert";
 // import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { fetchUser, updateProfile } from '../apiQuery'
 // import { useQuery } from '@tanstack/react-query';
-import Router from 'next/router'
+// import Router from 'next/router'
+import useAuth from '@hooks/useAuth'
+
 
 const ContentStyle = styled("div")({
     padding: 20,
@@ -37,6 +39,8 @@ export default function UpdateProfile(props) {
     const { user, setUser } = useUser()
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
+    const currentUser = useAuth({ redirect: 'login'})
+
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -76,21 +80,19 @@ export default function UpdateProfile(props) {
         }
     })
 
-    const getUser = async () => {
-        try {
-            const res = await fetchUser(user?.accessToken)
-            setUser(res)
-        } catch (error) {
-            if (error.isAxiosError) {
-                setUser()
-            }
-            Router.push('/login')
-        }
-    }
+    // const getUser = async () => {
+    //     try {
+    //         const res = await fetchUser(user?.accessToken)
+    //         setUser(res)
+    //     } catch (error) {
+    //         setUser()
+    //         Router.push('/login')
+    //     }
+    // }
 
-    useEffect(() => {
-        if (!user) getUser()
-    }, [user])
+    // useEffect(() => {
+    //     if (!user) getUser()
+    // }, [user])
 
     if (!user) {
         return (

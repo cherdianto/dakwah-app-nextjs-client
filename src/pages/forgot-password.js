@@ -21,6 +21,8 @@ const ForgotPassword = (props) => {
             const res = await fetchUser(user?.accessToken)
             setUser(res)
         } catch (error) {
+            console.log('error get user')
+
             setUser()
         }
     }

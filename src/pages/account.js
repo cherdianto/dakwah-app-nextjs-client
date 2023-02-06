@@ -7,25 +7,11 @@ import { useEffect } from 'react'
 import Container from '@mui/material/Container'
 import Profile from '@common/Profile'
 import { fetchUser } from '../apiQuery'
+import useAuth from '@hooks/useAuth'
 
 const AccountPage = (props) => {
     const { user, setUser } = useUser()
-
-    const getUser = async () => {
-        try {
-            const res = await fetchUser(user?.accessToken)
-            setUser(res)
-        } catch (error) {
-            // if (error.isAxiosError) {
-            // }
-            setUser()
-            Router.push('/login')
-        }
-    }
-
-    useEffect(() => {
-        if (!user) getUser()
-    }, [])
+    const currentUser = useAuth({ redirect: 'login'})
 
     if (!user) {
         return (
