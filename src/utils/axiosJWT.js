@@ -2,8 +2,7 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
 const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
-// const { user } = useUser()
-// $PENDINGWORK : setelah sukses dapet access token baru, seharusnya token baru disimpan di redux store auth/user/token utk dipake lagi di next request
+
 axios.defaults.withCredentials = true;
 
 const axiosJWT = axios.create()
@@ -48,6 +47,7 @@ axiosJWT.interceptors.response.use((response) => {
     //     console.log('mbuh')
     // }
     // console.log(error)
+    console.log()
 
     return Promise.reject('UNAUTHORIZED - INTERCEPTOR RESPONSE')
 

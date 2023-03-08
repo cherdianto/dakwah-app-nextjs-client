@@ -133,13 +133,15 @@ const Login = () => {
                                     endIcon={<ArrowRight />}
                                     fullWidth
                                     type="submit"
+                                    size="large"
                                     sx={{
-                                        my: 2
+                                        my: 2,
+                                        borderRadius: '15px'
                                     }}
                                 >
                                     Login
                                 </Button>
-                                <Typography variant="body2" align="center">New user?  
+                                <Typography variant="body2" align="center">New user?<span> </span>  
                                         <Link href={'/register'}>
                                              Register
                                         </Link>

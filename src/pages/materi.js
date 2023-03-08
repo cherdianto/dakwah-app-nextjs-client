@@ -15,6 +15,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import MateriModal from '@common/Modals/AddMateriModal'
 import axiosJWT from '@utils/axiosJWT'
 import useAuth from '@hooks/useAuth'
+import { AppNavbar } from '@mobile/Header'
 
 
 const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
@@ -127,17 +128,9 @@ export default function MateriPage() {
 
     return (
         <Layout>
-            <AppBar position='fixed' color="inherit" elevation={1}>
-                <Toolbar sx={{
-                    width: '100%',
-                    maxWidth: 768,
-                    mx: 'auto'
-                }}>
-                    <Typography variant="h5" color="inherit" component="div">Materi Aktif</Typography>
-                    <Box sx={{ flexGrow: 1 }} />
-                    { (user?.role === 'administrator' || user?.role === 'editor') && <MateriPopover onSelect={(selected) => handleMateriPopoverSelect(selected)} />}
-                </Toolbar>
-            </AppBar>
+            <AppNavbar 
+                text='Materi' 
+                popOver={(user?.role === 'administrator' || user?.role === 'editor') && <MateriPopover onSelect={(selected) => handleMateriPopoverSelect(selected)} />} />
             <Grid container>
                 <Grid container sx={{ p: 1 }} gap={2}>
                     {list?.map((lst, id) => {

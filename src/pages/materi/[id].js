@@ -149,14 +149,14 @@ const MateriDetail = ({ materiId }) => {
 
     return (
         <>
-            <AppBar position="static" color="inherit" elevation={1}>
+            <AppBar position="static" color="primary" elevation={1}>
                 <Toolbar sx={{
                     width: '100%',
                     maxWidth: 768,
                     mx: 'auto'
                 }}>
                     <Link href={"/materi"}>
-                        <IconButton edge='start' color="inherit" sx={{ mr: 2 }}>
+                        <IconButton edge='start' color="white" sx={{ mr: 2 }}>
                             <ArrowLeft />
                         </IconButton>
                     </Link>

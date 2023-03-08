@@ -145,16 +145,18 @@ const RegisterForm = () => {
                             <Box>
                                 <Button
                                     variant="contained"
+                                    size="large"
                                     endIcon={<ArrowRight />}
                                     fullWidth
                                     type="submit"
                                     sx={{
-                                        mb: 2
+                                        mb: 2,
+                                        borderRadius: "15px"
                                     }}
                                 >
                                     Register
                                 </Button>
-                                <Typography variant="body2" align="center">Already have an account?
+                                <Typography variant="body2" align="center">Already have an account?<span> </span>
                                     <Link href={'/login'}>
                                         Login
                                     </Link>

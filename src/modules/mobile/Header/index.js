@@ -1,29 +1,28 @@
-import Link from "next/link";
 import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Box from "@mui/material/Box";
-import Menu from "@mui/icons-material/Menu";
+import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Image from 'next/image'
 
+export const AppNavbar = ({ text, logo, popOver }) => {
 
-const Header = () => {
     return (
-        <Box sx={{ flex: 1 }}>
-            <AppBar position="fixed">
-                <Toolbar>
-                    <IconButton color="inherit" aria-label="menu" sx={{ marginRight: theme.spacing(2) }}>
-                        <Menu />
-                    </IconButton>
-                    <Link href={"/"}>
-                        <Typography variant="h6">
-                            Dakwah Bot
-                        </Typography>
-                    </Link>
-                </Toolbar>
-            </AppBar>
-        </Box>
+        <AppBar position="fixed" color='primary' elevation={1}>
+            <Toolbar sx={{
+                width: '100%',
+                maxWidth: 768,
+                mx: 'auto'
+            }}>
+                { logo && (
+                    <Image src={logo} alt="logo" width={170}/>
+                )}
+                { text && (
+                    <Typography variant='h5'>{text}</Typography>
+                )}
+                <Box sx={{ flexGrow: 1 }} />
+                {popOver}
+                
+            </Toolbar>
+        </AppBar>
     )
 }
-
-export default Header

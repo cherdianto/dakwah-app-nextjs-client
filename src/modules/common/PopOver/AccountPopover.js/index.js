@@ -68,7 +68,7 @@ export default function AccountPopover() {
                     }),
                 }}
             >
-                <MoreIcon />
+                <MoreIcon color='white' />
             </IconButton>
 
             <Popover

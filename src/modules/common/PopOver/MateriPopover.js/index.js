@@ -26,7 +26,7 @@ const MATERIMENU_ADMIN = [
 
 export default function MateriPopover({ onSelect }) {
     const [open, setOpen] = useState(null);
-    const { user, setUser } = useUser()
+    const { user } = useUser()
     const [selected, setSelected] = useState()
 
     const handleOpen = (event) => {
@@ -45,6 +45,10 @@ export default function MateriPopover({ onSelect }) {
         }
     };
 
+    if(user?.role !== 'administrator' && user?.role !== 'editor'){
+        return <>{user?.role}</>
+    }
+
     return (
         <>
             <IconButton
@@ -58,7 +62,7 @@ export default function MateriPopover({ onSelect }) {
                     }),
                 }}
             >
-                <MoreIcon />
+                <MoreIcon color='white' />
             </IconButton>
 
             <Popover

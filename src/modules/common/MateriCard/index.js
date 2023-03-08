@@ -66,7 +66,7 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID,
                                 <Button size="small" variant="outlined" endIcon={<Edit />} onClick={() => isEdit(true)}>Sunting</Button>
                         )}
                         {(user?.role === 'administrator' && user) && (
-                                <Button size="small" variant="outlined" endIcon={<Delete />} onClick={() => setShowDeleteDialog(true)}>Hapus</Button>
+                                <Button size="small" color="error" variant="contained" endIcon={<Delete />} onClick={() => setShowDeleteDialog(true)}>Hapus</Button>
                         )}
                     </Grid>
                 </CardContent>

@@ -16,6 +16,8 @@ import { useUser } from '@contexts/user.context'
 import LanguagePopover from '@common/PopOver/LanguagePopover'
 import Divider from '@mui/material/Divider'
 import useAuth from '@hooks/useAuth'
+import { AppNavbar } from '@mobile/Header'
+import Logo from '../../public/assets/logo-dark.svg'
 // import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // import { useTranslation } from 'next-i18next'
 
@@ -85,17 +87,7 @@ export default function Homepage(props) {
 
     return (
         <Layout>
-            <AppBar position="fixed" color="inherit" elevation={1}>
-                <Toolbar sx={{
-                    width: '100%',
-                    maxWidth: 768,
-                    mx: 'auto'
-                }}>
-                    <Typography variant='h5'>Hi, {user ? `${user.fullname}` : 'Guest'}</Typography>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <LanguagePopover />
-                </Toolbar>
-            </AppBar>
+            <AppNavbar logo={Logo} popOver=<LanguagePopover /> />
             <Grid container >
                 <Grid container direction='column'>
                     <Carousel
@@ -104,27 +96,36 @@ export default function Homepage(props) {
                         {items.map((item, i) => <PromoSlide key={i} item={item} />)}
                     </Carousel>
                 </Grid>
-                <Grid container direction='column' alignItems='center' sx={{
+
+                <Grid container direction='column' sx={{
                     p: 2
                 }}>
-                    <Typography variant='body1' align='center' sx={{ w: '100%', display: 'block'}}></Typography>
-                    <Typography variant='body1' align='center'>Disini kami berusaha untuk memberikan materi dakwah islam secara ringkas, mudah dipahami, dan berkelanjutan.</Typography>
-                    <Divider variant="middle" sx={{
-                        p: 1
-                    }}/>
-                    { (user === undefined || !user) && (
-                        <>
-                            <Typography gutterBottom variant='body1' align='center'>Untuk mendapatkan fasilitas belajar yang lebih maksimal, silakan login.</Typography>
-                            <Divider variant="middle" sx={{
-                                p: 1
-                            }}/>
-                            <Typography gutterBottom variant='body1' align='center'>Buat akun, klik tombol di bawah ini</Typography>
-                            <StyledLink href={'/register'}>
-                                <Button variant='outlined' sx={{ m: 2 }}>Register</Button>
-                            </StyledLink>
-                        </>
-                    )}
-                    <Typography variant='body1' align='center' sx={{ w: '100%', display: 'block'}}>Selamat belajar.</Typography>
+                    <Typography variant='h6'  sx={{ w: '100%', display: 'block'}}>Selamat datang di Moslem Guide App</Typography>
+                    {/* <Typography variant='h4'  sx={{ w: '100%', display: 'block'}}>Ahlan wa sahlan</Typography> */}
+                    <Typography variant='body1' sx={{ w: '100%', display: 'block'}}>Aplikasi dakwah yang di kelola oleh IMEA (Indonesian Moslem in Enchede Association)</Typography>
+                    {/* <Typography variant='body1' align='center'>Disini kami berusaha untuk memberikan materi dakwah islam secara ringkas, mudah dipahami, dan berkelanjutan.</Typography> */}
+
+                    <Grid container sx={{
+                        my: 2,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+
+                        { (user === undefined || !user) ? (
+                            <>
+                                <StyledLink href={'/register'}>
+                                    <Button variant='contained' size='large' sx={{ m: 2, borderRadius: '15px', width: '80vw', maxWidth: '768px' }}>Register</Button>
+                                </StyledLink>
+                            </>
+                        ) : (
+                            <>
+                                <StyledLink href={'/materi'}>
+                                    <Button variant='contained' size='large' sx={{ m: 2, borderRadius: '15px', width: '80vw' }}>Lanjut Belajar</Button>
+                                </StyledLink>
+                            </>
+                        )}
+                    </Grid>
+                    <Typography variant='body1' align='center' sx={{ w: '100%', display: 'block'}}>Privacy Policy | Need Help?</Typography>
                 </Grid>
             </Grid>
         </Layout>

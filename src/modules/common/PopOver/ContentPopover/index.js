@@ -61,7 +61,7 @@ export default function ContentPopover({ materiId, onNewContent, onSave }) {
                     }),
                 }}
             >
-                <MoreIcon />
+                <MoreIcon color='white' />
             </IconButton>
 
             <Popover
