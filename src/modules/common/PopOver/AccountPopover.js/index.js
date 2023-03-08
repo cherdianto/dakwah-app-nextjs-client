@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useUser } from '@contexts/user.context';
 
 // ----------------------------------------------------------------------
-const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 const ACCOUNTMENU = [
     {
         value: 'edit profile',
@@ -31,38 +31,24 @@ export default function AccountPopover() {
     const handleOpen = (event) => {
         setOpen(event.currentTarget);
     };
-
-    const handleLogout = async () => {
-        try {
-            const res = await axios.get(`${apiUrl}/auth/logout`, {withCredentials: true})
-            return true
-        } catch (error) {
-            console.log(error)
-            return false
-        }
-    }
-
     const handleClose = async (e) => {
         const target = e.target.id
-        // console.log(e.target.id)
         setOpen(null);
         
         
 
         if(target === 'edit profile') {
             Router.push('/update-profile')
-            console.log('edit profile')
         } else if ( target === 'logout'){
             try {
                 const res = await axios.get(`${apiUrl}/auth/logout`, {withCredentials: true})
-                console.log(res)
                 
                 if(res.data.status === true){
-                    Router.push('/')
+                    Router.push('/login')
                 }
                 
             } catch (error) {
-                console.log(error)
+                // console.log(error)
             }
 
             setUser()
@@ -82,7 +68,7 @@ export default function AccountPopover() {
                     }),
                 }}
             >
-                <MoreIcon />
+                <MoreIcon color='white' />
             </IconButton>
 
             <Popover

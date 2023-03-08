@@ -27,7 +27,6 @@ const style = {
 const ModalReadingResponse = ({ open, onClose, onReadingResponse }) => {
 
     const handleSubmit = (feeling) => {
-        // console.log(feeling)
         onReadingResponse(feeling)
         onClose()
     }

@@ -10,6 +10,11 @@ import PropTypes from 'prop-types'
 import styled from "@emotion/styled";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 import Share from "@mui/icons-material/Share";
+import Edit from "@mui/icons-material/Edit";
+import { useState } from "react";
+import Delete from "@mui/icons-material/Delete";
+import { useUser } from "@contexts/user.context";
+import DeleteDialog from "@common/Dialogs/DeleteDialog";
 
 const MateriLabelStyled = styled(MateriLabel)`
     margin-bottom: 0px;
@@ -19,14 +24,20 @@ const StyledLink = styled(Link)`
     text-decoration: none;
 `;
 
-const MateriCard = ({ name, img, status, rating, student, description, materiID, label }) => {
+const MateriCard = ({ name, img, status, rating, student, description, materiID, label, isEdit, isDelete }) => {
+    // const [modalEdit, setModalEdit] = useState(false)
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+    const { user, setUser } = useUser()
+
     return (
-        <Card elevation={2} sx={{
-            p: 0,
+        <>
+
+        <Card elevation={0} sx={{
+            // p: 0,
             border: '1px solid lightgray',
-            borderRadius: 5
+            borderRadius: 3
         }}>
-            <Box sx={{ position: 'relative', maxWidth: 368, px: 1 }}>
+            <Box sx={{ position: 'relative', px: 1 }}>
                 <CardContent >
                     <Grid container direction='column' sx={{ paddingBottom: 1, paddingTop: 0 }}>
                         <Grid container direction='row' justifyContent='stretch'>
@@ -46,15 +57,29 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID,
                         </Typography>
 
                     </Grid>
-                    <Grid container direction='row' gap={2}>
+                    <Grid container direction='row' gap={1}>
                         <StyledLink href={"/materi/[id]"} as={`materi/${materiID}`} >
-                            <Button size="small" variant="contained" endIcon={<PlayArrow />}>Mulai Baca</Button>
+                            <Button size="small" variant="contained" endIcon={<PlayArrow />}>Baca</Button>
                         </StyledLink>
-                        <Button size="small" variant="outlined" endIcon={<Share />}>Bagikan</Button>
+                        {/* <Button size="small" variant="outlined" endIcon={<Share />}>Bagi</Button> */}
+                        {(user?.role !== 'user' && user) && (
+                                <Button size="small" variant="outlined" endIcon={<Edit />} onClick={() => isEdit(true)}>Sunting</Button>
+                        )}
+                        {(user?.role === 'administrator' && user) && (
+                                <Button size="small" color="error" variant="contained" endIcon={<Delete />} onClick={() => setShowDeleteDialog(true)}>Hapus</Button>
+                        )}
                     </Grid>
                 </CardContent>
             </Box>
         </Card>
+            <DeleteDialog 
+                open={showDeleteDialog}
+                onDelete={isDelete}
+                onClose={() => setShowDeleteDialog(false)}
+                title={name}
+            />
+        </>
+
     )
 
 }

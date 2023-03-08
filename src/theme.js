@@ -13,16 +13,19 @@ export const roboto = Roboto({
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#556cd6',
+      main: '#469D20',
     },
     secondary: {
       main: '#19857b',
+    },
+    warning: {
+      main: '#FF9300'
     },
     white: {
       main: '#FFFFFF',
     },
     error: {
-      main: red.A400,
+      main: '#FF0000',
     },
   },
   typography: {

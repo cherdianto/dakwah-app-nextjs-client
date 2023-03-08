@@ -18,7 +18,7 @@ import axios from "axios";
 import Link from "next/link";
 
 axios.defaults.withCredentials = true;
-const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
 const RootStyle = styled("div")({
     height: 'calc(100vh - 110px)',
@@ -38,7 +38,6 @@ const HeadingStyle = styled(Box)({
 const Login = () => {
     const { user, setUser } = useUser()
     const [error, setError] = useState(null)
-    // console.log(apiUrl)
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -51,17 +50,25 @@ const Login = () => {
                 email : values.email,
                 password : values.password
             }
-            console.log('submit nih ' + cred)
+
             try {
                 const res = await axios.post(`${apiUrl}/auth/login`, cred)
                 setUser(res.data)
                 setError(null)
             } catch (error) {
-                setError({
-                    status: true,
-                    message:error.response.data.message
-                })
-                // alert(error.response.data.message)
+                if (error.response.status === 429) {
+                    // rate limiter error
+                    setError({
+                        status: true,
+                        message: error.response.data
+                    })
+                } else {
+                    // other errors
+                    setError({
+                        status: true,
+                        message: error.response.data.message
+                    })
+                }
             }
 
         }
@@ -108,7 +115,7 @@ const Login = () => {
                                 onChange={validation.handleChange}
                             />
                             <Box>
-                                <Stack
+                                {/* <Stack
                                     direction="row"
                                     alignItems="center"
                                     justifyContent="space-between"
@@ -120,21 +127,28 @@ const Login = () => {
                                         }
                                         label="Remember me"
                                     />
-                                </Stack>
+                                </Stack> */}
                                 <Button
                                     variant="contained"
                                     endIcon={<ArrowRight />}
                                     fullWidth
                                     type="submit"
+                                    size="large"
                                     sx={{
-                                        mb: 2
+                                        my: 2,
+                                        borderRadius: '15px'
                                     }}
                                 >
                                     Login
                                 </Button>
-                                <Typography variant="body2" align="center">New user?  
+                                <Typography variant="body2" align="center">New user?<span> </span>  
                                         <Link href={'/register'}>
                                              Register
+                                        </Link>
+                                </Typography>
+                                <Typography variant="body2" align="center"> 
+                                        <Link href={'/forgot-password'}>
+                                             Forgot Password
                                         </Link>
                                 </Typography>
                             </Box>

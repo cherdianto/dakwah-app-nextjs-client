@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../modules/common/Layout'
 import Carousel from 'react-material-ui-carousel'
 import Paper from '@mui/material/Paper'
@@ -6,24 +6,22 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import Select from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
 import Link from 'next/link'
 import styled from '@emotion/styled'
 import Toolbar from '@mui/material/Toolbar'
 import AppBar from '@mui/material/AppBar'
-import MoreIcon from '@mui/icons-material/MoreVert';
-import IconButton from '@mui/material/IconButton';
-import axiosJWT from '@utils/axiosJWT'
-
-
+import { fetchUser } from '../apiQuery'
+import Router from 'next/router'
 import { useUser } from '@contexts/user.context'
-import LanguagePopover from '@common/LanguagePopover'
+import LanguagePopover from '@common/PopOver/LanguagePopover'
+import Divider from '@mui/material/Divider'
+import useAuth from '@hooks/useAuth'
+import { AppNavbar } from '@mobile/Header'
+import Logo from '../../public/assets/logo-dark.svg'
+// import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+// import { useTranslation } from 'next-i18next'
 
-const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
 const StyledLink = styled(Link)`
     text-decoration: none;
@@ -35,7 +33,7 @@ function PromoSlide(props) {
             elevation={1}
             square={false}
             sx={{
-                background: 'red',
+                background: 'lightgray',
                 height: 200,
             }}
         >
@@ -55,8 +53,9 @@ function PromoSlide(props) {
 
 export default function Homepage(props) {
     const { user, setUser } = useUser()
+    const currentUser = useAuth({ redirect: null})
 
-    console.log('homepage')
+    // const { t } = useTranslation('common')
 
     let items = [
         {
@@ -73,61 +72,60 @@ export default function Homepage(props) {
         }
     ]
 
-    const getUser = async () => {
-        try {
-            console.log('firing axiosjwt from homepage')
+    // const getUser = async () => {
+    //     try {
+    //         const res = await fetchUser(user?.accessToken)
+    //         setUser(res)
+    //     } catch (error) {
+    //         setUser()
+    //     }
+    // }
 
-            const res = await axiosJWT(`${apiUrl}/auth/user`, {
-                withCredentials: true
-            })
-            setUser(res.data.user)
-        } catch (error) {
-            if(error.isAxiosError){
-                setUser()
-            }
-        }
-    }
-
-    useEffect(() => {
-        if(!user) getUser()
-    }, [user])
+    // useEffect(() => {
+    //     if (!user) getUser()
+    // }, [])
 
     return (
         <Layout>
-            <AppBar position="fixed" color="inherit" elevation={2}>
-                <Toolbar variant="dense" sx={{
-                    width: '100%',
-                    maxWidth: 600,
-                    mx: 'auto'
-                }}>
-                    <Typography variant='h6'>Welcome, {user ? `${user.fullname}` : 'Guest'}</Typography>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <LanguagePopover />
-                </Toolbar>
-            </AppBar>
+            <AppNavbar logo={Logo} popOver=<LanguagePopover /> />
             <Grid container >
                 <Grid container direction='column'>
                     <Carousel
-                        height={200} sx={{ mb: 2 }}
+                        height={200} sx={{ m:1 }}
                     >
                         {items.map((item, i) => <PromoSlide key={i} item={item} />)}
                     </Carousel>
                 </Grid>
-                <Grid container direction='column' alignItems='center' sx={{
+
+                <Grid container direction='column' sx={{
                     p: 2
                 }}>
-                    <Typography variant='body1' align='center'>Selamat datang di website dakwah-bot.com. Disini kami berusaha untuk memberikan materi dakwah islam secara ringkas, mudah dipahami, dan berkelanjutan.</Typography>
-                    <Typography gutterBottom variant='body1' align='center'>Anda dapat mengikuti materi di website ini dengan 3 cara, yaitu:
-                    </Typography>
-                    <Box sx={{ ml: 2 }}>
-                        <Typography gutterBottom variant='body1' align='left'>1. Register dan mengaktifkan layanan whatsapp, dakwah-bot akan mengirimkan materi dakwah secara berkala (rekomendasi)</Typography>
-                        <Typography gutterBottom variant='body1' align='left'>2. Register dan login untuk membaca materi dakwah dengan penyimpanan progres belajar</Typography>
-                        <Typography gutterBottom variant='body1' align='left'>3. Anda dapat membaca materi dakwah tanpa perlu login</Typography>
-                    </Box>
-                    <StyledLink href={'/register'}>
-                        <Button variant='outlined' sx={{ m: 3 }}>Register</Button>
-                    </StyledLink>
-                    <Typography variant='body1' align='center'>Selamat belajar.</Typography>
+                    <Typography variant='h6'  sx={{ w: '100%', display: 'block'}}>Selamat datang di Moslem Guide App</Typography>
+                    {/* <Typography variant='h4'  sx={{ w: '100%', display: 'block'}}>Ahlan wa sahlan</Typography> */}
+                    <Typography variant='body1' sx={{ w: '100%', display: 'block'}}>Aplikasi dakwah yang di kelola oleh IMEA (Indonesian Moslem in Enchede Association)</Typography>
+                    {/* <Typography variant='body1' align='center'>Disini kami berusaha untuk memberikan materi dakwah islam secara ringkas, mudah dipahami, dan berkelanjutan.</Typography> */}
+
+                    <Grid container sx={{
+                        my: 2,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+
+                        { (user === undefined || !user) ? (
+                            <>
+                                <StyledLink href={'/register'}>
+                                    <Button variant='contained' size='large' sx={{ m: 2, borderRadius: '15px', width: '80vw', maxWidth: '768px' }}>Register</Button>
+                                </StyledLink>
+                            </>
+                        ) : (
+                            <>
+                                <StyledLink href={'/materi'}>
+                                    <Button variant='contained' size='large' sx={{ m: 2, borderRadius: '15px', width: '80vw' }}>Lanjut Belajar</Button>
+                                </StyledLink>
+                            </>
+                        )}
+                    </Grid>
+                    <Typography variant='body1' align='center' sx={{ w: '100%', display: 'block'}}>Privacy Policy | Need Help?</Typography>
                 </Grid>
             </Grid>
         </Layout>
@@ -135,4 +133,12 @@ export default function Homepage(props) {
 }
 
 
-
+// export async function getStaticProps({ locale }){
+//     return {
+//         props: {
+//             ...(await serverSideTranslations(locale, [
+//                 'common'
+//             ]))
+//         }
+//     }
+// }

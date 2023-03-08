@@ -5,7 +5,7 @@ import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material';
 import Router from 'next/router'
 import axiosJWT from '@utils/axiosJWT';
 import { useUser } from '@contexts/user.context';
-import MateriModal from '@common/AddMateriModal';
+import MateriModal from '@common/Modals/AddMateriModal';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ const MATERIMENU_ADMIN = [
 
 export default function MateriPopover({ onSelect }) {
     const [open, setOpen] = useState(null);
-    const { user, setUser } = useUser()
+    const { user } = useUser()
     const [selected, setSelected] = useState()
 
     const handleOpen = (event) => {
@@ -45,6 +45,10 @@ export default function MateriPopover({ onSelect }) {
         }
     };
 
+    if(user?.role !== 'administrator' && user?.role !== 'editor'){
+        return <>{user?.role}</>
+    }
+
     return (
         <>
             <IconButton
@@ -58,7 +62,7 @@ export default function MateriPopover({ onSelect }) {
                     }),
                 }}
             >
-                <MoreIcon />
+                <MoreIcon color='white' />
             </IconButton>
 
             <Popover
@@ -85,7 +89,6 @@ export default function MateriPopover({ onSelect }) {
                     {MATERIMENU_ADMIN.map((option) => (
                         <MenuItem key={option.value} id={option.value} onClick={(e) => handleClose(e)}>
                             {/* <Box component="img" alt={option.label} src={option.icon} sx={{ width: 28, mr: 2 }} /> */}
-
                             {option.label}
                         </MenuItem>
                     ))}

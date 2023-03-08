@@ -1,31 +1,31 @@
 import { useUser } from '@contexts/user.context'
-import axiosJWT from '@utils/axiosJWT'
 import { useEffect, useState } from 'react'
+import { fetchUser } from '../apiQuery'
+import Router from 'next/router'
 
-const useAuth = () => {
+const useAuth = ({redirect}) => {
     const [currentUser, setCurrentUser]= useState(null)
     const { user, setUser } = useUser()
 
-    useEffect(() => {
-        const fetchUser = async() => {
-            try {
-                const res = await axiosJWT('http://localhost:3001/auth/user', {
-                    withCredentials: true
-                })
-        
-                setCurrentUser(res.data.user.fullname)
-                // setUser(res.data.user.fullname)
-            } catch (error) {
-                if (error.isAxiosError) {
-                    setCurrentUser()
-                    // setUser()
-                }
+    const getUser = async () => {
+        try {
+            const res = await fetchUser(user?.accessToken)
+            setCurrentUser(res)
+            setUser(res)
+        } catch (error) {
+            setUser()
+            setCurrentUser(null)
+            if(redirect !== null) {
+                Router.push(`/${redirect}`)
             }
         }
+    }
 
-        fetchUser()
-    }, [user])
-    return { currentUser }
+    useEffect(() => {
+        if (!user) getUser()
+    }, [])
+
+    return currentUser
 }
 
 export default useAuth

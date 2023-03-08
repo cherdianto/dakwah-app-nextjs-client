@@ -9,7 +9,7 @@ const MateriLabel = ({ className, label }) => {
                 return (
                     <Grid item key={id}>
                         <Chip
-                            color='secondary'
+                            color='warning'
                             size='small'
                             label={item.toUpperCase()}
                             sx={{

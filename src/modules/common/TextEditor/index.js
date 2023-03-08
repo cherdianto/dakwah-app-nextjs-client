@@ -26,7 +26,6 @@ const TextEditor = ({ contentId, matan, subTitle, onCancel, style, onSave }) => 
             subTitle: newSubtitle,
             contentId
         }
-        // const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
         onSave(formData)
         resetForm()
     }

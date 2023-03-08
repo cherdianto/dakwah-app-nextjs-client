@@ -19,7 +19,7 @@ import Link from "next/link";
 
 axios.defaults.withCredentials = true;
 
-const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
+const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
 const RootStyle = styled("div")({
     height: 'calc(100vh - 110px)',
@@ -56,7 +56,7 @@ const RegisterForm = () => {
                 whatsapp: values.whatsapp,
                 password: values.password
             }
-            console.log('submit register ' + data)
+
             try {
                 const res = await axios.post(`${apiUrl}/auth/register`, data)
                 console.log(res)
@@ -67,12 +67,10 @@ const RegisterForm = () => {
                     message: "REGISTER SUCCESS"
                 })
             } catch (error) {
-                console.log(error)
                 setError({
                     status: true,
                     message: error.response.data.message
                 })
-                // alert(error.response.data.message)
             }
 
         }
@@ -147,16 +145,18 @@ const RegisterForm = () => {
                             <Box>
                                 <Button
                                     variant="contained"
+                                    size="large"
                                     endIcon={<ArrowRight />}
                                     fullWidth
                                     type="submit"
                                     sx={{
-                                        mb: 2
+                                        mb: 2,
+                                        borderRadius: "15px"
                                     }}
                                 >
                                     Register
                                 </Button>
-                                <Typography variant="body2" align="center">Already have an account?
+                                <Typography variant="body2" align="center">Already have an account?<span> </span>
                                     <Link href={'/login'}>
                                         Login
                                     </Link>

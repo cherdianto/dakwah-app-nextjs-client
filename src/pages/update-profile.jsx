@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, cache } from 'react'
 import Layout from '../modules/common/Layout'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
@@ -24,8 +24,12 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Alert from "@mui/material/Alert";
+// import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { fetchUser, updateProfile } from '../apiQuery'
+// import { useQuery } from '@tanstack/react-query';
+// import Router from 'next/router'
+import useAuth from '@hooks/useAuth'
 
-const apiUrl = process.env.ENV === 'vercel' ? process.env.API_URL_VERCEL : process.env.API_URL_LOCAL
 
 const ContentStyle = styled("div")({
     padding: 20,
@@ -35,6 +39,8 @@ export default function UpdateProfile(props) {
     const { user, setUser } = useUser()
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
+    const currentUser = useAuth({ redirect: 'login'})
+
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -55,64 +61,53 @@ export default function UpdateProfile(props) {
                 // oldPassword: values.oldPassword,
                 // newPassword: values.newPassword
             }
-            console.log('submit update ' + data)
+            
             try {
-                const res = await axiosJWT.put(`${apiUrl}/auth/update-profile`, data)
-                console.log(res)
-                setUser(res.data.user)
+                const res = await updateProfile({data, accessToken: user?.accessToken})
+                setUser(res)
                 setError(null)
                 setSuccess({
                     status: true,
                     message: "UPDATE PROFILE SUCCESS"
                 })
             } catch (error) {
-                console.log(error)
                 setError({
                     status: true,
                     message: error.response.data.message
                 })
-                // alert(error.response.data.message)
             }
 
         }
     })
 
-    const getUser = async () => {
-        try {
-            console.log('firing axiosjwt from update profile page')
-            const res = await axiosJWT(`${apiUrl}/auth/user`, {
-                withCredentials: true
-            })
+    // const getUser = async () => {
+    //     try {
+    //         const res = await fetchUser(user?.accessToken)
+    //         setUser(res)
+    //     } catch (error) {
+    //         setUser()
+    //         Router.push('/login')
+    //     }
+    // }
 
-            console.log(res)
-            
-            setUser(res.data.user)
-        } catch (error) {
-            if(error.isAxiosError){
-                setUser()
-            }
-            Router.push('/login')
-        }
-    }
+    // useEffect(() => {
+    //     if (!user) getUser()
+    // }, [user])
 
-    useEffect(() => {
-        if(!user) getUser()
-    }, [])
-
-    if(!user){
+    if (!user) {
         return (
             <Layout>
                 <h2>loading...</h2>
             </Layout>
         )
     }
-    
+
     return (
         <Layout>
-            <AppBar position='fixed' color="inherit" elevation={2}>
-                <Toolbar variant="dense" sx={{
+            <AppBar position='fixed' color="inherit" elevation={1}>
+                <Toolbar sx={{
                     width: '100%',
-                    maxWidth: 600,
+                    maxWidth: 768,
                     mx: 'auto'
                 }}>
                     <Link href={"/account"}>
@@ -125,7 +120,7 @@ export default function UpdateProfile(props) {
             </AppBar>
             <ContentStyle>
                 <Grid container direction='column'>
-                    
+
                     <form
                         id="updateForm"
                         onSubmit={(e) => {
@@ -167,6 +162,27 @@ export default function UpdateProfile(props) {
                                 pb: 2
                             }}
                         />
+                        {/* <FormControl fullWidth>
+                            <InputLabel id="role">Role</InputLabel>
+                            <Select
+                                fullWidth
+                                id="role"
+                                type='select'
+                                name='role'
+                                value={validation.values.role}
+                                label='Role'
+                                labelId='role'
+                                onChange={validation.handleChange}
+                                sx={{
+                                    mb: 2
+                                }}
+                            >
+                                <MenuItem value={'user'}>user</MenuItem>
+                                <MenuItem value={'editor'}>editor</MenuItem>
+                                <MenuItem value={'translator'}>translator</MenuItem>
+                                <MenuItem value={'administrator'}>administrator</MenuItem>
+                            </Select>
+                        </FormControl> */}
                         <FormControl fullWidth>
                             <InputLabel id="language">Language</InputLabel>
                             <Select
@@ -225,7 +241,7 @@ export default function UpdateProfile(props) {
                     </form>
                 </Grid>
                 {error && error.status === true ? <Alert severity='error'>{error.message}</Alert> : ''}
-                    {success && success.status === true ? <Alert severity='success'>{success.message}</Alert> : ''}
+                {success && success.status === true ? <Alert severity='success'>{success.message}</Alert> : ''}
             </ContentStyle>
         </Layout>
     )

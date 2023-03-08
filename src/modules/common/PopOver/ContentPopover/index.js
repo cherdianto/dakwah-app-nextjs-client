@@ -5,8 +5,8 @@ import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material';
 import Router from 'next/router'
 import axiosJWT from '@utils/axiosJWT';
 import { useUser } from '@contexts/user.context';
-import MateriModal from '@common/AddMateriModal';
-import ContentModal from '@common/AddContentModal';
+import MateriModal from '@common/Modals/AddMateriModal';
+import ContentModal from '@common/Modals/AddContentModal';
 
 // ----------------------------------------------------------------------
 
@@ -36,26 +36,17 @@ export default function ContentPopover({ materiId, onNewContent, onSave }) {
 
     const handleClose = async (e) => {
         const target = e.target.id
-        // console.log(e.target.id)
         setOpen(null);
         
         
 
         if(target === 'add content') {
-            // Router.push('/update-profile')
-            console.log('add content')
             setOpen(null)
             setModalOpen(true)
         } else if ( target === 'sequence'){
-            console.log('sequence')
+            // console.log('sequence')
         }
     };
-
-    // const handleAddContentSuccess = (res) => {
-    //     console.log('handle add materi success')
-    //     console.log(res)
-    //     onNewContent(res.data.newMateri)
-    // }
 
     return (
         <>
@@ -70,7 +61,7 @@ export default function ContentPopover({ materiId, onNewContent, onSave }) {
                     }),
                 }}
             >
-                <MoreIcon />
+                <MoreIcon color='white' />
             </IconButton>
 
             <Popover

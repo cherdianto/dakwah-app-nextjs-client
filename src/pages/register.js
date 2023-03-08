@@ -3,7 +3,7 @@ import RegisterForm from '@common/RegisterForm'
 import React from 'react'
 import Layout from '../modules/common/Layout'
 import { useUser } from '@contexts/user.context'
-import { AppNavbar } from '@common/NavbarProfil'
+// import { AppNavbar } from '@common/NavbarProfil'
 import axiosJWT from '@utils/axiosJWT'
 import Router from 'next/router'
 import { useEffect } from 'react'
@@ -11,7 +11,6 @@ import { useEffect } from 'react'
 
 
 const RegisterPage = (props) => {
-    console.log(props)
     
     const {user, setUser} = useUser()
     
