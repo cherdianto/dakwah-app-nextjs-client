@@ -18,8 +18,11 @@ import Divider from '@mui/material/Divider'
 import useAuth from '@hooks/useAuth'
 import { AppNavbar } from '@mobile/Header'
 import Logo from '../../public/assets/logo-dark.svg'
+import Image from 'next/image'
 // import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 // import { useTranslation } from 'next-i18next'
+import Slide1 from '../../public/assets/slide1.png'
+import Slide2 from '../../public/assets/slide2.png'
 
 const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
@@ -35,9 +38,10 @@ function PromoSlide(props) {
             sx={{
                 background: 'lightgray',
                 height: 200,
+                // width: 300
             }}
         >
-            <Grid container direction='column' justifyContent='center' alignItems='center' sx={{
+            {/* <Grid container direction='column' justifyContent='center' alignItems='center' sx={{
                 p: 3
             }}>
                 <h2>{props.item.nama}</h2>
@@ -46,7 +50,8 @@ function PromoSlide(props) {
                 <Button className='CheckButton'>
                     read more
                 </Button>
-            </Grid>
+            </Grid> */}
+                <Image src={props.item.image} alt={props.item.alt} fill/>
         </Paper>
     )
 }
@@ -72,6 +77,17 @@ export default function Homepage(props) {
         }
     ]
 
+    let sliderImage = [
+        {
+            image: Slide1,
+            alt: 'slide 1'
+        },
+        {
+            image: Slide2,
+            alt: 'slide 2'
+        }
+    ]
+
     // const getUser = async () => {
     //     try {
     //         const res = await fetchUser(user?.accessToken)
@@ -93,7 +109,7 @@ export default function Homepage(props) {
                     <Carousel
                         height={200} sx={{ m:1 }}
                     >
-                        {items.map((item, i) => <PromoSlide key={i} item={item} />)}
+                        {sliderImage.map((item, i) => <PromoSlide key={i} item={item} />)}
                     </Carousel>
                 </Grid>
 
@@ -120,12 +136,14 @@ export default function Homepage(props) {
                         ) : (
                             <>
                                 <StyledLink href={'/materi'}>
-                                    <Button variant='contained' size='large' sx={{ m: 2, borderRadius: '15px', width: '80vw' }}>Lanjut Belajar</Button>
+                                    <Button variant='contained' size='large' sx={{ m: 2, borderRadius: '15px', width: '80vw', maxWidth: '768px' }}>Lanjut Belajar</Button>
                                 </StyledLink>
                             </>
                         )}
                     </Grid>
-                    <Typography variant='body1' align='center' sx={{ w: '100%', display: 'block'}}>Privacy Policy | Need Help?</Typography>
+                    <Typography variant='body1' align='center'  sx={{ w: '100%', display: 'block'}}>
+                        <StyledLink href={'/policy'} sx={{ color: '#000'}}>Privacy Policy</StyledLink> | <StyledLink href={'/help'}>Need Help?</StyledLink>
+                    </Typography>
                 </Grid>
             </Grid>
         </Layout>
