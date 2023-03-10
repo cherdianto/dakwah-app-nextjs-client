@@ -29,26 +29,6 @@ export default function MateriPage() {
     const { user, setUser } = useUser()
     const currentUser = useAuth({ redirect: null})
 
-
-    // const getUser = async () => {
-    //     try {
-    //         const config = {
-    //             headers: {
-    //                 Authorization: `Bearer ${user?.accessToken}`
-    //             },
-    //             withCredentials: true
-    //         }
-    //         const res = await axiosJWT(`${apiUrl}/auth/user`, config)
-    //         setUser(res.data.user)
-    //     } catch (error) {
-    //         setUser()
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     if (!user) getUser()
-    // }, [user])
-
     useEffect(() => {
         if (status === 'success') {
             if(!user || user?.role === 'user'){
@@ -58,6 +38,14 @@ export default function MateriPage() {
                 setList(data)
             }
         }
+
+        if(status === 'loading'){
+        return (
+            <Layout>
+                <h2>loading...</h2>
+            </Layout>
+        )
+    }
     }, [status, data, user])
 
     const handleMateriPopoverSelect = (selected) => {
@@ -125,6 +113,8 @@ export default function MateriPage() {
             throw new Error(error)
         }
     }
+
+    
 
     return (
         <Layout>

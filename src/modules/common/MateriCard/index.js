@@ -59,14 +59,14 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID,
                     </Grid>
                     <Grid container direction='row' gap={1}>
                         <StyledLink href={"/materi/[id]"} as={`materi/${materiID}`} >
-                            <Button size="small" variant="contained" endIcon={<PlayArrow />}>Baca</Button>
+                            <Button size="small" variant="contained" endIcon={<PlayArrow />} sx={{ borderRadius: '12px'}}>Baca</Button>
                         </StyledLink>
                         {/* <Button size="small" variant="outlined" endIcon={<Share />}>Bagi</Button> */}
                         {(user?.role !== 'user' && user) && (
-                                <Button size="small" variant="outlined" endIcon={<Edit />} onClick={() => isEdit(true)}>Sunting</Button>
+                                <Button size="small" variant="outlined" endIcon={<Edit />} onClick={() => isEdit(true)}sx={{ borderRadius: '12px'}}>Sunting</Button>
                         )}
                         {(user?.role === 'administrator' && user) && (
-                                <Button size="small" color="error" variant="contained" endIcon={<Delete />} onClick={() => setShowDeleteDialog(true)}>Hapus</Button>
+                                <Button size="small" color="error" variant="outlined" endIcon={<Delete />} onClick={() => setShowDeleteDialog(true)}sx={{ borderRadius: '12px'}}>Hapus</Button>
                         )}
                     </Grid>
                 </CardContent>

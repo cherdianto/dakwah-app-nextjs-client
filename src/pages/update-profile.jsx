@@ -39,6 +39,7 @@ export default function UpdateProfile(props) {
     const { user, setUser } = useUser()
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
+    const [status, setStatus] = useState()
     const currentUser = useAuth({ redirect: 'login'})
 
 
@@ -63,6 +64,7 @@ export default function UpdateProfile(props) {
             }
             
             try {
+                setStatus('loading')
                 const res = await updateProfile({data, accessToken: user?.accessToken})
                 setUser(res)
                 setError(null)
@@ -76,6 +78,8 @@ export default function UpdateProfile(props) {
                     message: error.response.data.message
                 })
             }
+
+            setStatus()
 
         }
     })
@@ -94,7 +98,7 @@ export default function UpdateProfile(props) {
     //     if (!user) getUser()
     // }, [user])
 
-    if (!user) {
+    if (!user || status === 'loading') {
         return (
             <Layout>
                 <h2>loading...</h2>
@@ -232,7 +236,9 @@ export default function UpdateProfile(props) {
                                 fullWidth
                                 type="submit"
                                 sx={{
-                                    mb: 2
+                                    mb: 2,
+
+                                    borderRadius: '15px'
                                 }}
                             >
                                 Update

@@ -2,25 +2,24 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../modules/common/Layout'
 import Carousel from 'react-material-ui-carousel'
 import Paper from '@mui/material/Paper'
-import Box from '@mui/material/Box'
+// import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import Link from 'next/link'
 import styled from '@emotion/styled'
-import Toolbar from '@mui/material/Toolbar'
-import AppBar from '@mui/material/AppBar'
-import { fetchUser } from '../apiQuery'
-import Router from 'next/router'
+// import Toolbar from '@mui/material/Toolbar'
+// import AppBar from '@mui/material/AppBar'
+// import { fetchUser } from '../apiQuery'
+// import Router from 'next/router'
 import { useUser } from '@contexts/user.context'
 import LanguagePopover from '@common/PopOver/LanguagePopover'
-import Divider from '@mui/material/Divider'
 import useAuth from '@hooks/useAuth'
 import { AppNavbar } from '@mobile/Header'
 import Logo from '../../public/assets/logo-dark.svg'
 import Image from 'next/image'
-// import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-// import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 import Slide1 from '../../public/assets/slide1.png'
 import Slide2 from '../../public/assets/slide2.png'
 
@@ -60,7 +59,7 @@ export default function Homepage(props) {
     const { user, setUser } = useUser()
     const currentUser = useAuth({ redirect: null})
 
-    // const { t } = useTranslation('common')
+    const { t } = useTranslation('common')
 
     let items = [
         {
@@ -116,7 +115,7 @@ export default function Homepage(props) {
                 <Grid container direction='column' sx={{
                     p: 2
                 }}>
-                    <Typography variant='h6'  sx={{ w: '100%', display: 'block'}}>Selamat datang di Moslem Guide App</Typography>
+                    <Typography variant='h6'  sx={{ w: '100%', display: 'block'}}>{t('greeting')}</Typography>
                     {/* <Typography variant='h4'  sx={{ w: '100%', display: 'block'}}>Ahlan wa sahlan</Typography> */}
                     <Typography variant='body1' sx={{ w: '100%', display: 'block'}}>Aplikasi dakwah yang di kelola oleh IMEA (Indonesian Moslem in Enchede Association)</Typography>
                     {/* <Typography variant='body1' align='center'>Disini kami berusaha untuk memberikan materi dakwah islam secara ringkas, mudah dipahami, dan berkelanjutan.</Typography> */}
@@ -151,12 +150,12 @@ export default function Homepage(props) {
 }
 
 
-// export async function getStaticProps({ locale }){
-//     return {
-//         props: {
-//             ...(await serverSideTranslations(locale, [
-//                 'common'
-//             ]))
-//         }
-//     }
-// }
+export async function getStaticProps({ locale }){
+    return {
+        props: {
+            ...(await serverSideTranslations(locale, [
+                'common'
+            ]))
+        }
+    }
+}

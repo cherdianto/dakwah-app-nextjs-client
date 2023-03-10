@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import theme from 'src/theme';
+import Router from 'next/router'
+
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material';
@@ -10,17 +12,22 @@ const LANGS = [
   {
     value: 'en',
     label: 'English',
-    icon: '/assets/icons/ic_flag_en.svg',
+    icon: '/assets/icons/flag-uk.svg',
   },
   {
     value: 'de',
     label: 'German',
-    icon: '/assets/icons/ic_flag_de.svg',
+    icon: '/assets/icons/flag-de.svg',
   },
   {
-    value: 'fr',
-    label: 'French',
-    icon: '/assets/icons/ic_flag_fr.svg',
+    value: 'id',
+    label: 'Indonesian',
+    icon: '/assets/icons/flag-id.svg',
+  },
+  {
+    value: 'nl',
+    label: 'Netherlands',
+    icon: '/assets/icons/flag-nl.svg',
   },
 ];
 
@@ -33,7 +40,8 @@ export default function LanguagePopover() {
     setOpen(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (e, lang) => {
+    Router.push([],[],{ locale: lang })
     setOpen(null);
   };
 
@@ -43,8 +51,8 @@ export default function LanguagePopover() {
         onClick={handleOpen}
         sx={{
           padding: 0,
-          width: 44,
-          height: 44,
+          width: 30,
+          height: 30,
           ...(open && {
             bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.focusOpacity),
           }),
@@ -75,7 +83,7 @@ export default function LanguagePopover() {
       >
         <Stack spacing={0.75}>
           {LANGS.map((option) => (
-            <MenuItem key={option.value} selected={option.value === LANGS[0].value} onClick={() => handleClose()}>
+            <MenuItem key={option.value} selected={option.value === LANGS[0].value} value={option.value} onClick={(e) => handleClose(e, option.value)}>
               <Box component="img" alt={option.label} src={option.icon} sx={{ width: 28, mr: 2 }} />
 
               {option.label}
