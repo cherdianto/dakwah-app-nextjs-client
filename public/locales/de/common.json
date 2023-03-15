@@ -1,3 +1,6 @@
 {
-    "greeting": "Willkommen bei der Moslem Guide App"
+    "greeting": "Willkommen bei der Moslem Guide App",
+    "app-description": "Da'wah-Anwendung verwaltet von IMEA (Indonesian Moslem in Enchede Association)",
+    "continue-reading" : "Weiterlesen",
+    "login": "Anmeldung"
 }

@@ -15,6 +15,7 @@ import { useState } from "react";
 import Delete from "@mui/icons-material/Delete";
 import { useUser } from "@contexts/user.context";
 import DeleteDialog from "@common/Dialogs/DeleteDialog";
+import { useSession } from "next-auth/react";
 
 const MateriLabelStyled = styled(MateriLabel)`
     margin-bottom: 0px;
@@ -27,7 +28,8 @@ const StyledLink = styled(Link)`
 const MateriCard = ({ name, img, status, rating, student, description, materiID, label, isEdit, isDelete }) => {
     // const [modalEdit, setModalEdit] = useState(false)
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-    const { user, setUser } = useUser()
+    // const { user, setUser } = useUser()
+    const {data:session} = useSession()
 
     return (
         <>
@@ -62,10 +64,10 @@ const MateriCard = ({ name, img, status, rating, student, description, materiID,
                             <Button size="small" variant="contained" endIcon={<PlayArrow />} sx={{ borderRadius: '12px'}}>Baca</Button>
                         </StyledLink>
                         {/* <Button size="small" variant="outlined" endIcon={<Share />}>Bagi</Button> */}
-                        {(user?.role !== 'user' && user) && (
+                        {(session.user?.role !== 'user' && session.user) && (
                                 <Button size="small" variant="outlined" endIcon={<Edit />} onClick={() => isEdit(true)}sx={{ borderRadius: '12px'}}>Sunting</Button>
                         )}
-                        {(user?.role === 'administrator' && user) && (
+                        {(session.user?.role === 'administrator' && session.user) && (
                                 <Button size="small" color="error" variant="outlined" endIcon={<Delete />} onClick={() => setShowDeleteDialog(true)}sx={{ borderRadius: '12px'}}>Hapus</Button>
                         )}
                     </Grid>

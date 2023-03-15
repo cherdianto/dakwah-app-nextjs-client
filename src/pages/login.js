@@ -7,15 +7,21 @@ import { useUser } from '@contexts/user.context'
 import axiosJWT from '@utils/axiosJWT'
 import Router from 'next/router'
 import { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 
 
 const LoginPage = (props) => {
+    const { status, data } = useSession()
     
-    const {user, setUser} = useUser()
+    // const {user, setUser} = useUser()
     
     useEffect(() => {
-        if(user) Router.push('/account')
-    }, [user])
+        if(status === 'authenticated') Router.replace('/account')
+    }, [status])
+
+    if( status === 'loading') {
+        return <Layout><h2>loading...</h2></Layout>
+    }
 
     return (
         <Layout>

@@ -29,6 +29,7 @@ import ModalReadingResponse from "@common/Modals/ReadingResponseModal";
 import { useUser } from "@contexts/user.context";
 import Delete from "@mui/icons-material/Delete";
 import DeleteDialog from "@common/Dialogs/DeleteDialog";
+import { useSession } from "next-auth/react";
 
 const MateriDetail = ({ materiId }) => {
     const { personalize, setPersonalize } = usePersonalize()
@@ -42,6 +43,7 @@ const MateriDetail = ({ materiId }) => {
     const [idReadingResponse, setIdReadingResponse] = useState()
     const { status, data } = useQuery(['content', materiId], () => showMateri(materiId))
     const { user, setUser } = useUser()
+    const { data: session, status: sessionStatus } = useSession()
 
     useEffect(() => {
         if (status === 'success') {
@@ -64,9 +66,10 @@ const MateriDetail = ({ materiId }) => {
     }
 
     const handleDelete = async (contentId) => {
+        // console.log(contentId)
         try {
             await removeContent.mutate({
-                accessToken: user?.accessToken,
+                accessToken: session.user?.accessToken,
                 materiId,
                 contentId
             })
@@ -106,7 +109,7 @@ const MateriDetail = ({ materiId }) => {
         if (isEdit) {
             try {
                 await editContent.mutate({
-                    accessToken: user?.accessToken,
+                    accessToken: session.user?.accessToken,
                     materiId,
                     contentId,
                     formData: { matan, subTitle }
@@ -120,7 +123,7 @@ const MateriDetail = ({ materiId }) => {
         } else {
             try {
                 await addNewContent.mutate({
-                    accessToken: user?.accessToken,
+                    accessToken: session.user?.accessToken,
                     materiId,
                     formData: { matan, subTitle }
                 })
@@ -147,6 +150,9 @@ const MateriDetail = ({ materiId }) => {
         setExpanded(isExpanded ? id : false)
     }
 
+    if(sessionStatus === 'loading'){
+        <>loading</>
+    }
     return (
         <>
             <AppBar position="static" color="primary" elevation={1}>
@@ -161,7 +167,7 @@ const MateriDetail = ({ materiId }) => {
                         </IconButton>
                     </Link>
                     <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>{masterContent?.name}</Typography>
-                    { (user?.role === 'administrator' || user?.role === 'editor') && <ContentPopover onSave={(formData) => handleSave(formData)} />}
+                    { (session?.user?.role === 'administrator' || session?.user?.role === 'editor') && <ContentPopover onSave={(formData) => handleSave(formData)} />}
                 </Toolbar>
             </AppBar>
             <Grid container justifyContent='center' sx={{
@@ -198,8 +204,8 @@ const MateriDetail = ({ materiId }) => {
                                             <Grid container direction='row' justifyContent='space-between' sx={{
                                                 mt: 3
                                             }}>
-                                                { (user?.role === 'administrator' || user?.role === 'editor') && <Button startIcon={<Edit />} id={ctn.id} onClick={(e) => handleClickEdit(e)} >Edit</Button>}
-                                                { user?.role === 'administrator' && <Button startIcon={<Delete />} id={ctn.id} onClick={(e) => handleClickDelete(e)} >Delete</Button>}
+                                                { (session.user?.role === 'administrator' || session.user?.role === 'editor') && <Button startIcon={<Edit />} id={ctn.id} onClick={(e) => handleClickEdit(e)} >Edit</Button>}
+                                                { session.user?.role === 'administrator' && <Button startIcon={<Delete />} id={ctn.id} onClick={(e) => handleClickDelete(e)} >Delete</Button>}
                                                 <FormGroup>
                                                     <FormControlLabel control={<Switch id={ctn.id} onChange={(e) => handleOpenModalReadingResponse(e)} />} label="Selesai Baca" />
                                                 </FormGroup>

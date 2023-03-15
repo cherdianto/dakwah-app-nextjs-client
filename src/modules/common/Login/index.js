@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -11,11 +11,13 @@ import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import { useFormik } from 'formik'
 import { useUser } from '@contexts/user.context'
+import Layout from "@common/Layout";
 
 import styled from "@emotion/styled";
 import ArrowRight from "@mui/icons-material/ArrowRight";
 import axios from "axios";
 import Link from "next/link";
+import { useSession, signIn } from "next-auth/react";
 
 axios.defaults.withCredentials = true;
 const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
@@ -38,6 +40,11 @@ const HeadingStyle = styled(Box)({
 const Login = () => {
     const { user, setUser } = useUser()
     const [error, setError] = useState(null)
+    const {status} = useSession()
+
+    // useEffect(() => {
+    //     if()
+    // }, [])
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -46,33 +53,45 @@ const Login = () => {
             password: ''
         },
         onSubmit: async (values) => {
-            const cred = {
-                email : values.email,
-                password : values.password
-            }
+            // const cred = {
+            //     email : values.email,
+            //     password : values.password
+            // }
 
-            try {
-                const res = await axios.post(`${apiUrl}/auth/login`, cred)
-                setUser(res.data)
-                setError(null)
-            } catch (error) {
-                if (error.response.status === 429) {
-                    // rate limiter error
-                    setError({
-                        status: true,
-                        message: error.response.data
-                    })
-                } else {
-                    // other errors
-                    setError({
-                        status: true,
-                        message: error.response.data.message
-                    })
-                }
-            }
+            const res = await signIn('credentials', {
+                email: values.email,
+                password: values.password,
+                redirect: false
+            })
+
+            // try {
+            //     const res = await axios.post(`${apiUrl}/auth/login`, cred)
+            //     setUser(res.data)
+            //     setError(null)
+            // } catch (error) {
+            //     if (error.response.status === 429) {
+            //         // rate limiter error
+            //         setError({
+            //             status: true,
+            //             message: error.response.data
+            //         })
+            //     } else {
+            //         // other errors
+            //         setError({
+            //             status: true,
+            //             message: error.response.data.message
+            //         })
+            //     }
+            // }
 
         }
     })
+
+    if( status === 'loading') {
+        return <Layout><h2>loading...</h2></Layout>
+    }
+
+
     return (
         <RootStyle>
             <Container >

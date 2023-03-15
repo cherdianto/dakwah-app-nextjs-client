@@ -6,7 +6,7 @@ import Router from 'next/router'
 import axiosJWT from '@utils/axiosJWT';
 import axios from 'axios';
 import { useUser } from '@contexts/user.context';
-
+import { signOut } from 'next-auth/react';
 // ----------------------------------------------------------------------
 const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 const ACCOUNTMENU = [
@@ -40,16 +40,18 @@ export default function AccountPopover() {
         if(target === 'edit profile') {
             Router.push('/update-profile')
         } else if ( target === 'logout'){
-            try {
-                const res = await axios.get(`${apiUrl}/auth/logout`, {withCredentials: true})
+            // try {
+            //     const res = await axios.get(`${apiUrl}/auth/logout`, {withCredentials: true})
                 
-                if(res.data.status === true){
-                    Router.push('/login')
-                }
+            //     if(res.data.status === true){
+            //         Router.push('/login')
+            //     }
                 
-            } catch (error) {
-                // console.log(error)
-            }
+            // } catch (error) {
+            //     // console.log(error)
+            // }
+
+            signOut()
 
             setUser()
         }

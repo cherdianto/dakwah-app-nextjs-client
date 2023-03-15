@@ -1,10 +1,12 @@
-import { useState } from 'react';
-import theme from 'src/theme';
+import { useState, useEffect } from 'react';
+// import theme from 'src/theme';
 import Router from 'next/router'
+import { useSession } from 'next-auth/react';
 
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material';
+import Image from 'next/image';
 
 // ----------------------------------------------------------------------
 
@@ -35,15 +37,25 @@ const LANGS = [
 
 export default function LanguagePopover() {
   const [open, setOpen] = useState(null);
-
+  const { data: session } = useSession()
+  const [ selectedLang, setSelectedLang ] = useState(LANGS[0])
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
 
   const handleClose = (e, lang) => {
+    // console.log(lang)
+    // console.log(lang === LANGS[0].value)
     Router.push([],[],{ locale: lang })
+
+    const temp = LANGS.filter(lgs => lgs.value === lang)
+    setSelectedLang(temp[0])
     setOpen(null);
   };
+
+  // useEffect(() => {
+  //   console.log(selectedLang)
+  // }, [selectedLang])
 
   return (
     <>
@@ -58,7 +70,7 @@ export default function LanguagePopover() {
           }),
         }}
       >
-        <img src={LANGS[0].icon} alt={LANGS[0].label} />
+        <Image src={selectedLang.icon} alt={selectedLang.label} width={30} height={30}/>
       </IconButton>
 
       <Popover
@@ -83,7 +95,7 @@ export default function LanguagePopover() {
       >
         <Stack spacing={0.75}>
           {LANGS.map((option) => (
-            <MenuItem key={option.value} selected={option.value === LANGS[0].value} value={option.value} onClick={(e) => handleClose(e, option.value)}>
+            <MenuItem key={option.value} selected={option.value === selectedLang.value} value={option.value} onClick={(e) => handleClose(e, option.value)}>
               <Box component="img" alt={option.label} src={option.icon} sx={{ width: 28, mr: 2 }} />
 
               {option.label}
