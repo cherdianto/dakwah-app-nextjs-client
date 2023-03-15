@@ -1,6 +1,7 @@
 import axios from "axios";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+const apiUrl = process.env.ENV === 'dev' ? process.env.API_URL_DEV : process.env.API_URL_PROD
 
 const authOptions = (req, res) => {
     // console.log(res)
@@ -15,7 +16,7 @@ const authOptions = (req, res) => {
                     //     body: JSON.stringify(credentials),
                     //     headers: { "Content-Type": "application/json"}
                     // })
-                    const response = await axios.post('http://localhost:3001/auth/login', credentials, {
+                    const response = await axios.post(`${apiUrl}/auth/login`, credentials, {
                         withCredentials: true
                     })
                     
